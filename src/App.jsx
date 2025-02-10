@@ -9,7 +9,7 @@ const App = () => {
         <Navbar></Navbar>
        
        
-        <main className=""> 
+        <main className="mt-32"> 
           <section className="">
             <img src="" alt="" />
 

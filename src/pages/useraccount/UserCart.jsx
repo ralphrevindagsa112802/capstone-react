@@ -33,7 +33,7 @@ const UserCart = () => {
                     <aside class="w-full mt-12 md:w-64 h-auto md:h-screen py-4 flex flex-col space-y-6">
                     <nav class="space-y-4">
                 
-                        <a id="profile" href="profile.html" class="flex items-center space-x-4">
+                        <a id="profile" href="UserAccount.jsx" class="flex items-center space-x-4">
                         <img src="path-to-user-profile-icon.svg" alt="User Profile" class="w-6 h-6"/>
                         <span class="font-semibold">User profile</span>
                         </a>

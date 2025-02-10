@@ -6,7 +6,7 @@ const UserMenu = () => {
   return (
     <div className='bg-[#DCDEEA]'>
         <UserNavbar />
-        <div class="flex">
+        <div class="flex mt-32">
             <div class="ml-8 w-60 h-screen p-4">
                 <h2 class="text-lg font-bold text-[#1C359A] text  -center mb-4">Categories</h2>
 
@@ -56,10 +56,10 @@ const UserMenu = () => {
                     </div>
                     </div>
 
-                    <hr className="border-t border-black mx-4 my-2"/>
+                    <hr className="border-t border-black mx-4 my-2 w-full"/>
 
                     {/* 🔹 Make the cards display in a row */}
-                    <div className="container-fluid grid grid-cols-3 gap-4 p-5">
+                    <div className="container-fluid grid grid-cols-3 gap-36 p-5">
                     
                     {/* 🔹 Card 1 */}
                     <div id="card1" className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
@@ -141,6 +141,28 @@ const UserMenu = () => {
                         </div>
                         </div>
                     </div>
+
+                    {/* 🔹 Card 4 */}
+                <div id="card3" className="bg-black w-72 h-90 relative flex flex-col items-center justify-center rounded-2xl">
+                    <div className="justify-center flex items-center absolute -top-10">
+                        <img src="../img/2022-11-21 (2).jpg" alt="" className="w-42 h-42 rounded-full object-cover"/>
+                    </div>
+                        <div className="rounded-md h-full mt-4 w-full p-5 flex flex-col">
+                        <div className="text-[#1C359A] font-bold flex">Seafood Pasta</div>
+                        <div className="text-justify opacity-55">
+                            A tomato-based pasta that is served with shrimp.
+                        </div>
+                        <div className="flex flex-row-reverse justify-between mt-auto pt-4 items-center">
+                            <div className="price text-sm font-semibold">₱160</div>
+                            <button className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2">
+                            <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
+                            <span>Add</span>
+                            </button>
+                            </div>
+                        </div>
+                 </div>
+
+                 
 
                     </div> {/* 🔹 End of row container */}
                 </div>

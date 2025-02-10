@@ -7,7 +7,7 @@ const UserHome = () => {
     <div className='md-overflow-y-hidden bg-[#DCDEEA]'>
       <UserNavbar />
 
-      <main className=""> 
+      <main className="mt-32"> 
           <section className="">
             <img src="" alt="" />
 
