@@ -42,11 +42,11 @@ const UserNavbar = () => {
 
             
             <div className="hidden md:flex space-x-16">
-                <Link to="/userhome" className="uppercase text-black font-bold tracking-wide text-xs">Home</Link>
-                <Link to="/usermenu" className="uppercase text-black font-bold tracking-wide text-xs">Menu</Link>
-                <Link to="/usercompany" className="uppercase text-black font-bold tracking-wide text-xs">Company</Link>
-                <Link to="/userspecial" className="uppercase text-black font-bold tracking-wide text-xs">Special</Link>
-                <Link to="/usercontact" className="uppercase text-black font-bold tracking-wide text-xs">Contact</Link>
+                <Link to="/user/home" className="uppercase text-black font-bold tracking-wide text-xs">Home</Link>
+                <Link to="/user/menu" className="uppercase text-black font-bold tracking-wide text-xs">Menu</Link>
+                <Link to="/user/company" className="uppercase text-black font-bold tracking-wide text-xs">Company</Link>
+                <Link to="/user/special" className="uppercase text-black font-bold tracking-wide text-xs">Special</Link>
+                <Link to="/user/contact" className="uppercase text-black font-bold tracking-wide text-xs">Contact</Link>
             </div>
 
        
@@ -79,12 +79,12 @@ const UserNavbar = () => {
                                 <div className="flex items-center">
                                     <div id="profilePicture" className="w-10 h-10 bg-gray-300 rounded-full"></div>
                                     <div className="ml-3">
-                                        <Link to="/useraccount" className="text-sm font-medium text-gray-800">User Name</Link>
+                                        <Link to="/user/account" className="text-sm font-medium text-gray-800">User Name</Link>
                                     </div>
                                 </div>
                             </div>
-                            <Link to="/usercart" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">My Cart</Link>
-                            <Link to="/userlogout" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</Link>
+                            <Link to="/user/cart" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">My Cart</Link>
+                            <Link to="/user/logout" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</Link>
                         </div>
                     )}
                 </div>

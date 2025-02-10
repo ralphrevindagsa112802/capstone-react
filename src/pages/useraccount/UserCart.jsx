@@ -86,10 +86,12 @@ const UserCart = () => {
                 
                     
                         <div class="mt-6 flex justify-end">
-                        <button 
-                            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                            <Link to="/checkout">Proceed</Link>
-                        </button>
+                        <Link to="/user/checkout">
+                            <button 
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            Proceed
+                            </button>
+                        </Link>
                         </div>
                     </form>
                     </div>

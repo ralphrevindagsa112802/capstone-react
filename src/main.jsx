@@ -13,6 +13,7 @@ import UserMenu from './pages/useraccount/UserMenu'
 import UserAccount from './pages/useraccount/UserAccount'
 import UserCart from './pages/useraccount/UserCart'
 import CheckOut from './components/CheckOut'
+import AdminHome from './admin/AdminHome'
 
 const router = createBrowserRouter([{
   path: '/',
@@ -31,27 +32,27 @@ const router = createBrowserRouter([{
   element: <LogIn />,
   errorElement: <NotFound/>,
 }, {
-  path: '/userhome',
+  path: '/user/home',
   element: <UserHome />,
   errorElement: <NotFound/>,
 }, {
-  path: '/usermenu',
+  path: '/user/menu',
   element: <UserMenu />,
   errorElement: <NotFound/>,
 }, {
-  path: '/useraccount',
+  path: '/user/account',
   element: <UserAccount />,
   errorElement: <NotFound/>,
 }, {
-  path: '/usercart',
+  path: '/user/cart',
   element: <UserCart />,
   errorElement: <NotFound/>,
 }, {
-  path: '/userlogout',
+  path: '/user/logout',
   element: <App />,
   errorElement: <NotFound/>,
 }, {
-  path: '/checkout',
+  path: '/user/checkout',
   element: <CheckOut />,
   errorElement: <NotFound/>,
 }]);
