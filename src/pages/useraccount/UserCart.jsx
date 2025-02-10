@@ -7,7 +7,7 @@ const UserCart = () => {
   return (
     <div>
         <UserNavbar />
-            <div class="flex flex-row bg-[#1C359A] py-10 px-4 md:px-36 ">
+            <div class="flex flex-row bg-[#1C359A] py-10 px-4 md:px-36 mt-32 ">
 
                 <div class="flex flex-row  absolute -mb-42 md:flex-row">
                 
