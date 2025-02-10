@@ -16,6 +16,10 @@ import CheckOut from './components/CheckOut'
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
 
+const RequireAuth = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
+  return isAuthenticated ? children : <Navigate to="/admin/login" />;
+};
 
 const router = createBrowserRouter([{
   path: '/',
@@ -63,7 +67,7 @@ const router = createBrowserRouter([{
   errorElement: <NotFound/>,
 }, { 
   path: '/admin/dashboard', 
-  element: <AdminDashboard />, 
+  element: <RequireAuth><AdminDashboard /></RequireAuth>, 
   errorElement: <NotFound/> 
 },]);
 
