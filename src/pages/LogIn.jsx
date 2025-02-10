@@ -72,10 +72,12 @@ const LogIn = () => {
                     </div>
                 
                     <div className="flex items-center justify-between">
-                    <button 
-                        type="submit"
-                        className="w-96 py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition"><Link to='/userhome'>LOGIN</Link>
-                    </button>
+                    <Link to='/userhome'>
+                        <button 
+                            type="submit"
+                            className="w-96 py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">LOGIN
+                        </button>
+                    </Link>
                     </div>
                 </form>
 
