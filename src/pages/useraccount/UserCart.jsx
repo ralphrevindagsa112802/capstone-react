@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import UserNavbar from '../components/UserNavbar';
-import Footer from '../components/Footer';
+import UserNavbar from '../../components/UserNavbar';
+import Footer from '../../components/Footer';
 
 const UserCart = () => {
   return (

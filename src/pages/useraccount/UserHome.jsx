@@ -1,6 +1,6 @@
 import React from 'react'
-import UserNavbar from '../components/UserNavbar'
-import Footer from '../components/Footer'
+import UserNavbar from '../../components/UserNavbar'
+import Footer from '../../components/Footer'
 
 const UserHome = () => {
   return (

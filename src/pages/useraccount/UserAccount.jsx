@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import UserNavbar from '../components/UserNavbar';
-import Footer from '../components/Footer';
+import UserNavbar from '../../components/UserNavbar';
+import Footer from '../../components/Footer';
 
 const UserAccount = () => {
   // ✅ State to enable/disable form fields
