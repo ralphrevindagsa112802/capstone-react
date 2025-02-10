@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import './index.css'
 
 import App from './App'
@@ -13,7 +13,9 @@ import UserMenu from './pages/useraccount/UserMenu'
 import UserAccount from './pages/useraccount/UserAccount'
 import UserCart from './pages/useraccount/UserCart'
 import CheckOut from './components/CheckOut'
-import AdminHome from './admin/AdminHome'
+import AdminLogin from './admin/AdminLogin'
+import AdminDashboard from './admin/AdminDashboard'
+
 
 const router = createBrowserRouter([{
   path: '/',
@@ -55,7 +57,15 @@ const router = createBrowserRouter([{
   path: '/user/checkout',
   element: <CheckOut />,
   errorElement: <NotFound/>,
-}]);
+}, {
+  path: '/admin/login',
+  element: <AdminLogin />,
+  errorElement: <NotFound/>,
+}, { 
+  path: '/admin/dashboard', 
+  element: <AdminDashboard />, 
+  errorElement: <NotFound/> 
+},]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
