@@ -64,6 +64,27 @@ const UserMenu = () => {
                     {/* 🔹 Card 1 */}
                     <div id="card1" className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
                         <div className="w-full flex flex-wrap justify-center gap-4">
+                        <img src="../img//CLASSIC COFFEES/Cafe Vienna.jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
+                        </div>
+                        <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col"> 
+                        <div className="text-[#1C359A] font-bold flex">Cafe Vienna</div>
+                        <div className="text-justify opacity-55"> 
+                            Viannese Coffee that serves Americano topped with a heavy whipped
+                            cream. Dashed with cocoa powder
+                        </div>
+                        <div className="flex flex-row-reverse justify-between pt-4 mt-auto items-center">
+                            <div className="price text-sm font-semibold">₱130 - ₱140</div>
+                            <button className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2">
+                            <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
+                            <span>Add</span>
+                            </button>
+                        </div>
+                        </div>
+                    </div>
+
+                    {/* 🔹 Card 2 */}
+                    <div id="card2" className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
+                        <div className="w-full flex flex-wrap justify-center gap-4">
                         <img src="../img/katsudon.jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
                         </div>
                         <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col"> 
