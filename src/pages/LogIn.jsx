@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost/capstone-react/api/login.php", {
+      const response = await fetch("http://localhost/yappari_api/login.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -26,7 +26,7 @@ const Login = () => {
       const data = await response.json();
       if (data.success) {
         alert("Login successful!");
-        navigate("/dashboard"); // Redirect to dashboard or homepage
+        navigate("/user/home"); // Redirect to dashboard or homepage
       } else {
         setError(data.message);
       }

@@ -6,6 +6,7 @@ const SignIn = () => {
     firstname: "",
     lastname: "",
     username: "",
+    email: "",
     location: "",
     number: "",
     password: "",
@@ -26,7 +27,7 @@ const SignIn = () => {
     }
 
     try {
-      const response = await fetch("http://localhost/capstone-react/api/signup.php", {
+      const response = await fetch("http://localhost/yappari_api/signup.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -102,6 +103,12 @@ const SignIn = () => {
                     <div className="mb-4">
                         <input type="text" name="lastname" placeholder="Last Name" onChange={handleChange} className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
                     </div>
+
+                    <div className="mb-4">
+                        <input type="email" name="email" placeholder="Email" onChange={handleChange} 
+                            className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                    </div>
+
 
                     <div className="mb-4">
                         <input type="text" name="username" placeholder="Username" onChange={handleChange} className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
