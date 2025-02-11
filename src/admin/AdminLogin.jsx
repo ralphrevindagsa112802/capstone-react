@@ -7,26 +7,38 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    // 🔹 Dummy credentials (Replace with API call if needed)
-    const adminUser = 'admin';
-    const adminPass = 'password123';
-
-    if (username === adminUser && password === adminPass) {
-      localStorage.setItem('isAdminAuthenticated', 'true'); // Save login state
-      navigate('/admin/dashboard'); // Redirect to Admin Home
-    } else {
-      setError('Invalid username or password!');
+  
+    try {
+      const response = await fetch('http://localhost/yappari_api/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: username.trim(),  // Trim whitespace
+          password: password.trim(),
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        localStorage.setItem('isAdminAuthenticated', 'true'); // Store login state
+        navigate('/admin/dashboard'); // Redirect to Admin Home
+      } else {
+        setError(data.message);
+      }
+    } catch (error) {
+      setError('Failed to connect to the server');
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md md:w-1/3 w-full">
         <h2 className="text-2xl font-bold text-center text-blue-800">Yappari Admin Login</h2>
-        <p className="text-gray-600 text-center mt-2">Please fill in your admin details below</p>
+        <p className="text-gray-600 text-center mt-2">Enter your admin details</p>
 
         {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
