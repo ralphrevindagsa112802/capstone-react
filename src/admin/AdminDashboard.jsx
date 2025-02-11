@@ -27,7 +27,7 @@ const AdminDashboard = () => {
             <div class="text-xl text-[#1C359A] font-bold">
                 Admin
             </div>
-        <button onClick={handleLogout} className="bg-red-500 text-white py-2 px-4 rounded-lg">
+        <button onClick={handleLogout} className="mt-6 bg-[#1C359A] text-sm font-semibold text-white py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
             Logout
         </button>
         </div>
