@@ -1,7 +1,35 @@
-import React from 'react'
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const LogIn = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost/capstone-react/api/login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Login successful!");
+        navigate("/user/home"); // Redirect after login
+      } else {
+        setError(data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Failed to connect to server");
+    }
+  };
+
   return (
     <div>
             <div className="bg-[#1C359A] flex flex-col md:flex-row items-center justify-center min-h-screen">
@@ -48,13 +76,16 @@ const LogIn = () => {
                     <p className="mt-2 text-gray-600">"Log in now and enjoy fresh coffee delivered to your door!"</p>
                 </div>
 
-                    <form className="mt-6 flex items-center justify-center flex-col" onsubmit="handleLogin(event)">
+                <form className="mt-6 flex items-center justify-center flex-col" onSubmit={handleLogin}>
+                    {error && <p className="text-red-500">{error}</p>}
                     <div className="mb-4">
                     <label for="username" className="sr-only">Username</label>
                     <input 
                         type="text" 
                         id="username" 
                         placeholder="Enter username" 
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                         className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
                     </div>
                 
@@ -64,6 +95,8 @@ const LogIn = () => {
                         type="password" 
                         id="password" 
                         placeholder="Enter password" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
                     <button 
                         type="button" 
@@ -72,12 +105,21 @@ const LogIn = () => {
                     </div>
                 
                     <div className="flex items-center justify-between">
+                    {/*
                     <Link to='/user/home'>
                         <button 
                             type="submit"
                             className="w-96 py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">LOGIN
                         </button>
                     </Link>
+                    */}
+
+            <button
+            type="submit"
+            className="w-96 py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition"
+          >
+            LOGIN
+          </button>
                     </div>
                 </form>
 
@@ -110,7 +152,7 @@ const LogIn = () => {
         </div>
     </div>
     
-  )
-}
+  );
+};
 
-export default LogIn
+export default LogIn;

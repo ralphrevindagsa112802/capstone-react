@@ -15,7 +15,7 @@ const UserAccount = () => {
     <div>
       <UserNavbar />
 
-      <div className="flex flex-row bg-[#1C359A] py-10 px-4 md:px-36 ">
+      <div className="flex flex-row bg-[#1C359A] py-10 px-4 md:px-36 mt-32 ">
         <div className="flex flex-row absolute -mb-42 md:flex-row">
           <div className="w-40 h-40 shadow-2xl rounded-full bg-white flex items-center justify-center text-[#1C359A] text-2xl md:text-4xl">
             <span id="userInitials">--</span>

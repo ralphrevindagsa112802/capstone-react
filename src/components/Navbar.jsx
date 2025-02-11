@@ -5,8 +5,8 @@ import '../css/Navbar.css'
 const Navbar = () => {
   return (
     <div>
-        <nav className="bg-white shadow-md">
-            <div className="container mx-auto flex items-center justify-between py-2 px-[2px]">
+        <nav className="bg-white shadow-md fixed top-0 z-100 w-full ">
+            <div className="container mx-auto flex items-center justify-between py-6 px-12">
             
             <div className="flex items-center justify-center md:justify-start w-full md:w-auto">
                 <img src="../img/YCB LOGO (BLUE).png" alt="Logo" className="h-20 w-auto object-contain block"/>
