@@ -27,7 +27,7 @@ const SignIn = () => {
     }
 
     try {
-      const response = await fetch("http://localhost/yappari_api/signup.php", {
+      const response = await fetch("http://localhost/capstone-react/api/signup.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -50,7 +50,7 @@ const SignIn = () => {
     <div>
         <div className="bg-[#1C359A] flex flex-col md:flex-row items-center justify-center min-h-screen">
 
-            <div className="flex flex-col justify-start w-1/3 md:w-1/2 text-white h-full">
+            <div className="flex flex-col justify-start w-1/3 md:w-1/2 text-white h-screen">
             
             <div className="flex flex-col items-center min-h-screen justify-start">
         
@@ -68,7 +68,7 @@ const SignIn = () => {
             </div>
 
             
-            <div className="w-2/3 md:w-2/3 bg-white rounded-lg p-8 shadow-lg h-screen ">
+            <div className="w-2/3 md:w-2/3 bg-white rounded-lg p-8 shadow-lg h-screen">
 
                 <div className="flex justify-between items-center px-4 py-2 text-gray-600 text-sm mb-6">
                 

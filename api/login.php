@@ -1,30 +1,40 @@
 <?php
-header("Access-Control-Allow-Origin: *"); 
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
 
-$conn = new mysqli("localhost", "root", "", "yappari");
+$conn = new mysqli("localhost", "root", "", "yappari_db");
 
 if ($conn->connect_error) {
-    die(json_encode(["success" => false, "message" => "Database connection failed"]));
+    die(json_encode(["error" => "Database connection failed"]));
 }
 
-$data = json_decode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input"), true);
 
-if (isset($data->username) && isset($data->password)) {
-    $username = $conn->real_escape_string($data->username);
-    $password = md5($data->password); // Use password_hash() for better security
+if (!isset($data["username"], $data["password"])) {
+    echo json_encode(["error" => "Missing email or password"]);
+    exit();
+}
 
-    $query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-    $result = $conn->query($query);
+$username = $data["username"];
+$password = $data["password"];
 
-    if ($result->num_rows > 0) {
-        echo json_encode(["success" => true, "message" => "Login successful"]);
+$stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    $user = $result->fetch_assoc();
+
+    if (password_verify($password, $user["password"])) {
+        echo json_encode(["success" => true, "message" => "Login successful", "token" => md5(uniqid())]);
     } else {
-        echo json_encode(["success" => false, "message" => "Invalid username or password"]);
+        echo json_encode(["error" => "Incorrect password"]);
     }
 } else {
-    echo json_encode(["success" => false, "message" => "Missing credentials"]);
+    echo json_encode(["error" => "User not found"]);
 }
 
 $conn->close();

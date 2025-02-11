@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost/yappari_api/login.php", {
+      const response = await fetch("http://localhost/capstone-react/api/login.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -38,7 +38,7 @@ const Login = () => {
 
   return (
     <div className="bg-[#1C359A] flex flex-col md:flex-row items-center justify-center min-h-screen">
-      <div className="flex flex-col justify-start w-1/3 md:w-1/2 text-white h-full">
+      <div className="flex flex-col justify-start w-1/3 md:w-1/2 text-white h-screen">
         <div className="flex flex-col items-center min-h-screen justify-start">
           <div className="w-3/4 md:w-2/3">
             <img src="../img/YCB LOGO (CREAM) (1).png" alt="YCB Logo" className="w-full h-auto object-contain"/>
