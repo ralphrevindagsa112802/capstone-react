@@ -11,7 +11,7 @@ const AdminLogin = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch('http://localhost/yappari_api/admin_login.php', {
+      const response = await fetch('http://localhost/capstone-react/api/admin_login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
