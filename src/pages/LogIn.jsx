@@ -67,7 +67,6 @@ const Login = () => {
           <p className="mt-2 text-gray-600">"Log in to order your favorite coffee!"</p>
         </div>
         <form onSubmit={handleLogin} className="mt-6 flex items-center justify-center flex-col">
-          <h2 className="text-2xl font-bold text-[#1C359A] mb-6">Log In</h2>
           {error && <p className="text-red-500 text-center">{error}</p>}
           <div className="mb-4">
             <input type="text" name="username" placeholder="Username" onChange={handleChange} className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
@@ -78,6 +77,31 @@ const Login = () => {
           <button className="w-96 py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">Log In</button>
           
         </form>
+
+
+        
+      <div class="text-center mt-4">
+        <a href="#" class="text-sm text-[#1C359A] hover:underline">Having issues with your password?</a>
+      </div>
+
+      <h1 class="text-sm text-gray-500 text-center mt-4">OR</h1>
+
+      <div class="mt-4">
+        <div class="flex items-center justify-between">
+          <span class="w-1/5 border-b border-gray-300"></span>
+          <span class="text-xl text-[#1C359A] font-black">Login with</span>
+          <span class="w-1/5 border-b border-gray-300"></span>
+        </div>
+        <div class="text-center mt-4 flex items-center justify-center flex-col">
+          <p class="text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
+          <button type="button"
+            class="flex items-center justify-center w-96 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+            <img src="https://www.freepik.com/free-photos-vectors/google-logo" alt="Google" class="mr-2"/> Login with Google
+          </button>
+        </div>
+      </div>
+
+
       </div>
     </div>
   );
