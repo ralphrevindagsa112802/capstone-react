@@ -18,6 +18,7 @@ if ($conn->connect_error) {
 
 // Fetch menu items
 $sql = "SELECT food_id, food_name, food_description, food_size, food_price, food_img FROM food";
+
 $result = $conn->query($sql);
 
 $menuItems = [];
