@@ -5,6 +5,7 @@ const UserNavbar = () => {
     
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const dropdownRef = useRef(null);
+    const [user, setUser] = useState(null); // Store user data
   
     // Function to toggle dropdown
     const toggleDropdown = () => {
@@ -23,6 +24,29 @@ const UserNavbar = () => {
       return () => {
         document.removeEventListener("click", handleClickOutside);
       };
+    }, []);
+
+    // Fetch user data from the backend
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch("http://localhost/capstone-react/api/getUser.php", {
+                    method: "GET",
+                    credentials: "include", // Ensure cookies (session) are sent
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    setUser(data.user); // Store user data
+                } else {
+                    console.error("Failed to fetch user data:", data.message);
+                }
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        fetchUserData();
     }, []);
 
   return (
@@ -79,7 +103,10 @@ const UserNavbar = () => {
                                 <div className="flex items-center">
                                     <div id="profilePicture" className="w-10 h-10 bg-gray-300 rounded-full"></div>
                                     <div className="ml-3">
-                                        <Link to="/user/account" className="text-sm font-medium text-gray-800">User Name</Link>
+                                        {/* ✅ Display user name dynamically */}
+                                            <Link to="/user/account" className="text-sm font-medium text-gray-800">
+                                                    {user ? user.firstname + " " + user.lastname : "User Name"}
+                                            </Link>
                                     </div>
                                 </div>
                             </div>

@@ -4,7 +4,7 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-$conn = new mysqli("localhost", "root", "", "yappari_db");
+include("db.php"); // Import database connection
 
 if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));
