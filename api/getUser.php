@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:3000"); // Adjust based on your React app URL
+header("Access-Control-Allow-Origin: http://localhost:5173"); // Adjust based on your React app URL
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET");
 header("Content-Type: application/json");
