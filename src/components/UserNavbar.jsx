@@ -28,20 +28,16 @@ const UserNavbar = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await fetch("http://localhost/capstone-react/api/getUser.php", {
+                const response = await fetch("http://localhost/capstone-react/api/user.php", {
                     method: "GET",
-                    credentials: "include", // Important for session-based authentication
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
+                    credentials: "include", // Important for sessions
+                    headers: { "Content-Type": "application/json" }
                 });
     
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error("Failed to fetch user data");
     
                 const data = await response.json();
-                console.log("User Data:", data); // Debugging
+                console.log("User Data:", data);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -49,6 +45,7 @@ const UserNavbar = () => {
     
         fetchUserData();
     }, []);
+    
     
 
     return (
