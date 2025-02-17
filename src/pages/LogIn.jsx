@@ -15,26 +15,29 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch("http://localhost/capstone-react/api/login.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // 🔹 Important! Allows session cookies
         body: JSON.stringify(formData),
       });
-
+  
       const data = await response.json();
       if (data.success) {
+        localStorage.setItem("username", data.user.username); // Store username locally
         alert("Login successful!");
-        navigate("/user/home"); // Redirect to dashboard or homepage
+        navigate("/user/home"); 
       } else {
-        setError(data.message);
+        setError(data.error);
       }
     } catch (error) {
       console.error("Error:", error);
       setError("Failed to connect to server");
     }
   };
+  
 
   return (
     <div className="bg-[#1C359A] flex flex-col md:flex-row items-center justify-center min-h-screen">

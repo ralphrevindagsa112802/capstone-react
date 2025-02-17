@@ -5,7 +5,7 @@ const UserNavbar = () => {
     
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const dropdownRef = useRef(null);
-    const [user, setUser] = useState(null); // Store user data
+    const [username, setUsername] = useState("");
   
     // Function to toggle dropdown
     const toggleDropdown = () => {
@@ -29,25 +29,26 @@ const UserNavbar = () => {
     // Fetch user data from the backend
     useEffect(() => {
         const fetchUserData = async () => {
-            try {
-                const response = await fetch("http://localhost/capstone-react/api/getUser.php", {
-                    method: "GET",
-                    credentials: "include", // Ensure cookies (session) are sent
-                });
-
-                const data = await response.json();
-                if (data.success) {
-                    setUser(data.user); // Store user data
-                } else {
-                    console.error("Failed to fetch user data:", data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
+          try {
+            const response = await fetch("http://localhost/capstone-react/api/getUser.php", {
+              method: "GET",
+              credentials: "include", // 🔹 Allows session access
+            });
+    
+            const data = await response.json();
+            if (data.success) {
+              setUsername(data.username);
+            } else {
+              console.error("User not logged in");
             }
+          } catch (error) {
+            console.error("Failed to fetch user data:", error);
+          }
         };
-
+    
         fetchUserData();
-    }, []);
+      }, []);
+    
 
   return (
     <div>
@@ -105,7 +106,7 @@ const UserNavbar = () => {
                                     <div className="ml-3">
                                         {/* ✅ Display user name dynamically */}
                                             <Link to="/user/account" className="text-sm font-medium text-gray-800">
-                                                    {user ? user.firstname + " " + user.lastname : "User Name"}
+                                                    {username ? username : "Guest"}
                                             </Link>
                                     </div>
                                 </div>
