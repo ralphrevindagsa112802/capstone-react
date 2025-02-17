@@ -26,9 +26,9 @@ const Login = () => {
       const data = await response.json();
       if (data.success) {
         alert("Login successful!");
-        navigate("/user/home"); // Redirect to dashboard or homepage
+        navigate("/user/home"); // Redirect to user home
       } else {
-        setError(data.message);
+        setError(data.error); // Show error message from API
       }
     } catch (error) {
       console.error("Error:", error);
@@ -69,10 +69,10 @@ const Login = () => {
         <form onSubmit={handleLogin} className="mt-6 flex items-center justify-center flex-col">
           {error && <p className="text-red-500 text-center">{error}</p>}
           <div className="mb-4">
-            <input type="text" name="username" placeholder="Username" onChange={handleChange} className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <input type="text" name="username" placeholder="Username"  value={formData.username} onChange={handleChange} className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
           </div>
           <div className="mb-4">
-            <input type="password" name="password" placeholder="Password" onChange={handleChange} className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <input type="password" name="password" placeholder="Password"  value={formData.password} onChange={handleChange} className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
           </div>
           <button className="w-96 py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">Log In</button>
           
