@@ -30,6 +30,9 @@ if ($result->num_rows > 0) {
 
     if (password_verify($password, $user["password"])) {
         echo json_encode(["success" => true, "message" => "Login successful", "token" => md5(uniqid())]);
+        session_start();
+        $_SESSION['user_id'] = $user['id']; // Store logged-in user ID
+
     } else {
         echo json_encode(["error" => "Incorrect password"]);
     }
