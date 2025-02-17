@@ -19,19 +19,33 @@ const SignIn = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSignup = async () => {
-    try {
-        const response = await fetch("http://localhost/capstone-react/api/signup.php", {
-            method: "POST",
-            credentials: "include", // Important for sessions
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, email, password })
-        });
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
 
-        const data = await response.json();
-        console.log(data);
+    try {
+      const response = await fetch(
+        "http://localhost/capstone-react/api/signup.php",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Signup successful! You can now log in.");
+        navigate("/login");
+      } else {
+        setError(data.message);
+      }
     } catch (error) {
-        console.error("Error signing up:", error);
+      console.error("Error:", error);
+      setError("Failed to connect to server");
     }
   };
 
