@@ -1,10 +1,12 @@
 <?php
+session_start();
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-include("db.php"); // Import database connection
+$conn = new mysqli("localhost", "root", "", "yappari_db");
 
 if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));
@@ -29,9 +31,10 @@ if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
 
     if (password_verify($password, $user["password"])) {
+        $_SESSION["user_id"] = $user["id"]; // Store user ID in session
+        $_SESSION["username"] = $user["username"]; // Store username in session
         echo json_encode(["success" => true, "message" => "Login successful", "token" => md5(uniqid())]);
-        session_start();
-        $_SESSION['user_id'] = $user['id']; // Store logged-in user ID
+        
 
     } else {
         echo json_encode(["error" => "Incorrect password"]);
