@@ -208,32 +208,32 @@ const SignIn = () => {
             </button>
           </form>
 
-          <div className="text-center mt-4">
-            <a href="#" className="text-sm text-[#1C359A] hover:underline">
+          <div class="text-center mt-4">
+            <a href="#" class="text-sm text-[#1C359A] hover:underline">
               Having issues with your password?
             </a>
           </div>
 
-          <h1 className="text-sm text-gray-500 text-center mt-4">OR</h1>
+          <h1 class="text-sm text-gray-500 text-center mt-4">OR</h1>
 
-          <div className="mt-4">
-            <div className="flex items-center justify-between">
-              <span className="w-1/5 border-b border-gray-300"></span>
-              <span className="text-xl text-[#1C359A] font-black">Login with</span>
-              <span className="w-1/5 border-b border-gray-300"></span>
+          <div class="mt-4">
+            <div class="flex items-center justify-between">
+              <span class="w-1/5 border-b border-gray-300"></span>
+              <span class="text-xl text-[#1C359A] font-black">Login with</span>
+              <span class="w-1/5 border-b border-gray-300"></span>
             </div>
-            <div className="text-center mt-4 flex items-center justify-center flex-col">
-              <p className="text-gray-600 mb-2">
+            <div class="text-center mt-4 flex items-center justify-center flex-col">
+              <p class="text-gray-600 mb-2">
                 "Your perfect brew is just a click away!"
               </p>
               <button
                 type="button"
-                className="flex items-center justify-center w-96 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+                class="flex items-center justify-center w-96 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
               >
                 <img
                   src="https://www.freepik.com/free-photos-vectors/google-logo"
                   alt="Google"
-                  className="mr-2"
+                  class="mr-2"
                 />{" "}
                 Login with Google
               </button>
