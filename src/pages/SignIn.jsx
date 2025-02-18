@@ -93,7 +93,7 @@ const SignIn = () => {
             </Link>
 
             <div>
-              <span>Already have an account?</span>
+              <span>Already have an account? </span>
               <Link
                 to="/login"
                 className="text-[#1C359A] font-bold hover:underline"
