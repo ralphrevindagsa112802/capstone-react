@@ -7,8 +7,8 @@ const SignIn = () => {
     lastname: "",
     username: "",
     email: "",
-    location: "",
-    number: "",
+    address: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -37,11 +37,12 @@ const SignIn = () => {
       );
 
       const data = await response.json();
+      console.log(data); // Log the response for debugging
       if (data.success) {
         alert("Signup successful! You can now log in.");
         navigate("/login");
       } else {
-        setError(data.message);
+        setError(data.message || "Signup failed");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -51,9 +52,6 @@ const SignIn = () => {
 
   return (
     <div>
-
-            {/**left side */}
-
       <div className="bg-[#1C359A] flex flex-col md:flex-row items-center justify-center min-h-screen">
         <div className="flex flex-col justify-start w-1/3 md:w-1/2 text-white h-full">
           <div className="flex flex-col items-center min-h-screen justify-start">
@@ -64,7 +62,6 @@ const SignIn = () => {
                 className="w-full h-auto object-contain"
               />
             </div>
-
             <div className="w-2/3 md:w-1/2">
               <img
                 src="../img/cafeviennaNobg.png"
@@ -74,8 +71,7 @@ const SignIn = () => {
             </div>
           </div>
         </div>
-      
-      {/**right side */}
+
         <div className="w-2/3 md:w-2/3 bg-white rounded-lg p-8 shadow-lg h-full">
           <div className="flex justify-between items-center px-4 py-2 text-gray-600 text-sm mb-6">
             <Link to="/" className="flex items-center hover:text-gray-800">
@@ -97,7 +93,7 @@ const SignIn = () => {
             </Link>
 
             <div>
-              <span>Already have an account?</span> <span></span>
+              <span>Already have an account?</span>
               <Link
                 to="/login"
                 className="text-[#1C359A] font-bold hover:underline"
@@ -118,7 +114,7 @@ const SignIn = () => {
 
           <form
             onSubmit={handleSignUp}
-            className="mt-6 flex items-center justify-center flex-col "
+            className="mt-6 flex items-center justify-center flex-col"
           >
             <h2 className="text-2xl font-bold text-[#1C359A] mb-6">Sign Up</h2>
             {error && <p className="text-red-500 text-center">{error}</p>}
@@ -166,8 +162,8 @@ const SignIn = () => {
             <div className="mb-4">
               <input
                 type="text"
-                name="location"
-                placeholder="Location"
+                name="address"
+                placeholder="Address"
                 onChange={handleChange}
                 className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
@@ -176,7 +172,7 @@ const SignIn = () => {
             <div className="mb-4">
               <input
                 type="number"
-                name="number"
+                name="phone"
                 placeholder="Phone Number"
                 onChange={handleChange}
                 className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -234,7 +230,7 @@ const SignIn = () => {
                   src="https://www.freepik.com/free-photos-vectors/google-logo"
                   alt="Google"
                   className="mr-2"
-                />{" "}
+                />
                 Login with Google
               </button>
             </div>
