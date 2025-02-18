@@ -1,6 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow only React frontend
-header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
@@ -32,9 +31,8 @@ $stmt->bind_param("sssssss", $username, $email, $f_name, $l_name, $phone_number,
 if ($stmt->execute()) {
     echo json_encode(["success" => true, "message" => "Signup successful"]);
 } else {
-    echo json_encode(["error" => "Email already exists"]);
+    echo json_encode(["success" => false, "message" => "All fields are required"]);
 }
 
-$stmt->close();
 $conn->close();
 ?>
