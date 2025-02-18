@@ -4,7 +4,7 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-$conn = new mysqli("localhost", "root", "", "yappari_db");
+$conn = new mysqli("localhost", "root", "", "yappari");
 
 if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));
@@ -12,24 +12,48 @@ if ($conn->connect_error) {
 
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data["username"], $data["email"], $data["password"], $data["f_name"], $data["l_name"], $data["phone_number"], $data["address"])) {
-    echo json_encode(["error" => "Missing required fields"]);
-    exit();
-}
+if (
+    isset($data["firstname"]) &&
+    isset($data["lastname"]) &&
+    isset($data["username"]) &&
+    isset($data["email"]) &&
+    isset($data["address"]) &&
+    isset($data["phone"]) &&
+    isset($data["password"]) &&
+    isset($data["confirmPassword"])
+) {
+    $f_name = $data["firstname"];
+    $l_name = $data["lastname"];
+    $username = $data["username"];
+    $email = $data["email"];
+    $address = $data["address"];
+    $phone = $data["phone"];
+    $password = $data["password"];
+    $confirmPassword = $data["confirmPassword"];
 
-$username = $data["username"];
-$email = $data["email"];
-$f_name = $data["f_name"];
-$l_name = $data["l_name"];
-$phone_number = $data["phone_number"];
-$address = $data["address"];
-$password = password_hash($data["password"], PASSWORD_DEFAULT); // Secure password
+    // Check if password matches
+    if ($password !== $confirmPassword) {
+        echo json_encode(["success" => false, "message" => "Passwords do not match"]);
+        exit;
+    }
 
-$stmt = $conn->prepare("INSERT INTO users (username, email, f_name, l_name, phone_number, address, password) VALUES (?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("sssssss", $username, $email, $f_name, $l_name, $phone_number, $address, $password);
+    // Check if the email already exists
+    $checkEmail = $conn->query("SELECT * FROM users WHERE email='$email'");
+    if ($checkEmail->num_rows > 0) {
+        echo json_encode(["success" => false, "message" => "Email already exists"]);
+        exit;
+    }
 
-if ($stmt->execute()) {
-    echo json_encode(["success" => true, "message" => "Signup successful"]);
+    // Insert new user
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $query = "INSERT INTO users (f_name, l_name, username, email, address, phone, password) 
+              VALUES ('$f_name', '$l_name', '$username', '$email', '$address', '$phone', '$hashedPassword')";
+
+    if ($conn->query($query)) {
+        echo json_encode(["success" => true, "message" => "Signup successful"]);
+    } else {
+        echo json_encode(["success" => false, "message" => "Error: " . $conn->error]);
+    }
 } else {
     echo json_encode(["success" => false, "message" => "All fields are required"]);
 }

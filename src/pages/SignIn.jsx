@@ -3,16 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
-    f_name: "",
-    l_name: "",
+    firstname: "",
+    lastname: "",
     username: "",
     email: "",
     address: "",
-    phone_number: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
-
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -43,7 +42,7 @@ const SignIn = () => {
         alert("Signup successful! You can now log in.");
         navigate("/login");
       } else {
-        setError(data.error || "Signup failed");
+        setError(data.message || "Signup failed");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -94,7 +93,7 @@ const SignIn = () => {
             </Link>
 
             <div>
-              <span>Already have an account? </span>
+              <span>Already have an account?</span>
               <Link
                 to="/login"
                 className="text-[#1C359A] font-bold hover:underline"
@@ -123,7 +122,7 @@ const SignIn = () => {
             <div className="mb-4">
               <input
                 type="text"
-                name="f_name"
+                name="firstname"
                 placeholder="First Name"
                 onChange={handleChange}
                 className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -133,7 +132,7 @@ const SignIn = () => {
             <div className="mb-4">
               <input
                 type="text"
-                name="l_name"
+                name="lastname"
                 placeholder="Last Name"
                 onChange={handleChange}
                 className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -172,8 +171,8 @@ const SignIn = () => {
 
             <div className="mb-4">
               <input
-                type="text"
-                name="phone_number"
+                type="number"
+                name="phone"
                 placeholder="Phone Number"
                 onChange={handleChange}
                 className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -204,6 +203,38 @@ const SignIn = () => {
               Sign Up
             </button>
           </form>
+
+          <div className="text-center mt-4">
+            <a href="#" className="text-sm text-[#1C359A] hover:underline">
+              Having issues with your password?
+            </a>
+          </div>
+
+          <h1 className="text-sm text-gray-500 text-center mt-4">OR</h1>
+
+          <div className="mt-4">
+            <div className="flex items-center justify-between">
+              <span className="w-1/5 border-b border-gray-300"></span>
+              <span className="text-xl text-[#1C359A] font-black">Login with</span>
+              <span className="w-1/5 border-b border-gray-300"></span>
+            </div>
+            <div className="text-center mt-4 flex items-center justify-center flex-col">
+              <p className="text-gray-600 mb-2">
+                "Your perfect brew is just a click away!"
+              </p>
+              <button
+                type="button"
+                className="flex items-center justify-center w-96 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
+              >
+                <img
+                  src="https://www.freepik.com/free-photos-vectors/google-logo"
+                  alt="Google"
+                  className="mr-2"
+                />
+                Login with Google
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
