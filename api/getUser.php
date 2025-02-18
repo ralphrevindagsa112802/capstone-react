@@ -8,7 +8,12 @@ header("Content-Type: application/json");
 if (isset($_SESSION["user_id"])) {
     echo json_encode([
         "success" => true,
-        "username" => $_SESSION["username"]
+        "user" => [
+            "id" => $_SESSION["user_id"],
+            "firstname" => $_SESSION["firstname"],
+            "lastname" => $_SESSION["lastname"],
+            "username" => $_SESSION["username"]
+        ]
     ]);
 } else {
     echo json_encode(["success" => false, "error" => "User not logged in"]);

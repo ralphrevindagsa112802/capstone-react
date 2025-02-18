@@ -15,19 +15,21 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch("http://localhost/capstone-react/api/login.php", {
         method: "POST",
+        credentials: "include", // Important for session handling
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // 🔹 Important! Allows session cookies
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          username: formData.username, 
+          password: formData.password
+        }),
       });
-  
+
       const data = await response.json();
       if (data.success) {
-        localStorage.setItem("username", data.user.username); // Store username locally
-        alert("Login successful!");
+        alert(`Welcome back, ${data.user.firstname} ${data.user.lastname}!`);
         navigate("/user/home"); 
       } else {
         setError(data.error);
@@ -36,7 +38,8 @@ const Login = () => {
       console.error("Error:", error);
       setError("Failed to connect to server");
     }
-  };
+};
+
   
 
   return (
