@@ -25,7 +25,7 @@ $username = trim($data["username"]);
 $password = trim($data["password"]);
 
 // Fetch user details based on username
-$stmt = $conn->prepare("SELECT id, firstname, lastname, username, password FROM users WHERE username = ?");
+$stmt = $conn->prepare("SELECT id, f_name, l_name, username, password FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -37,8 +37,8 @@ if ($result->num_rows > 0) {
     if (password_verify($password, $user["password"])) {
         // Store user info in session
         $_SESSION["user_id"] = $user["id"];
-        $_SESSION["firstname"] = $user["firstname"];
-        $_SESSION["lastname"] = $user["lastname"];
+        $_SESSION["f_name"] = $user["f_name"];
+        $_SESSION["l_name"] = $user["l_name"];
         $_SESSION["username"] = $user["username"];
 
         echo json_encode([
@@ -46,8 +46,8 @@ if ($result->num_rows > 0) {
             "message" => "Login successful",
             "user" => [
                 "id" => $user["id"],
-                "firstname" => $user["firstname"],
-                "lastname" => $user["lastname"],
+                "f_name" => $user["f_name"],
+                "l_name" => $user["l_name"],
                 "username" => $user["username"]
             ],
         ]);

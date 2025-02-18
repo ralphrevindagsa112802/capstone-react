@@ -9,7 +9,7 @@ const UserAccount = () => {
     f_name: '',
     l_name: '',
     email: '',
-    phone: '',
+    phone_number: '',
     address: '',
   });
 
@@ -145,10 +145,10 @@ const UserAccount = () => {
               />
               <input 
                 type="text" 
-                id="phone" 
+                id="phone_number" 
                 className={`w-full mt-1 p-2 rounded-md ${isEditing ? 'border' : 'border-none'}`} 
                 placeholder="Phone Number"
-                value={userData.phone} 
+                value={userData.phone_number} 
                 disabled={!isEditing} 
               />
             </div>

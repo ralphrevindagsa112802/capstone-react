@@ -10,8 +10,8 @@ if (isset($_SESSION["user_id"])) {
         "success" => true,
         "user" => [
             "id" => $_SESSION["user_id"],
-            "firstname" => $_SESSION["firstname"],
-            "lastname" => $_SESSION["lastname"],
+            "f_name" => $_SESSION["f_name"],
+            "l_name" => $_SESSION["l_name"],
             "username" => $_SESSION["username"]
         ]
     ]);

@@ -29,7 +29,7 @@ const Login = () => {
 
       const data = await response.json();
       if (data.success) {
-        alert(`Welcome back, ${data.user.firstname} ${data.user.lastname}!`);
+        alert(`Welcome back, ${data.user.f_name} ${data.user.l_name}!`);
         navigate("/user/home"); 
       } else {
         setError(data.error);

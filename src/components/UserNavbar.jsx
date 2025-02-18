@@ -37,7 +37,7 @@ const UserNavbar = () => {
     
           const data = await response.json();
           if (data.success) {
-            console.log(`Welcome, ${data.user.firstname} ${data.user.lastname}`);
+            console.log(`Welcome, ${data.user.f_name} ${data.user.l_name}`);
             setUser(data.user); // Store user data in state
           } else {
             console.log("User not logged in");
@@ -107,7 +107,7 @@ const UserNavbar = () => {
                                     <div className="ml-3">
                                         {/* ✅ Display user name dynamically */}
                                             <Link to="/user/account" className="text-sm font-medium text-gray-800">
-                                                {user ? `${user.firstname} ${user.lastname}` : "Guest"}
+                                                {user ? `${user.f_name} ${user.l_name}` : "Guest"}
                                             </Link>
                                     </div>
                                 </div>
