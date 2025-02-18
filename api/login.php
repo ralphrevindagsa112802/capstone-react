@@ -1,8 +1,8 @@
 <?php
-session_start(); // Start session at the very top
+session_start(); // Start session at the top
 
 header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow React frontend
-header("Access-Control-Allow-Credentials: true"); // Allow session cookies
+header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
@@ -15,15 +15,17 @@ if ($conn->connect_error) {
 
 $data = json_decode(file_get_contents("php://input"), true);
 
+// Check if required fields are provided
 if (!isset($data["username"], $data["password"])) {
     echo json_encode(["error" => "Missing username or password"]);
     exit();
 }
 
-$username = $data["username"];
-$password = $data["password"];
+$username = trim($data["username"]);
+$password = trim($data["password"]);
 
-$stmt = $conn->prepare("SELECT id, username, password FROM users WHERE username = ?");
+// Fetch user details based on username
+$stmt = $conn->prepare("SELECT id, firstname, lastname, username, password FROM users WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -31,14 +33,23 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     $user = $result->fetch_assoc();
 
+    // Verify the hashed password
     if (password_verify($password, $user["password"])) {
-        $_SESSION["user_id"] = $user["id"]; // Store user ID in session
-        $_SESSION["username"] = $user["username"]; // Store username in session
+        // Store user info in session
+        $_SESSION["user_id"] = $user["id"];
+        $_SESSION["firstname"] = $user["firstname"];
+        $_SESSION["lastname"] = $user["lastname"];
+        $_SESSION["username"] = $user["username"];
 
         echo json_encode([
             "success" => true,
             "message" => "Login successful",
-            "user" => ["id" => $user["id"], "username" => $user["username"]],
+            "user" => [
+                "id" => $user["id"],
+                "firstname" => $user["firstname"],
+                "lastname" => $user["lastname"],
+                "username" => $user["username"]
+            ],
         ]);
     } else {
         echo json_encode(["error" => "Incorrect password"]);
@@ -47,5 +58,6 @@ if ($result->num_rows > 0) {
     echo json_encode(["error" => "User not found"]);
 }
 
+$stmt->close();
 $conn->close();
 ?>
