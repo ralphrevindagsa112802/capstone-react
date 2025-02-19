@@ -7,7 +7,7 @@ header("Access-Control-Allow-Methods: GET");
 $servername = "localhost";
 $username = "root"; // Default for XAMPP
 $password = ""; // Default for XAMPP
-$dbname = "yappari"; // Change this to your actual database name
+$dbname = "yappari_db"; // Change this to your actual database name
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

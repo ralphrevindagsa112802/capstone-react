@@ -19,6 +19,29 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create food table
+CREATE TABLE food (
+  food_id int(222) NOT NULL,
+  food_name varchar(222) NOT NULL,
+  food_description varchar(222) NOT NULL,
+  food_size varchar(222) NOT NULL,
+  food_price int(222) NOT NULL,
+  food_img varchar(222) NOT NULL
+);
+
+INSERT INTO `food` (`food_id`, `food_name`, `food_description`, `food_size`, `food_price`, `food_img`) VALUES
+(1, 'katsudon', 'basta katsudon yan', 'regular', 160, '[value-6]'),
+(2, 'fish n chips', 'fish n chips', 'regular', 110, ''),
+(3, 'fish n chips', 'fish n chips', 'regular', 110, ''),
+(4, 'Pork curry', 'This delicious pork curry recipe has just the right amount of heat, but it can be adjusted to any taste.', 'Regular', 160, '[value-6]');
+
+-- Create food size
+CREATE TABLE size (
+  size_id int(222) NOT NULL,
+  regular varchar(222) NOT NULL,
+  tail varchar(222) NOT NULL
+);
+
 -- Create the admin table
 CREATE TABLE admin_users (
     id INT AUTO_INCREMENT PRIMARY KEY,

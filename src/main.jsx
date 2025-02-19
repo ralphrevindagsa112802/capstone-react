@@ -15,6 +15,7 @@ import UserCart from './pages/useraccount/UserCart'
 import CheckOut from './components/CheckOut'
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
+import AdminMenu from './admin/AdminMenu'
 
 const RequireAuth = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
@@ -68,6 +69,10 @@ const router = createBrowserRouter([{
 }, { 
   path: '/admin/dashboard', 
   element: <RequireAuth><AdminDashboard /></RequireAuth>, 
+  errorElement: <NotFound/> 
+},{ 
+  path: '/admin/menu', 
+  element: <RequireAuth><AdminMenu /></RequireAuth>, 
   errorElement: <NotFound/> 
 },]);
 
