@@ -11,7 +11,7 @@ include 'db.php';
 if (isset($_SESSION["user_id"])) {
     $user_id = $_SESSION["user_id"];
     
-    $query = "SELECT username, f_name, l_name, email, phone_number, address FROM users WHERE ID = ?";
+    $query = "SELECT username, f_name, l_name, email, phone, address FROM users WHERE ID = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();

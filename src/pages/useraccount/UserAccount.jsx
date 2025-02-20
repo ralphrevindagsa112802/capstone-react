@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import UserNavbar from '../../components/UserNavbar';
 import Footer from '../../components/Footer';
 
@@ -9,7 +10,7 @@ const UserAccount = () => {
     f_name: '',
     l_name: '',
     email: '',
-    phone_number: '',
+    phone: '',
     address: '',
   });
 
@@ -57,40 +58,27 @@ const UserAccount = () => {
       <div className="container mx-auto pt-6 px-4 md:px-36 flex flex-col md:flex-row w-full">
       {/**side bar profile section */}
       <aside className="w-full mt-12 md:w-64 h-auto md:h-screen py-4 flex flex-col space-y-6">
-                    <nav className="space-y-4">
-                
-                        <a id="profile" href="UserAccount.jsx" className="flex items-center space-x-4">
-                        <img src="path-to-user-profile-icon.svg" alt="User Profile" className="w-6 h-6"/>
-                        <span className="font-semibold">User profile</span>
-                        </a>
-
-                    
-                        <a id="cart" href="cart.html" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
-                        <img src="path-to-cart-icon.svg" alt="Cart" className="w-6 h-6"/>
-                        <span className="font-semibold">Cart</span>
-                        </a>
-
-                    
-                        <a id="orderstatus" href="orderstatus.html" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
-                        <img src="path-to-order-status-icon.svg" alt="Order Status" className="w-6 h-6"/>
-                        <span className="font-semibold">Order status</span>
-                        </a>
-
-                    
-                        <a id="orderhistory" href="orderhistory.html" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
-                        <img src="path-to-order-history-icon.svg" alt="Order History" className="w-6 h-6"/>
-                        <span className="font-semibold">Order History</span>
-                        </a>
+                <nav className="space-y-4">
+                        <Link to="/user/account" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+                            <span className="font-semibold">User Profile</span>
+                        </Link>
+                        <Link to="/user/cart" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+                            <span className="font-semibold">Cart</span>
+                        </Link>
+                        <Link to="/user/orderstatus" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+                            <span className="font-semibold">Order Status</span>
+                        </Link>
+                        <Link to="/user/orderhistory" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+                            <span className="font-semibold">Order History</span>
+                        </Link>
                     </nav>
-
-                    
                     <div className="mt-6">
                         <button className="flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700">
-                        <img src="path-to-sign-out-icon.svg" alt="Sign Out" className="w-5 h-5 mr-2"/>
-                        SIGN OUT
+                            <img src="path-to-sign-out-icon.svg" alt="Sign Out" className="w-5 h-5 mr-2" />
+                            SIGN OUT
                         </button>
                     </div>
-                    </aside>
+                </aside>
 
       {/** main content*/}
 
@@ -145,10 +133,10 @@ const UserAccount = () => {
               />
               <input 
                 type="text" 
-                id="phone_number" 
+                id="phone" 
                 className={`w-full mt-1 p-2 rounded-md ${isEditing ? 'border' : 'border-none'}`} 
                 placeholder="Phone Number"
-                value={userData.phone_number} 
+                value={userData.phone} 
                 disabled={!isEditing} 
               />
             </div>
