@@ -99,7 +99,7 @@ const UserNavbar = () => {
 
                     {/* Dropdown Menu */}
                     {isDropdownVisible && (
-                        <div id="profileDropdown" className="absolute right-0 mt-5 w-64 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
+                        <div id="profileDropdown" className="absolute right-22 mt-8 w-64 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
                             {/* ✅ Profile Picture & Username Section */}
                             <div className="p-3 border-b border-gray-300">
                                 <div className="flex items-center">

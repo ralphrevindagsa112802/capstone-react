@@ -4,6 +4,9 @@ import axios from "axios";
 
 const AdminMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
+
 
   useEffect(() => {
     axios
@@ -13,12 +16,29 @@ const AdminMenu = () => {
       })
       .catch((error) => {
         console.error("Error fetching menu items:", error);
-      });
+      }); 
   }, []);
 
   const handleLogout = () => {
     console.log("Logout function triggered");
     // Add logout functionality here if needed
+  };
+
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setImagePreview(null);
+  };
+
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => setPreviewImage(e.target.result);
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -86,9 +106,8 @@ const AdminMenu = () => {
               <button className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md hover:bg-white">
                 Post
               </button>
-              <button className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md hover:bg-white">
-                Add product
-              </button>
+              <button onClick={() => setIsModalOpen(true)} className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md hover:bg-white">Add Product</button>
+              
               <button className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md flex items-center space-x-2 hover:bg-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +127,7 @@ const AdminMenu = () => {
               </button>
             </div>
           </div>
-
+        
           {/* Menu Table */}
           <div className="overflow-x-auto mt-6">
             <table className="w-full bg-white shadow-md border border-gray-300">
@@ -156,10 +175,124 @@ const AdminMenu = () => {
                 )}
               </tbody>
             </table>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+
+
+{/**popup ADD product  */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[500px] relative">
+            <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-600 text-xl">&times;</button>
+            <h2 className="text-xl font-bold text-blue-800 mb-4">New Product</h2>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center cursor-pointer">
+              <input type="file" className="hidden" onChange={handleImageChange} accept="image/*" />
+              {previewImage ? (
+                <img src={previewImage} className="w-24 h-24 object-cover mb-2 rounded-md" alt="Preview" />
+              ) : (
+                <p>Drag photo here or <span className="text-blue-600 underline">Browse image</span></p>
+              )}
+            </div>
+            <form className="mt-4 space-y-3">
+              <label className="flex flex-row items-center w-full">
+                <div className="text-gray-700 w-1/3">Product name :</div>
+                <input type="text" className="w-full p-2 border rounded-md" placeholder="Enter product name" required />
+              </label>
+              <label className="flex flex-row items-center w-full">
+                <div className="text-gray-700 w-1/3">Description :</div>
+                <textarea className="w-full p-2 border rounded-md" placeholder="Enter description"></textarea>
+              </label>
+              <label className="flex flex-row items-center w-full">
+                <div className="text-gray-700 w-1/3">Size :</div>
+                <select className="w-full p-2 border rounded-md">
+                  <option value="">Select size...</option>
+                  <option value="Regular">Regular</option>
+                  <option value="Tall">Tall</option>
+                  <option value="Large">Large</option>
+                </select>
+              </label>
+              <label className="flex flex-row items-center w-full">
+                <div className="text-gray-700 w-1/3">Category :</div>
+                <select className="w-full p-2 border rounded-md">
+                  <option value="">Select category</option>
+                  <option value="Coffee">Classic Coffee</option>
+                  <option value="Frappes">Frappes</option>
+                  <option value="Smoothies">Smoothies</option>
+                  <option value="Refreshers">Refreshers</option>
+                  <option value="Milk Drinks">Milk Drinks</option>
+                  <option value="Rice Meals">Rice Meals</option>
+                  <option value="Snacks & Pasta">Snacks & Pasta</option>
+                </select>
+              </label>
+              <label className="flex flex-row items-center w-full">
+                <div className="text-gray-700 w-1/3">Price :</div>
+                <input type="number" className="w-full p-2 border rounded-md" placeholder="Enter price" required />
+              </label>
+              <div className="flex justify-end gap-2 mt-4">
+                <button type="submit" className="flex font-bold items-center border border-[#1C359A] text-black px-4 py-2 rounded-md hover:bg-blue-600">
+                  <span className="mr-2">💾</span> Add Item
+                </button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="border font-bold border-[#1C359A] px-4 py-2 rounded-md hover:bg-gray-200">
+                  Discard
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-      </div>
+      )}
+
+
+       {/* Popup Modal 
+       {isModalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-[500px] relative">
+                <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-600 text-xl">&times;</button>
+                <h2 className="text-xl font-bold text-blue-800 mb-4">New Product</h2>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center cursor-pointer">
+                  <input type="file" className="hidden" onChange={handleImageChange} accept="image/*" />
+                  {previewImage ? (
+                    <img src={previewImage} className="w-24 h-24 object-cover mb-2 rounded-md" alt="Preview" />
+                  ) : (
+                    <p>Drag photo here or <span className="text-blue-600 underline">Browse image</span></p>
+                  )}
+                </div>
+                <form className="mt-4 space-y-3">
+                  <input type="text" className="w-full p-2 border rounded-md" placeholder="Enter product name" required />
+                  <textarea className="w-full p-2 border rounded-md" placeholder="Enter description"></textarea>
+                  <select className="w-full p-2 border rounded-md">
+                    <option value="">Select size...</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Tall">Tall</option>
+                    <option value="Large">Large</option>
+                  </select>
+                  <select className="w-full p-2 border rounded-md">
+                    <option value="">Select category...</option>
+                    <option value="Coffee">Classic Coffee</option>
+                    <option value="Frappes">Frappes</option>
+                    <option value="Smoothies">Smoothies</option>
+                    <option value="Refreshers">Refreshers</option>
+                    <option value="Milk Drinks">Milk Drinks</option>
+                    <option value="Rice Meals">Rice Meals</option>
+                    <option value="Snacks & Pasta">Snacks & Pasta</option>
+                  </select>
+                  <input type="number" className="w-full p-2 border rounded-md" placeholder="Enter price" required />
+                  <div className="flex justify-end gap-2 mt-4">
+                    <button type="submit" className="border border-[#1C359A] text-black px-4 py-2 rounded-md hover:bg-blue-600">Add Item</button>
+                    <button type="button" onClick={() => setIsModalOpen(false)} className="border border-[#1C359A] px-4 py-2 rounded-md hover:bg-gray-200">Discard</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+*/}
     </div>
+
+    
   );
 };
 
