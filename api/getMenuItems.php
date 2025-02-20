@@ -4,20 +4,10 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 
 // Database connection
-$servername = "localhost";
-$username = "root"; // Default for XAMPP
-$password = ""; // Default for XAMPP
-$dbname = "yappari_db"; // Change this to your actual database name
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed"]));
-}
+include 'db.php';
 
 // Fetch menu items
-$sql = "SELECT food_id, food_name, food_description, food_size, food_price, food_img FROM food";
+$sql = "SELECT * FROM food";
 
 $result = $conn->query($sql);
 

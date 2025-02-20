@@ -100,10 +100,15 @@ const Login = () => {
           </div>
           <div className="text-center mt-4 flex items-center justify-center flex-col">
             <p className="text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
-            <button type="button"
-              className="flex items-center justify-center w-96 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
-              <img src="https://www.freepik.com/free-photos-vectors/google-logo" alt="Google" className="mr-2"/> Login with Google
-            </button>
+              <button type="button"
+                className="flex items-center justify-center w-96 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+                <img 
+                src="..\img\google-logo.png"
+                alt="Google"
+                className="mr-2 w-8 h-8"/> 
+                
+                Login with Google
+              </button>
           </div>
         </div>
 
