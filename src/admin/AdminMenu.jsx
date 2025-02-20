@@ -6,6 +6,14 @@ const AdminMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+  const [formData, setFormData] = useState({
+    food_name: "",
+    food_description: "",
+    food_size: "",
+    food_price: "",
+    category: "",
+    food_img: null,
+  });
 
 
   useEffect(() => {
@@ -16,30 +24,83 @@ const AdminMenu = () => {
       })
       .catch((error) => {
         console.error("Error fetching menu items:", error);
-      }); 
+      });
   }, []);
 
   const handleLogout = () => {
     console.log("Logout function triggered");
+    localStorage.removeItem('isAdminAuthenticated');
+    navigate('/admin/login');
     // Add logout functionality here if needed
   };
 
+  
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setImagePreview(null);
+    setPreviewImage(null);
+    setFormData({
+      food_name: "",
+      food_description: "",
+      food_size: "",
+      food_price: "",
+      category: "",
+      food_img: null,
+    });
   };
-
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setFormData({ ...formData, food_img: file });
       const reader = new FileReader();
       reader.onload = (e) => setPreviewImage(e.target.result);
       reader.readAsDataURL(file);
     }
   };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("food_name", formData.food_name);
+    data.append("food_description", formData.food_description);
+    data.append("food_size", formData.food_size);
+    data.append("food_price", formData.food_price);
+    data.append("category", formData.category);
+    if (formData.food_img) {
+      data.append("food_img", formData.food_img);
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost/capstone-react/api/add_product.php",
+        data,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response.data.success) {
+        alert("Product added successfully!");
+        handleCloseModal();
+        // Refresh menu items
+        axios.get("http://localhost/capstone-react/api/getMenuItems.php").then((res) => {
+          setMenuItems(res.data);
+        });
+      } else {
+        alert(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Failed to add product.");
+    }
+  };
+
 
   return (
     <div className="flex flex-col h-screen bg-[#DCDEEA]">
@@ -60,7 +121,7 @@ const AdminMenu = () => {
         {/* Sidebar */}
         <div className="w-64 flex-none bg-white shadow-md h-full flex flex-col p-4">
           <nav className="flex flex-col space-y-4">
-            <Link
+            <Link     
               to="/admin/dashboard"
               className="font-bold border-l-2 border-black hover:border-[#1C359A] sidebar-link flex items-center justify-center space-x-2 p-3 hover:bg-gray-200 text-gray-800"
             >
@@ -87,16 +148,13 @@ const AdminMenu = () => {
           </nav>
 
           {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className="mt-20 font-bold flex items-center justify-center bg-[#1C359A] text-white px-4 py-2 rounded-lg hover:bg-blue-800"
-          >
-            SIGN OUT
+          <button onClick={handleLogout} className="mt-20 font-bold flex items-center justify-center bg-[#1C359A] text-white px-4 py-2 rounded-lg hover:bg-blue-800">
+                        SIGN OUT
           </button>
         </div>
 
         {/* Main Content (Menu Management) */}
-        <div className="flex-1 p-8 bg-[#DCDEEA]">
+        <div className="flex-1 w-full p-6 overflow-auto bg-[#DCDEEA]">
           {/* Header Section */}
           <div className="w-full flex justify-between">
             <div className="text-[#1C359A] text-lg font-bold">
@@ -106,8 +164,8 @@ const AdminMenu = () => {
               <button className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md hover:bg-white">
                 Post
               </button>
-              <button onClick={() => setIsModalOpen(true)} className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md hover:bg-white">Add Product</button>
-              
+              <button onClick={handleOpenModal} className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md hover:bg-white">Add Product</button>
+
               <button className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md flex items-center space-x-2 hover:bg-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -127,39 +185,41 @@ const AdminMenu = () => {
               </button>
             </div>
           </div>
-        
+
           {/* Menu Table */}
-          <div className="overflow-x-auto mt-6">
-            <table className="w-full bg-white shadow-md border border-gray-300">
+          <div className="p-2 w-full mt-6 rounded-2xl">
+            <table className="w-full bg-white opacity-90 rounded-2xl">
               <thead>
-                <tr className="bg-gray-200">
-                  <th className="border px-4 py-2">ID</th>
-                  <th className="border px-4 py-2">Name</th>
-                  <th className="border px-4 py-2">Category</th>
-                  <th className="border px-4 py-2">Price</th>
-                  <th className="border px-4 py-2">Size</th>
-                  <th className="border px-4 py-2">Availability</th>
-                  <th className="border px-4 py-2">Description</th>
-                  <th className="border px-4 py-2">Action</th>
+                <tr className="">
+                {/**  <th className="px-4 py-2 text-left text-sm text-[#808080]">ID</th> */} 
+                  <th className="p-3 text-left text-[#808080]"><input type="checkbox" /></th>
+                  <th className=" px-4 py-2 text-left text-sm text-[#808080]">Name</th>
+                  <th className=" px-4 py-2 text-left text-sm text-[#808080]">Category</th>
+                  <th className=" px-4 py-2 text-left text-sm text-[#808080]">Price</th>
+                  <th className=" px-4 py-2 text-left text-sm text-[#808080]">Size</th>
+                  <th className=" px-4 py-2 text-left text-sm text-[#808080]">Availability</th>
+                  <th className=" px-4 py-2 text-left text-sm text-[#808080]">Description</th>
+                  <th className=" px-4 py-2 text-left text-sm text-[#808080]">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {menuItems.length > 0 ? (
                   menuItems.map((item) => (
-                    <tr key={item.food_id} className="hover:bg-gray-100">
-                      <td className="border px-4 py-2">{item.food_id}</td>
-                      <td className="border px-4 py-2">{item.food_name}</td>
-                      <td className="border px-4 py-2">{item.category}</td>
+                    <tr key={item.food_id} className="border-t hover:bg-gray-100">
+                     {/**  <td className=" px-4 py-2">{item.food_id}</td>  */}
+                      <td className="p-3"><input type="checkbox" /></td>
+                      <td className="  px-4 py-2">{item.food_name}</td>
+                      <td className=" px-4 py-2">{item.category}</td>
 
-                      <td className="border px-4 py-2">₱{item.food_price}</td>
-                      <td className="border px-4 py-2">{item.food_size}</td>
+                      <td className=" px-4 py-2">₱{item.food_price}</td>
+                      <td className=" px-4 py-2">{item.food_size}</td>
 
-                      <td className="border px-4 py-2">{item.availability}</td>
-                      
-                      <td className="border px-4 py-2">
+                      <td className=" px-4 py-2">{item.availability}</td>
+
+                      <td className=" px-4 py-2">
                         {item.food_description}
                       </td>
-                      <td className="border px-4 py-2">{item.action}</td>
+                      <td className=" px-4 py-2">{item.action}</td>
 
                     </tr>
                   ))
@@ -175,40 +235,42 @@ const AdminMenu = () => {
                 )}
               </tbody>
             </table>
-            
+
           </div>
-          
+
         </div>
-        
+
       </div>
 
 
-{/**popup ADD product  */}
+      {/**popup ADD product  */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[500px] relative">
-            <button onClick={() => setIsModalOpen(false)} className="absolute top-3 right-3 text-gray-600 text-xl">&times;</button>
+            <button onClick={handleCloseModal} className="absolute top-3 right-3 text-gray-600 text-xl">
+              &times;
+            </button>
             <h2 className="text-xl font-bold text-blue-800 mb-4">New Product</h2>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center cursor-pointer">
-              <input type="file" className="hidden" onChange={handleImageChange} accept="image/*" />
-              {previewImage ? (
-                <img src={previewImage} className="w-24 h-24 object-cover mb-2 rounded-md" alt="Preview" />
-              ) : (
-                <p>Drag photo here or <span className="text-blue-600 underline">Browse image</span></p>
-              )}
+
+            {/* Image Upload */}
+            <div onClick={() => document.getElementById("fileInput").click()} className="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center cursor-pointer">
+              <input id="fileInput" type="file" className="hidden" onChange={handleImageChange} accept="image/*" />
+              {previewImage ? <img src={previewImage} className="w-24 h-24 object-cover mb-2 rounded-md" alt="Preview" /> : <p>Drag or Browse image</p>}
             </div>
-            <form className="mt-4 space-y-3">
+
+            {/* Product Form */}
+            <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
               <label className="flex flex-row items-center w-full">
-                <div className="text-gray-700 w-1/3">Product name :</div>
-                <input type="text" className="w-full p-2 border rounded-md" placeholder="Enter product name" required />
+                <div className="text-gray-700 w-1/3">Product name:</div>
+                <input type="text" name="food_name" value={formData.food_name} onChange={handleChange} className="w-full p-2 border rounded-md" required />
               </label>
               <label className="flex flex-row items-center w-full">
-                <div className="text-gray-700 w-1/3">Description :</div>
-                <textarea className="w-full p-2 border rounded-md" placeholder="Enter description"></textarea>
+                <div className="text-gray-700 w-1/3">Description:</div>
+                <textarea name="food_description" value={formData.food_description} onChange={handleChange} className="w-full p-2 border rounded-md"></textarea>
               </label>
               <label className="flex flex-row items-center w-full">
-                <div className="text-gray-700 w-1/3">Size :</div>
-                <select className="w-full p-2 border rounded-md">
+                <div className="text-gray-700 w-1/3">Size:</div>
+                <select name="food_size" value={formData.food_size} onChange={handleChange} className="w-full p-2 border rounded-md">
                   <option value="">Select size...</option>
                   <option value="Regular">Regular</option>
                   <option value="Tall">Tall</option>
@@ -216,10 +278,10 @@ const AdminMenu = () => {
                 </select>
               </label>
               <label className="flex flex-row items-center w-full">
-                <div className="text-gray-700 w-1/3">Category :</div>
-                <select className="w-full p-2 border rounded-md">
+                <div className="text-gray-700 w-1/3">Category:</div>
+                <select name="category" value={formData.category} onChange={handleChange} className="w-full p-2 border rounded-md">
                   <option value="">Select category</option>
-                  <option value="Coffee">Classic Coffee</option>
+                  <option value="Classic Coffee">Classic Coffee</option>
                   <option value="Frappes">Frappes</option>
                   <option value="Smoothies">Smoothies</option>
                   <option value="Refreshers">Refreshers</option>
@@ -229,24 +291,20 @@ const AdminMenu = () => {
                 </select>
               </label>
               <label className="flex flex-row items-center w-full">
-                <div className="text-gray-700 w-1/3">Price :</div>
-                <input type="number" className="w-full p-2 border rounded-md" placeholder="Enter price" required />
+                <div className="text-gray-700 w-1/3">Price (₱):</div>
+                <input type="number" name="food_price" value={formData.food_price} onChange={handleChange} className="w-full p-2 border rounded-md" required />
               </label>
-              <div className="flex justify-end gap-2 mt-4">
-                <button type="submit" className="flex font-bold items-center border border-[#1C359A] text-black px-4 py-2 rounded-md hover:bg-blue-600">
-                  <span className="mr-2">💾</span> Add Item
-                </button>
-                <button type="button" onClick={() => setIsModalOpen(false)} className="border font-bold border-[#1C359A] px-4 py-2 rounded-md hover:bg-gray-200">
-                  Discard
-                </button>
-              </div>
+
+              <button type="submit" className="bg-blue-600 text-white p-2 rounded-md w-full hover:bg-blue-700">
+                Add Product
+              </button>
             </form>
           </div>
         </div>
       )}
 
 
-       {/* Popup Modal 
+      {/* Popup Modal 
        {isModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
               <div className="bg-white p-6 rounded-lg shadow-lg w-[500px] relative">
@@ -292,7 +350,7 @@ const AdminMenu = () => {
 */}
     </div>
 
-    
+
   );
 };
 

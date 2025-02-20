@@ -2,56 +2,69 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
 
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "yappari";
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-$conn = new mysqli($servername, $username, $password, $database);
+require_once "db.php"; // Ensure this file correctly connects to your database
 
-// Check for connection error
-if ($conn->connect_error) {
-    die(json_encode(["success" => false, "message" => "Database connection failed"]));
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    echo json_encode(["success" => false, "message" => "Invalid request method"]);
+    exit;
 }
 
-// Check if form data is received
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $food_name = $_POST["food_name"];
-    $food_description = $_POST["food_description"];
-    $food_size = $_POST["food_size"];
-    $food_price = $_POST["food_price"];
-    $category_id = $_POST["category_id"];
+$food_name = isset($_POST["food_name"]) ? trim($_POST["food_name"]) : "";
+$food_description = isset($_POST["food_description"]) ? trim($_POST["food_description"]) : "";
+$food_size = isset($_POST["food_size"]) ? trim($_POST["food_size"]) : "";
+$food_price = isset($_POST["food_price"]) ? floatval($_POST["food_price"]) : 0;
+$category = isset($_POST["category"]) ? intval($_POST["category"]) : 0;
+$food_img = null;
+
+// Ensure required fields are filled
+if (empty($food_name) || empty($food_description) || empty($food_size) || $food_price <= 0 || $category <= 0) {
+    echo json_encode(["success" => false, "message" => "All fields are required and must be valid"]);
+    exit;
+}
+
+// Handle image upload if provided
+if (!empty($_FILES["food_img"]["name"])) {
+    $target_dir = "uploads/";
+    if (!is_dir($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
     
-    // Handle image upload
-    $food_img = null;
-    if (isset($_FILES["food_img"])) {
-        $target_dir = "uploads/"; // Ensure this folder exists and is writable
-        $file_name = time() . "_" . basename($_FILES["food_img"]["name"]);
-        $target_file = $target_dir . $file_name;
-        
-        if (move_uploaded_file($_FILES["food_img"]["tmp_name"], $target_file)) {
-            $food_img = $file_name;
-        } else {
-            echo json_encode(["success" => false, "message" => "Image upload failed"]);
-            exit();
-        }
+    $image_name = basename($_FILES["food_img"]["name"]);
+    $target_file = $target_dir . uniqid() . "_" . $image_name;
+    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    // Validate image file
+    $allowed_types = ["jpg", "jpeg", "png", "gif"];
+    if (!in_array($imageFileType, $allowed_types)) {
+        echo json_encode(["success" => false, "message" => "Invalid image format (JPG, JPEG, PNG, GIF allowed)"]);
+        exit;
     }
 
-    // Insert product into database
-    $stmt = $conn->prepare("INSERT INTO food (food_name, food_description, food_size, food_price, food_img, category_id) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssi", $food_name, $food_description, $food_size, $food_price, $food_img, $category_id);
-
-    if ($stmt->execute()) {
-        echo json_encode(["success" => true, "message" => "Product added successfully"]);
+    if (move_uploaded_file($_FILES["food_img"]["tmp_name"], $target_file)) {
+        $food_img = $target_file;
     } else {
-        echo json_encode(["success" => false, "message" => "Failed to add product"]);
+        echo json_encode(["success" => false, "message" => "Failed to upload image"]);
+        exit;
     }
-
-    $stmt->close();
-    $conn->close();
-} else {
-    echo json_encode(["success" => false, "message" => "Invalid request"]);
 }
+
+// Insert data into database
+$sql = "INSERT INTO food (food_name, food_description, food_size, food_price, category, food_img) 
+        VALUES (?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sssdis", $food_name, $food_description, $food_size, $food_price, $category, $food_img);
+
+if ($stmt->execute()) {
+    echo json_encode(["success" => true, "message" => "Product added successfully"]);
+} else {
+    echo json_encode(["success" => false, "message" => "Failed to add product", "error" => $stmt->error]);
+}
+
+$stmt->close();
+$conn->close();
 ?>
