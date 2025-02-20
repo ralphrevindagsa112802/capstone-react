@@ -83,8 +83,8 @@ const UserMenu = () => {
                         <div key={food.food_id} className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
                             <div className="w-full flex flex-wrap justify-center gap-4">
                                 <img src={food.food_img} alt="" className="w-[213px] h-48 rounded-md object-cover"/>
-                                </div>
-                                <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col"> 
+                            </div>
+                            <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col"> 
                                 <div className="text-[#1C359A] font-bold flex">{food.food_name}</div>
                                 <div className="text-justify opacity-55">{food.food_description}</div>
                                 <div className="flex flex-row-reverse justify-between pt-4 mt-auto items-center">
