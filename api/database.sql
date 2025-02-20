@@ -30,10 +30,10 @@ CREATE TABLE food (
 );
 
 INSERT INTO `food` (`food_id`, `food_name`, `food_description`, `food_size`, `food_price`, `food_img`) VALUES
-(1, 'katsudon', 'basta katsudon yan', 'regular', 160, '[value-6]'),
-(2, 'fish n chips', 'fish n chips', 'regular', 110, ''),
-(3, 'fish n chips', 'fish n chips', 'regular', 110, ''),
-(4, 'Pork curry', 'This delicious pork curry recipe has just the right amount of heat, but it can be adjusted to any taste.', 'Regular', 160, '[value-6]');
+(1, 'Cafe Vienna', 'Viannese Coffee that serves Americano topped with a heavy whipped cream. Dashed with cocoa powder', 'Regular', 130, '../img//CLASSIC COFFEES/Cafe Vienna.jpg'),
+(2, 'Pork Katsudon', 'Fried panko-breaded pork cutlet with egg cooked in japanese soy sauce over rice.', 'Regular', 120, '../img/katsudon.jpg'),
+(3, 'Caramel Macchiato', 'Milk espresso-based coffee with use of freshly steamed milk, caramel syrup and caramel drizzle on top.', 'Regular', 125, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg'),
+(4, 'Seafood Pasta', ' A tomato-based pasta that is served with shrimp.', 'Regular', 160, '../img/2022-11-21 (2).jpg');
 
 -- Create food size table
 CREATE TABLE size (

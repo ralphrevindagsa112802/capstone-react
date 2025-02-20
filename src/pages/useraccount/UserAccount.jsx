@@ -56,37 +56,37 @@ const UserAccount = () => {
 
       <div className="container mx-auto pt-6 px-4 md:px-36 flex flex-col md:flex-row w-full">
       {/**side bar profile section */}
-      <aside class="w-full mt-12 md:w-64 h-auto md:h-screen py-4 flex flex-col space-y-6">
-                    <nav class="space-y-4">
+      <aside className="w-full mt-12 md:w-64 h-auto md:h-screen py-4 flex flex-col space-y-6">
+                    <nav className="space-y-4">
                 
-                        <a id="profile" href="UserAccount.jsx" class="flex items-center space-x-4">
-                        <img src="path-to-user-profile-icon.svg" alt="User Profile" class="w-6 h-6"/>
-                        <span class="font-semibold">User profile</span>
+                        <a id="profile" href="UserAccount.jsx" className="flex items-center space-x-4">
+                        <img src="path-to-user-profile-icon.svg" alt="User Profile" className="w-6 h-6"/>
+                        <span className="font-semibold">User profile</span>
                         </a>
 
                     
-                        <a id="cart" href="cart.html" class="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
-                        <img src="path-to-cart-icon.svg" alt="Cart" class="w-6 h-6"/>
-                        <span class="font-semibold">Cart</span>
+                        <a id="cart" href="cart.html" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+                        <img src="path-to-cart-icon.svg" alt="Cart" className="w-6 h-6"/>
+                        <span className="font-semibold">Cart</span>
                         </a>
 
                     
-                        <a id="orderstatus" href="orderstatus.html" class="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
-                        <img src="path-to-order-status-icon.svg" alt="Order Status" class="w-6 h-6"/>
-                        <span class="font-semibold">Order status</span>
+                        <a id="orderstatus" href="orderstatus.html" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+                        <img src="path-to-order-status-icon.svg" alt="Order Status" className="w-6 h-6"/>
+                        <span className="font-semibold">Order status</span>
                         </a>
 
                     
-                        <a id="orderhistory" href="orderhistory.html" class="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
-                        <img src="path-to-order-history-icon.svg" alt="Order History" class="w-6 h-6"/>
-                        <span class="font-semibold">Order History</span>
+                        <a id="orderhistory" href="orderhistory.html" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+                        <img src="path-to-order-history-icon.svg" alt="Order History" className="w-6 h-6"/>
+                        <span className="font-semibold">Order History</span>
                         </a>
                     </nav>
 
                     
-                    <div class="mt-6">
-                        <button class="flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700">
-                        <img src="path-to-sign-out-icon.svg" alt="Sign Out" class="w-5 h-5 mr-2"/>
+                    <div className="mt-6">
+                        <button className="flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700">
+                        <img src="path-to-sign-out-icon.svg" alt="Sign Out" className="w-5 h-5 mr-2"/>
                         SIGN OUT
                         </button>
                     </div>
