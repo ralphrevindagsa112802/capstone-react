@@ -2,7 +2,8 @@ import { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 
-export const CartProvider = ({ children }) => {
+export const CartProvider = ({ children }) => { 
+
   const [cartItems, setCartItems] = useState(() => {
     // Get stored cart from localStorage or start with an empty array
     const savedCart = localStorage.getItem("cartItems");

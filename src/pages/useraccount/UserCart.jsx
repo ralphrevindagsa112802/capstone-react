@@ -16,31 +16,24 @@ const UserCart = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const items = cartItems.map(item => ({
-            food_id: item.food_id,
-            quantity: item.quantity,
-            price: item.food_price
-        }));
-
         try {
             const response = await axios.post(
-                "http://localhost/capstone-react/api/submitOrders.php",
-                JSON.stringify({ items }),
-                { headers: { "Content-Type": "application/json" }, withCredentials: true }
+                'http://localhost/capstone-react/api/submitOrders.php',
+                { items: cartItems },
+                { withCredentials: true }
             );
-
             if (response.data.success) {
                 alert(`Order submitted! Order ID: ${response.data.order_id}`);
-                setCartItems([]);
+                setCartItems([]); // Clear cart after successful submission
             } else {
                 alert(`Error: ${response.data.message}`);
             }
         } catch (error) {
-            console.error("Error submitting order:", error);
-            alert("Failed to submit order. Please try again.");
+            console.error('Error submitting order:', error);
+            alert('Failed to submit order. Please try again.');
         }
     };
+    
 
     return (
         <div>

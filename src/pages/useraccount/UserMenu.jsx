@@ -5,11 +5,11 @@ import Footer from "../../components/Footer";
 import { CartContext } from "../../context/CartContext"; // Import context
 
 const UserMenu = () => {
-    const { cartItems} = useContext(CartContext); // Use context
+    const { cartItems, addToCart } = useContext(CartContext); // Use context
     const [foodItems, setFoodItems] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost/capstone-react/api/getFoodItems.php")
+        axios.get('http://localhost/capstone-react/api/getFoodItems.php')
             .then(response => {
                 if (response.data.success) {
                     setFoodItems(response.data.data);
@@ -19,20 +19,6 @@ const UserMenu = () => {
             })
             .catch(error => console.error(error));
     }, []);
-
-    const addToCart = (food) => {
-        const cartItem = {
-            ...food,
-            quantity: 1, // Ensure quantity is always included
-        };
-        setCartItems([...cartItems, cartItem]);
-        alert(`${food.food_name} added to cart!`);
-    };
-    
-    const handleAddToCart = (food) => {
-        addToCart(food);
-        alert(`${food.food_name} added to cart!`);
-    };
 
     return (
         <div className='bg-[#DCDEEA]'>
@@ -104,7 +90,7 @@ const UserMenu = () => {
                                     <div className="text-justify opacity-55">{food.food_description}</div>
                                     <div className="flex flex-row-reverse justify-between pt-4 mt-auto items-center">
                                         <div className="price text-sm font-semibold">₱{food.food_price}</div>
-                                        <button onClick={() => handleAddToCart(food)} className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2">
+                                            <button onClick={() => addToCart({...food, quantity: 1})} className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer">
                                         <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
                                         <span>Add</span>
                                         </button>
