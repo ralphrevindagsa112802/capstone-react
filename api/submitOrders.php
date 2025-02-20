@@ -1,21 +1,32 @@
 <?php
-header('Content-Type: application/json'); // Set response header to JSON
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET");
-include 'db.php'; // Include the database connection
+session_start(); // Start session to access user data
+
+header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow React frontend
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
+
+// Database connection
+include 'db.php';
+
+// Check if the user is logged in
+if (!isset($_SESSION["user_id"])) {
+    echo json_encode(["success" => false, "message" => "User not logged in"]);
+    exit();
+}
 
 // Get raw JSON data from the request body
 $data = json_decode(file_get_contents('php://input'), true);
 
 // Validate input data
-if (empty($data['user_name']) || empty($data['user_email']) || empty($data['items'])) {
+if (empty($data['items'])) {
     echo json_encode(["success" => false, "message" => "Invalid input data"]);
     exit;
 }
 
 // Extract data
-$userName = $conn->real_escape_string($data['user_name']);
-$userEmail = $conn->real_escape_string($data['user_email']);
+$userId = $_SESSION["user_id"]; // Get user ID from session
 $items = $data['items'];
 
 // Calculate total amount
@@ -25,9 +36,12 @@ foreach ($items as $item) {
 }
 
 // Insert order into the `orders` table
-$sql = "INSERT INTO orders (user_name, user_email, total_amount) VALUES ('$userName', '$userEmail', $totalAmount)";
-if ($conn->query($sql) === TRUE) {
-    $orderId = $conn->insert_id; // Get the ID of the newly inserted order
+$sql = "INSERT INTO orders (user_id, total_amount) VALUES (?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("id", $userId, $totalAmount);
+
+if ($stmt->execute()) {
+    $orderId = $stmt->insert_id; // Get the ID of the newly inserted order
 
     // Insert order items into the `order_items` table
     foreach ($items as $item) {
@@ -35,17 +49,21 @@ if ($conn->query($sql) === TRUE) {
         $quantity = $conn->real_escape_string($item['quantity']);
         $price = $conn->real_escape_string($item['price']);
 
-        $sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ($orderId, $productId, $quantity, $price)";
-        if (!$conn->query($sql)) {
-            echo json_encode(["success" => false, "message" => "Failed to insert order items: " . $conn->error]);
+        $sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("iiid", $orderId, $productId, $quantity, $price);
+
+        if (!$stmt->execute()) {
+            echo json_encode(["success" => false, "message" => "Failed to insert order items: " . $stmt->error]);
             exit;
         }
     }
 
     echo json_encode(["success" => true, "order_id" => $orderId]); // Success response
 } else {
-    echo json_encode(["success" => false, "message" => "Failed to insert order: " . $conn->error]); // Error response
+    echo json_encode(["success" => false, "message" => "Failed to insert order: " . $stmt->error]); // Error response
 }
 
-$conn->close(); // Close the database connection
+$stmt->close();
+$conn->close();
 ?>

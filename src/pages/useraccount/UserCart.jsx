@@ -1,9 +1,29 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import UserNavbar from '../../components/UserNavbar';
 import Footer from '../../components/Footer';
 
 const UserCart = () => {
+
+    const submitOrder = async (items) => {
+        try {
+            const response = await axios.post('http://localhost/capstone-react/api/submitOrder.php', {
+                items: items
+            }, {
+                withCredentials: true // Include cookies for session handling
+            });
+    
+            if (response.data.success) {
+                alert(`Order submitted! Order ID: ${response.data.order_id}`);
+            } else {
+                alert(`Error: ${response.data.message}`);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
   return (
     <div>
         <UserNavbar />

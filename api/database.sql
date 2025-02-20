@@ -21,7 +21,7 @@ CREATE TABLE users (
 
 -- Create food table
 CREATE TABLE food (
-  food_id int(222) NOT NULL,
+  food_id int(222) AUTO_INCREMENT PRIMARY KEY,
   food_name varchar(222) NOT NULL,
   food_description varchar(222) NOT NULL,
   food_size varchar(222) NOT NULL,
@@ -29,11 +29,11 @@ CREATE TABLE food (
   food_img varchar(222) NOT NULL
 );
 
-INSERT INTO `food` (`food_id`, `food_name`, `food_description`, `food_size`, `food_price`, `food_img`) VALUES
-(1, 'Cafe Vienna', 'Viannese Coffee that serves Americano topped with a heavy whipped cream. Dashed with cocoa powder', 'Regular', 130, '../img//CLASSIC COFFEES/Cafe Vienna.jpg'),
-(2, 'Pork Katsudon', 'Fried panko-breaded pork cutlet with egg cooked in japanese soy sauce over rice.', 'Regular', 120, '../img/katsudon.jpg'),
-(3, 'Caramel Macchiato', 'Milk espresso-based coffee with use of freshly steamed milk, caramel syrup and caramel drizzle on top.', 'Regular', 125, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg'),
-(4, 'Seafood Pasta', ' A tomato-based pasta that is served with shrimp.', 'Regular', 160, '../img/2022-11-21 (2).jpg');
+INSERT INTO `food` (`food_name`, `food_description`, `food_size`, `food_price`, `food_img`) VALUES
+('Cafe Vienna', 'Viannese Coffee that serves Americano topped with a heavy whipped cream. Dashed with cocoa powder', 'Regular', 130, '../img//CLASSIC COFFEES/Cafe Vienna.jpg'),
+('Pork Katsudon', 'Fried panko-breaded pork cutlet with egg cooked in japanese soy sauce over rice.', 'Regular', 120, '../img/katsudon.jpg'),
+('Caramel Macchiato', 'Milk espresso-based coffee with use of freshly steamed milk, caramel syrup and caramel drizzle on top.', 'Regular', 125, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg'),
+('Seafood Pasta', ' A tomato-based pasta that is served with shrimp.', 'Regular', 160, '../img/2022-11-21 (2).jpg');
 
 -- Create food size table
 CREATE TABLE size (
@@ -45,9 +45,11 @@ CREATE TABLE size (
 -- Create orders table
 CREATE TABLE orders (
     orders_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
     user_name VARCHAR(255) NOT NULL,
     user_email VARCHAR(255) NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -55,11 +57,11 @@ CREATE TABLE orders (
 CREATE TABLE order_items (
     order_items_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
-    product_id INT,
+    foods_id INT,
     quantity INT,
     price DECIMAL(10, 2),
     FOREIGN KEY (order_id) REFERENCES orders(orders_id),
-    FOREIGN KEY (food_id) REFERENCES food(food_id)
+    FOREIGN KEY (foods_id) REFERENCES food(food_id)
 );
 
 -- Create the admin table

@@ -4,19 +4,27 @@ import UserNavbar from '../../components/UserNavbar'
 import Footer from '../../components/Footer'
 
 const UserMenu = () => {
-        const [foodItems, setFoodItems] = useState([]);
+
+    const [foodItems, setFoodItems] = useState([]);
     
-        useEffect(() => {
-            axios.get('http://localhost/capstone-react/api/getFoodItems.php')
-                .then(response => {
-                    if (response.data.success) {
-                        setFoodItems(response.data.data);
-                    } else {
-                        console.error(response.data.message);
-                    }
-                })
-                .catch(error => console.error(error));
-        }, []);
+    useEffect(() => {
+        axios.get('http://localhost/capstone-react/api/getFoodItems.php')
+            .then(response => {
+                if (response.data.success) {
+                    setFoodItems(response.data.data);
+                } else {
+                    console.error(response.data.message);
+                }
+            })
+            .catch(error => console.error(error));
+    }, []);
+
+    const [cart, setCart] = useState([]);
+
+    const addToCart = (food) => {
+        setCart([...cart, food]);
+        alert(`${food.food_name} added to cart!`);
+    };
     
 
   return (
@@ -88,8 +96,8 @@ const UserMenu = () => {
                                 <div className="text-[#1C359A] font-bold flex">{food.food_name}</div>
                                 <div className="text-justify opacity-55">{food.food_description}</div>
                                 <div className="flex flex-row-reverse justify-between pt-4 mt-auto items-center">
-                                    <div className="price text-sm font-semibold">{food.food_price}</div>
-                                    <button className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2">
+                                    <div className="price text-sm font-semibold">₱{food.food_price}</div>
+                                    <button onClick={() => addToCart(food)} className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2">
                                     <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
                                     <span>Add</span>
                                     </button>
