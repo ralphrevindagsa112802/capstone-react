@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import UserNavbar from "../../components/UserNavbar";
 import Footer from "../../components/Footer";
-import { useCart } from "../../context/CartContext"; // Import context
+import { CartContext } from "../../context/CartContext"; // Import context
 
 const UserMenu = () => {
-    const { addToCart } = useCart(); // Use context
+    const { cartItems} = useContext(CartContext); // Use context
     const [foodItems, setFoodItems] = useState([]);
 
     useEffect(() => {
@@ -19,6 +19,20 @@ const UserMenu = () => {
             })
             .catch(error => console.error(error));
     }, []);
+
+    const addToCart = (food) => {
+        const cartItem = {
+            ...food,
+            quantity: 1, // Ensure quantity is always included
+        };
+        setCartItems([...cartItems, cartItem]);
+        alert(`${food.food_name} added to cart!`);
+    };
+    
+    const handleAddToCart = (food) => {
+        addToCart(food);
+        alert(`${food.food_name} added to cart!`);
+    };
 
     return (
         <div className='bg-[#DCDEEA]'>
@@ -90,7 +104,7 @@ const UserMenu = () => {
                                     <div className="text-justify opacity-55">{food.food_description}</div>
                                     <div className="flex flex-row-reverse justify-between pt-4 mt-auto items-center">
                                         <div className="price text-sm font-semibold">₱{food.food_price}</div>
-                                        <button onClick={() => addToCart(food)} className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2">
+                                        <button onClick={() => handleAddToCart(food)} className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2">
                                         <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
                                         <span>Add</span>
                                         </button>

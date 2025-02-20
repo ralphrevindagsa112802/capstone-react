@@ -19,7 +19,20 @@ if (!isset($_SESSION["user_id"])) {
 // Get raw JSON data from the request body
 $data = json_decode(file_get_contents('php://input'), true);
 
-error_log("Received data: " . print_r($data, true));
+// 🔹 Debug: Print the received JSON to check if quantity exists
+error_log(print_r($data, true)); // Logs the received data
+
+if (!isset($data["items"]) || !is_array($data["items"])) {
+    echo json_encode(["error" => "Invalid data JSON"]);
+    exit();
+}
+
+foreach ($data["items"] as $item) {
+    if (!isset($item["food_id"], $item["quantity"])) {
+        echo json_encode(["error" => "Missing food_id or quantity"]);
+        exit();
+    }
+    
 
 // Validate input data
 if (empty($data['items'])) {
@@ -46,24 +59,25 @@ if ($stmt->execute()) {
     $orderId = $stmt->insert_id; // Get the ID of the newly inserted order
 
     // Insert order items into the `order_items` table
-    foreach ($items as $item) {
-        $productId = $conn->real_escape_string($item['foods_id']);
-        $quantity = $conn->real_escape_string($item['quantity']);
-        $price = $conn->real_escape_string($item['price']);
-
-        $sql = "INSERT INTO order_items (order_id, foods_id, quantity, price) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iiid", $orderId, $productId, $quantity, $price);
-
-        if (!$stmt->execute()) {
-            echo json_encode(["success" => false, "message" => "Failed to insert order items: " . $stmt->error]);
-            exit;
+    foreach ($data["items"] as $item) {
+        $food_id = isset($item["food_id"]) ? $item["food_id"] : null;
+        $quantity = isset($item["quantity"]) ? $item["quantity"] : 1; // Default to 1 if missing
+    
+        if ($food_id === null) {
+            echo json_encode(["error" => "Missing food_id"]);
+            exit();
         }
+    
+        // 🔹 Now $quantity is always set
     }
+    
 
-    echo json_encode(["success" => true, "order_id" => $orderId]); // Success response
+    
+    echo json_encode(["success" => true, "message" => "Order submitted"]); // Success response
 } else {
     echo json_encode(["success" => false, "message" => "Failed to insert order: " . $stmt->error]); // Error response
+}
+
 }
 
 $stmt->close();

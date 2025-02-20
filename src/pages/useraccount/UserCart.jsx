@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../../context/CartContext";
+import { CartContext } from "../../context/CartContext";
 import axios from "axios";
 import UserNavbar from "../../components/UserNavbar";
 import Footer from "../../components/Footer";
 
 const UserCart = () => {
-    const { cartItems, setCartItems } = useCart();
+    const { cartItems, removeFromCart } = useContext(CartContext);
     const [totalAmount, setTotalAmount] = useState(0);
 
     useEffect(() => {
@@ -101,7 +101,7 @@ const UserCart = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {cartItems.map((item) => (
+                                {cartItems.length > 0 ? (cartItems.map((item) => (
                                     <tr key={item.food_id} className="border-b">
                                         <td className="py-4 flex items-center">
                                             <img src={item.food_img} alt={item.food_name} className="w-16 h-16 rounded-md object-cover mr-4" />
@@ -112,8 +112,24 @@ const UserCart = () => {
                                         <td className="text-center py-4">{item.quantity}</td>
                                         <td className="text-center py-4">₱{item.food_price}</td>
                                         <td className="text-center py-4">₱{(item.food_price * item.quantity)}</td>
+                                        <td>
+                                            <div>
+                                                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onClick={() => removeFromCart(item.food_id)}>
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        </td>
+                                            
                                     </tr>
-                                ))}
+                                ))) : (
+                                    <tr>
+                                        <td className="py-4 flex items-center">
+                                            <p className="font-semibold">Your cart is empty</p>
+                                        </td>
+                                    </tr>
+                                  )
+                                }
+                                
                             </tbody>
                         </table>
 
@@ -122,6 +138,7 @@ const UserCart = () => {
                             <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                                 Proceed to Checkout
                             </button>
+                            
                         </div>
                     </form>
                 </div>
