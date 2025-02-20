@@ -35,11 +35,31 @@ INSERT INTO `food` (`food_id`, `food_name`, `food_description`, `food_size`, `fo
 (3, 'fish n chips', 'fish n chips', 'regular', 110, ''),
 (4, 'Pork curry', 'This delicious pork curry recipe has just the right amount of heat, but it can be adjusted to any taste.', 'Regular', 160, '[value-6]');
 
--- Create food size
+-- Create food size table
 CREATE TABLE size (
   size_id int(222) NOT NULL,
   regular varchar(222) NOT NULL,
   tail varchar(222) NOT NULL
+);
+
+-- Create orders table
+CREATE TABLE orders (
+    orders_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create order items table
+CREATE TABLE order_items (
+    order_items_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    product_id INT,
+    quantity INT,
+    price DECIMAL(10, 2),
+    FOREIGN KEY (order_id) REFERENCES orders(orders_id),
+    FOREIGN KEY (food_id) REFERENCES food(food_id)
 );
 
 -- Create the admin table
