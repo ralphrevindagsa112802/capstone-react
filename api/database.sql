@@ -3,6 +3,9 @@ CREATE DATABASE IF NOT EXISTS yappari_db;
 USE yappari_db;
 
 -- Drop existing tables if they exist (for development purposes)
+DROP TABLE IF EXISTS order_items;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS food;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS admin_users;
 
@@ -13,41 +16,32 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     f_name VARCHAR(100) NOT NULL,
     l_name VARCHAR(100) NOT NULL,
-    phone_number VARCHAR(15) NOT NULL, -- Added phone number
-    address TEXT NOT NULL, -- Added address
+    phone VARCHAR(15) NOT NULL,
+    address TEXT NOT NULL,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create food table
 CREATE TABLE food (
-  food_id int(222) AUTO_INCREMENT PRIMARY KEY,
-  food_name varchar(222) NOT NULL,
-  food_description varchar(222) NOT NULL,
-  food_size varchar(222) NOT NULL,
-  food_price int(222) NOT NULL,
-  food_img varchar(222) NOT NULL
+    food_id INT AUTO_INCREMENT PRIMARY KEY,
+    food_name VARCHAR(222) NOT NULL,
+    food_description VARCHAR(222) NOT NULL,
+    food_price INT(222) NOT NULL,
+    food_img VARCHAR(222) NOT NULL,
+    size VARCHAR(255)
 );
 
-INSERT INTO `food` (`food_name`, `food_description`, `food_size`, `food_price`, `food_img`) VALUES
-('Cafe Vienna', 'Viannese Coffee that serves Americano topped with a heavy whipped cream. Dashed with cocoa powder', 'Regular', 130, '../img//CLASSIC COFFEES/Cafe Vienna.jpg'),
-('Pork Katsudon', 'Fried panko-breaded pork cutlet with egg cooked in japanese soy sauce over rice.', 'Regular', 120, '../img/katsudon.jpg'),
-('Caramel Macchiato', 'Milk espresso-based coffee with use of freshly steamed milk, caramel syrup and caramel drizzle on top.', 'Regular', 125, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg'),
-('Seafood Pasta', ' A tomato-based pasta that is served with shrimp.', 'Regular', 160, '../img/2022-11-21 (2).jpg');
-
--- Create food size table
-CREATE TABLE size (
-  size_id int(222) NOT NULL,
-  regular varchar(222) NOT NULL,
-  tail varchar(222) NOT NULL
-);
+INSERT INTO `food` (`food_name`, `food_description`, `food_price`, `food_img`, `size`) VALUES
+('Cafe Vienna', 'Viannese Coffee that serves Americano topped with a heavy whipped cream. Dashed with cocoa powder', 130, '../img//CLASSIC COFFEES/Cafe Vienna.jpg', 'Regular'),
+('Pork Katsudon', 'Fried panko-breaded pork cutlet with egg cooked in japanese soy sauce over rice.', 120, '../img/katsudon.jpg', 'Regular'),
+('Caramel Macchiato', 'Milk espresso-based coffee with use of freshly steamed milk, caramel syrup and caramel drizzle on top.', 125, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg', 'Regular'),
+('Seafood Pasta', ' A tomato-based pasta that is served with shrimp.', 160, '../img/2022-11-21 (2).jpg', 'Regular');
 
 -- Create orders table
 CREATE TABLE orders (
     orders_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    user_name VARCHAR(255) NOT NULL,
-    user_email VARCHAR(255) NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -57,11 +51,11 @@ CREATE TABLE orders (
 CREATE TABLE order_items (
     order_items_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,
-    foods_id INT,
+    food_id INT,
     quantity INT,
     price DECIMAL(10, 2),
     FOREIGN KEY (order_id) REFERENCES orders(orders_id),
-    FOREIGN KEY (foods_id) REFERENCES food(food_id)
+    FOREIGN KEY (food_id) REFERENCES food(food_id)
 );
 
 -- Create the admin table
@@ -73,4 +67,4 @@ CREATE TABLE admin_users (
 );
 
 -- Insert a default admin account
-INSERT INTO admin_users (username, password) VALUES ('admin', 'password123'); -- MD5 is used for password hashing
+INSERT INTO admin_users (username, password) VALUES ('admin', 'password123');

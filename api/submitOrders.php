@@ -19,6 +19,8 @@ if (!isset($_SESSION["user_id"])) {
 // Get raw JSON data from the request body
 $data = json_decode(file_get_contents('php://input'), true);
 
+error_log("Received data: " . print_r($data, true));
+
 // Validate input data
 if (empty($data['items'])) {
     echo json_encode(["success" => false, "message" => "Invalid input data"]);
@@ -45,11 +47,11 @@ if ($stmt->execute()) {
 
     // Insert order items into the `order_items` table
     foreach ($items as $item) {
-        $productId = $conn->real_escape_string($item['product_id']);
+        $productId = $conn->real_escape_string($item['foods_id']);
         $quantity = $conn->real_escape_string($item['quantity']);
         $price = $conn->real_escape_string($item['price']);
 
-        $sql = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO order_items (order_id, foods_id, quantity, price) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("iiid", $orderId, $productId, $quantity, $price);
 

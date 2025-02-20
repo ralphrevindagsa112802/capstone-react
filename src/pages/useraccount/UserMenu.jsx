@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import UserNavbar from '../../components/UserNavbar'
 import Footer from '../../components/Footer'
+import { Link } from 'react-router-dom'
 
 const UserMenu = () => {
 
     const [foodItems, setFoodItems] = useState([]);
+    const [cartItems, setCartItems] = useState([]);
     
     useEffect(() => {
         axios.get('http://localhost/capstone-react/api/getFoodItems.php')
@@ -19,10 +21,21 @@ const UserMenu = () => {
             .catch(error => console.error(error));
     }, []);
 
-    const [cart, setCart] = useState([]);
-
     const addToCart = (food) => {
-        setCart([...cart, food]);
+        const itemExists = cartItems.find((item) => item.food_id === food.food_id);
+    
+        if (itemExists) {
+            // Item already exists in the cart, increment quantity
+            setCartItems(
+                cartItems.map((item) =>
+                    item.food_id === food.food_id ? { ...item, quantity: item.quantity + 1 } : item
+                )
+            );
+        } else {
+            // Item doesn't exist, add it with quantity 1
+            setCartItems([...cartItems, { ...food, quantity: 1 }]);
+        }
+    
         alert(`${food.food_name} added to cart!`);
     };
     
@@ -76,7 +89,10 @@ const UserMenu = () => {
                     <div className="w-full h-16 flex justify-between items-center px-4 relative">
                     <h1 className="text-[#1C359A] font-bold text-lg">All Menu</h1>
                     <div className="relative z-10">
-                        <img src="../img/cart.png" alt="Cart" className="h-6 w-6"/>
+                        {/* Use Link to navigate to UserCart */}
+                        <Link to={{ pathname: '/user/cart', state: { cartItems } }}>
+                                    <img src="../img/cart.png" alt="Cart" className="h-6 w-6" />
+                        </Link>
                     </div>
                     </div>
 

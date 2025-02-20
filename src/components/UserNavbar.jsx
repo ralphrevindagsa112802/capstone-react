@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const UserNavbar = () => {
     
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const dropdownRef = useRef(null);
     const [user, setUser] = useState(null);
+    const location = useLocation();
+    const cartItems = location.state?.cartItems || [];
   
     // Function to toggle dropdown
     const toggleDropdown = () => {
@@ -113,7 +115,7 @@ const UserNavbar = () => {
                                 </div>
                             </div>
                             <Link to="/user/account" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Account</Link>
-                            <Link to="/user/cart" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">My Cart</Link>
+                            <Link to={{ pathname: '/user/cart', state: { cartItems } }} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">My Cart</Link>
                             <Link to="/user/logout" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</Link>
                         </div>
                     )}
