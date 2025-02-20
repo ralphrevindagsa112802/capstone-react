@@ -1,5 +1,7 @@
 <?php
 header('Content-Type: application/json'); // Set response header to JSON
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET");
 include 'db.php'; // Include the database connection
 
 // Get raw JSON data from the request body
