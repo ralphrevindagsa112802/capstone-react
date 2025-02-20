@@ -97,7 +97,7 @@ const UserCart = ({ setCartItems }) => {
                 </aside>
 
                 <div className="w-full mx-auto bg-white p-6">
-                    <form onSubmit={()=>{}} id="cartForm">
+                    <form onSubmit={handleSubmit} id="cartForm">
                         <table className="w-full border-collapse">
                             <thead>
                                 <tr className="border-b">
