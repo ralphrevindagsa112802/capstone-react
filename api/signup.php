@@ -4,11 +4,8 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-$conn = new mysqli("localhost", "root", "", "yappari");
-
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed"]));
-}
+// Database connection
+include 'db.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 

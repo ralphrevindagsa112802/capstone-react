@@ -4,18 +4,8 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-// Connect to MySQL
-$servername = "localhost";
-$username = "root"; // Default XAMPP MySQL user
-$password = ""; // Default XAMPP MySQL password (empty)
-$dbname = "yappari_db";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed"]));
-}
+// Database connection
+include 'db.php';
 
 // Get JSON data from request
 $data = json_decode(file_get_contents("php://input"), true);
