@@ -29,8 +29,7 @@ const AdminMenu = () => {
 
   const handleLogout = () => {
     console.log("Logout function triggered");
-    localStorage.removeItem('isAdminAuthenticated');
-    navigate('/admin/login');
+
     // Add logout functionality here if needed
   };
 
@@ -190,7 +189,7 @@ const AdminMenu = () => {
           <div className="p-2 w-full mt-6 rounded-2xl">
             <table className="w-full bg-white opacity-90 rounded-2xl">
               <thead>
-                <tr className="">
+                <tr className="border-t border-4 border-[#DCDEEA]">
                 {/**  <th className="px-4 py-2 text-left text-sm text-[#808080]">ID</th> */} 
                   <th className="p-3 text-left text-[#808080]"><input type="checkbox" /></th>
                   <th className=" px-4 py-2 text-left text-sm text-[#808080]">Name</th>
@@ -205,7 +204,7 @@ const AdminMenu = () => {
               <tbody>
                 {menuItems.length > 0 ? (
                   menuItems.map((item) => (
-                    <tr key={item.food_id} className="border-t hover:bg-gray-100">
+                    <tr key={item.food_id} className="border-t border-4 border-[#DCDEEA] hover:bg-gray-100">
                      {/**  <td className=" px-4 py-2">{item.food_id}</td>  */}
                       <td className="p-3"><input type="checkbox" /></td>
                       <td className="  px-4 py-2">{item.food_name}</td>

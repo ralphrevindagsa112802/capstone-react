@@ -106,7 +106,7 @@ const AdminDashboard = () => {
                     <div className="p-2 w-full mt-6 rounded-2xl">
                         <table className="w-full bg-white opacity-90 rounded-2xl">
                             <thead>
-                                <tr>
+                                <tr className="border-t border-4 border-[#DCDEEA]">
                                     <th className="p-3 text-left text-[#808080]"><input type="checkbox" /></th>
                                     <th className="p-3 text-left text-sm text-[#808080]">Order #</th>
                                     <th className="p-3 text-left text-sm text-[#808080]">Date</th>
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
                             </thead>
                             <tbody>
                                 {orders.map((order) => (
-                                    <tr key={order.id} className="border-t">
+                                    <tr key={order.id} className="w-full border-t border-4 border-[#DCDEEA]  hover:bg-gray-100">
                                         <td className="p-3"><input type="checkbox" /></td>
                                         <td className="p-3">{order.id}</td>
                                         <td className="p-3">{order.date}</td>
