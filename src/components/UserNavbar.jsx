@@ -51,6 +51,15 @@ const UserNavbar = () => {
     
         fetchUserData();
       }, []);
+
+      // Handle Logout
+      const handleLogout = () => {
+        localStorage.removeItem("loggedInUser"); // Remove user session
+        localStorage.removeItem(`cartItems_${user_id}`); // Remove cart for that user
+        setCartItems([]); // Clear cart state
+        navigate("/");
+      };
+      
     
 
   return (
@@ -116,7 +125,7 @@ const UserNavbar = () => {
                             </div>
                             <Link to="/user/account" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Account</Link>
                             <Link to={{ pathname: '/user/cart', state: { cartItems } }} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">My Cart</Link>
-                            <Link to="/user/logout" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</Link>
+                            <Link to="/user/logout" onClick={handleLogout} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</Link>
                         </div>
                     )}
                 </div>

@@ -4,16 +4,31 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => { 
 
-  const [cartItems, setCartItems] = useState(() => {
-    // Get stored cart from localStorage or start with an empty array
-    const savedCart = localStorage.getItem("cartItems");
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
+  const [cartItems, setCartItems] = useState([]);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    // Store cart items in localStorage whenever they change
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+    // Get the logged-in user ID from localStorage/sessionStorage
+    const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (storedUser && storedUser.id) {
+      setUserId(storedUser.id);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      // Load cart for the specific user
+      const savedCart = localStorage.getItem(`cartItems_${userId}`);
+      setCartItems(savedCart ? JSON.parse(savedCart) : []);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId) {
+      // Save cart for the specific user
+      localStorage.setItem(`cartItems_${userId}`, JSON.stringify(cartItems));
+    }
+  }, [cartItems, userId]);
 
   const addToCart = (food) => {
     setCartItems((prevCart) => [...prevCart, food]);

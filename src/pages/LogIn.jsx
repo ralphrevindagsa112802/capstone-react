@@ -30,6 +30,7 @@ const Login = () => {
       const data = await response.json();
       if (data.success) {
         alert(`Welcome back, ${data.user.f_name} ${data.user.l_name}!`);
+        localStorage.setItem("loggedInUser", JSON.stringify({ id: data.user.id, username: data.user.username }));
         navigate("/user/home"); 
       } else {
         setError(data.error);
@@ -38,7 +39,7 @@ const Login = () => {
       console.error("Error:", error);
       setError("Failed to connect to server");
     }
-};
+  };
 
   
 
