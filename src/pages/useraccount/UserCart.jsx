@@ -16,35 +16,23 @@ const UserCart = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        if (cartItems.length === 0) {
-            alert("Your cart is empty!");
-            return;
-        }
-    
         try {
             const response = await axios.post(
-                "http://localhost/capstone-react/api/submitOrders.php",
-                JSON.stringify({ items: cartItems }),  // Ensure JSON.stringify()
-                {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,  // Include session cookies
-                }
+                'http://localhost/capstone-react/api/submitOrders.php',
+                { items: cartItems },
+                { withCredentials: true }
             );
-    
-            const data = response.data;
-            if (data.success) {
-                alert(`Order submitted! Order ID: ${data.order_id}`);
-                setCartItems([]); // Clear cart after order
+            if (response.data.success) {
+                alert(`Order submitted! Order ID: ${response.data.order_id}`);
+                setCartItems([]); // Clear cart after successful submission
             } else {
-                alert(`Error: ${data.message}`);
+                alert(`Error: ${response.data.message}`);
             }
         } catch (error) {
-            console.error("Error submitting order:", error);
-            alert("Failed to submit order. Please try again.");
+            console.error('Error submitting order:', error);
+            alert('Failed to submit order. Please try again.');
         }
     };
-    
     
 
     return (
@@ -95,7 +83,7 @@ const UserCart = () => {
                 </aside>
 
                 <div className="w-full mx-auto bg-white p-6">
-                    <form onSubmit={handleSubmit} id="cartForm">
+                    <form onSubmit={() => {}} id="cartForm">
                         <table className="w-full border-collapse">
                             <thead>
                                 <tr className="border-b">
@@ -143,6 +131,7 @@ const UserCart = () => {
                             <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                                 Proceed to Checkout
                             </button>
+                            
                         </div>
                     </form>
                 </div>

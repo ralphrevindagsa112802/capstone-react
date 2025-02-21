@@ -1,7 +1,7 @@
 <?php
-session_start(); // Start session
+session_start(); // Start session to access user data
 
-header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow React frontend
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -10,57 +10,76 @@ header("Content-Type: application/json");
 // Database connection
 include 'db.php';
 
-// Check connection
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed"]));
-}
-
-// Ensure user is logged in
+// Check if the user is logged in
 if (!isset($_SESSION["user_id"])) {
-    echo json_encode(["error" => "User not logged in"]);
+    echo json_encode(["success" => false, "message" => "User not logged in"]);
     exit();
 }
 
-$user_id = $_SESSION["user_id"];
+// Get raw JSON data from the request body
+$data = json_decode(file_get_contents('php://input'), true);
 
-// Read JSON input
-$data = json_decode(file_get_contents("php://input"), true);
+// 🔹 Debug: Print the received JSON to check if quantity exists
+error_log(print_r($data, true)); // Logs the received data
 
-// Check if JSON data is valid
-if (!$data || !isset($data["items"]) || !is_array($data["items"])) {
-    echo json_encode(["error" => "Invalid JSON data"]);
+if (!isset($data["items"]) || !is_array($data["items"])) {
+    echo json_encode(["error" => "Invalid data JSON"]);
     exit();
 }
-
-// Insert order into `orders` table
-$stmt = $conn->prepare("INSERT INTO orders (user_id, total_price) VALUES (?, ?)");
-$total_price = array_reduce($data["items"], function ($sum, $item) {
-    return $sum + ($item["food_price"] * $item["quantity"]);
-}, 0);
-$stmt->bind_param("id", $user_id, $total_price);
-$stmt->execute();
-$orders_id = $stmt->insert_id; // This should match `orders_id` in your orders table
-$stmt->close();
-
-
-// Insert each item into `order_items` table
-$itemStmt = $conn->prepare("INSERT INTO order_items (order_id, food_id, quantity, price) VALUES (?, ?, ?, ?)");
 
 foreach ($data["items"] as $item) {
-    if (!isset($item["food_id"], $item["quantity"], $item["food_price"])) {
-        continue; // Skip invalid items
+    if (!isset($item["food_id"], $item["quantity"])) {
+        echo json_encode(["error" => "Missing food_id or quantity"]);
+        exit();
     }
+    
 
-    $food_id = $item["food_id"];
-    $quantity = $item["quantity"];
-    $price = $item["food_price"];
-
-    $itemStmt->bind_param("iiid", $order_id, $food_id, $quantity, $price);
-    $itemStmt->execute();
+// Validate input data
+if (empty($data['items'])) {
+    echo json_encode(["success" => false, "message" => "Invalid input data"]);
+    exit;
 }
-$itemStmt->close();
 
-echo json_encode(["success" => true, "message" => "Order placed successfully!", "order_id" => $order_id]);
+// Extract data
+$userId = $_SESSION["user_id"]; // Get user ID from session
+$items = $data['items'];
 
+// Calculate total amount
+$totalAmount = 0;
+foreach ($items as $item) {
+    $totalAmount += $item['price'] * $item['quantity'];
+}
+
+// Insert order into the `orders` table
+$sql = "INSERT INTO orders (user_id, total_amount) VALUES (?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("id", $userId, $totalAmount);
+
+if ($stmt->execute()) {
+    $orderId = $stmt->insert_id; // Get the ID of the newly inserted order
+
+    // Insert order items into the `order_items` table
+    foreach ($data["items"] as $item) {
+        $food_id = isset($item["food_id"]) ? $item["food_id"] : null;
+        $quantity = isset($item["quantity"]) ? $item["quantity"] : 1; // Default to 1 if missing
+    
+        if ($food_id === null) {
+            echo json_encode(["error" => "Missing food_id"]);
+            exit();
+        }
+    
+        // 🔹 Now $quantity is always set
+    }
+    
+
+    
+    echo json_encode(["success" => true, "message" => "Order submitted"]); // Success response
+} else {
+    echo json_encode(["success" => false, "message" => "Failed to insert order: " . $stmt->error]); // Error response
+}
+
+}
+
+$stmt->close();
 $conn->close();
 ?>
