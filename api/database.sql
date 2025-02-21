@@ -32,30 +32,32 @@ CREATE TABLE food (
     size VARCHAR(255)
 );
 
-INSERT INTO `food` (`food_name`, `food_description`, `food_price`, `food_img`, `size`) VALUES
+-- Insert sample food items
+INSERT INTO food (food_name, food_description, food_price, food_img, size) VALUES
 ('Cafe Vienna', 'Viannese Coffee that serves Americano topped with a heavy whipped cream. Dashed with cocoa powder', 130, '../img//CLASSIC COFFEES/Cafe Vienna.jpg', 'Regular'),
-('Pork Katsudon', 'Fried panko-breaded pork cutlet with egg cooked in japanese soy sauce over rice.', 120, '../img/katsudon.jpg', 'Regular'),
-('Caramel Macchiato', 'Milk espresso-based coffee with use of freshly steamed milk, caramel syrup and caramel drizzle on top.', 125, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg', 'Regular'),
-('Seafood Pasta', ' A tomato-based pasta that is served with shrimp.', 160, '../img/2022-11-21 (2).jpg', 'Regular');
+('Pork Katsudon', 'Fried panko-breaded pork cutlet with egg cooked in Japanese soy sauce over rice.', 120, '../img/katsudon.jpg', 'Regular'),
+('Caramel Macchiato', 'Milk espresso-based coffee with freshly steamed milk, caramel syrup, and caramel drizzle on top.', 125, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg', 'Regular'),
+('Seafood Pasta', 'A tomato-based pasta that is served with shrimp.', 160, '../img/2022-11-21 (2).jpg', 'Regular');
 
 -- Create orders table
 CREATE TABLE orders (
     orders_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    user_id INT NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Create order items table
+-- Create order items table (✅ Fixed `order_id` to `orders_id`)
 CREATE TABLE order_items (
     order_items_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT,
-    food_id INT,
-    quantity INT,
-    price DECIMAL(10, 2),
-    FOREIGN KEY (order_id) REFERENCES orders(orders_id),
-    FOREIGN KEY (food_id) REFERENCES food(food_id)
+    orders_id INT NOT NULL,
+    food_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    price DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (orders_id) REFERENCES orders(orders_id) ON DELETE CASCADE,
+    FOREIGN KEY (food_id) REFERENCES food(food_id) ON DELETE CASCADE
 );
 
 -- Create the admin table

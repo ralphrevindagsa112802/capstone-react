@@ -6,7 +6,7 @@ import UserNavbar from "../../components/UserNavbar";
 import Footer from "../../components/Footer";
 
 const UserCart = () => {
-    const { cartItems, removeFromCart } = useContext(CartContext);
+    const { cartItems, removeFromCart, setCartItems } = useContext(CartContext);
     const [totalAmount, setTotalAmount] = useState(0);
 
     useEffect(() => {
@@ -16,23 +16,42 @@ const UserCart = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
+        console.log("Submitting order with cart items:", cartItems);
+    
+        if (cartItems.length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
+    
+        // Convert food_id and food_price to proper numbers
+        const formattedCartItems = cartItems.map((item) => ({
+            food_id: parseInt(item.food_id, 10), // Convert to integer
+            food_price: parseFloat(item.food_price), // Convert to float
+            quantity: parseInt(item.quantity, 10), // Convert to integer
+        }));
+    
         try {
             const response = await axios.post(
                 'http://localhost/capstone-react/api/submitOrders.php',
-                { items: cartItems },
-                { withCredentials: true }
+                { items: formattedCartItems }, // Send formatted data
+                { headers: { "Content-Type": "application/json" }, withCredentials: true }
             );
+    
+            console.log("Server Response:", response.data);
+    
             if (response.data.success) {
-                alert(`Order submitted! Order ID: ${response.data.order_id}`);
-                setCartItems([]); // Clear cart after successful submission
+                alert(`Order submitted successfully! Order ID: ${response.data.order_id}`);
+                setCartItems([]); // Clear cart after checkout 
             } else {
-                alert(`Error: ${response.data.message}`);
+                alert(`Error: ${response.data.message || "Failed to place order"}`);
             }
         } catch (error) {
-            console.error('Error submitting order:', error);
-            alert('Failed to submit order. Please try again.');
+            console.error("Error submitting order:", error.response?.data || error.message);
+            alert("Failed to submit order. Please try again.");
         }
     };
+    
     
 
     return (
@@ -83,7 +102,7 @@ const UserCart = () => {
                 </aside>
 
                 <div className="w-full mx-auto bg-white p-6">
-                    <form onSubmit={() => {}} id="cartForm">
+                    <form onSubmit={handleSubmit} id="cartForm">
                         <table className="w-full border-collapse">
                             <thead>
                                 <tr className="border-b">

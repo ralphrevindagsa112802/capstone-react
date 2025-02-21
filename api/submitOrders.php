@@ -1,85 +1,82 @@
 <?php
-session_start(); // Start session to access user data
+session_start();
 
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow React frontend
+header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 
-// Database connection
-include 'db.php';
+$conn = new mysqli("localhost", "root", "", "yappari_db");
 
-// Check if the user is logged in
+if ($conn->connect_error) {
+    die(json_encode(["success" => false, "error" => "Database connection failed"]));
+}
+
+// Read raw JSON input
+$jsonData = file_get_contents("php://input");
+$data = json_decode($jsonData, true);
+
+// Debugging: Log received data
+error_log("Received Order Data: " . print_r($data, true));
+
+if (!$data || !isset($data["items"]) || empty($data["items"])) {
+    echo json_encode(["success" => false, "error" => "Invalid order data"]);
+    exit();
+}
+
 if (!isset($_SESSION["user_id"])) {
-    echo json_encode(["success" => false, "message" => "User not logged in"]);
+    echo json_encode(["success" => false, "error" => "User not logged in"]);
     exit();
 }
 
-// Get raw JSON data from the request body
-$data = json_decode(file_get_contents('php://input'), true);
+$user_id = $_SESSION["user_id"];
+$total_amount = 0;
 
-// 🔹 Debug: Print the received JSON to check if quantity exists
-error_log(print_r($data, true)); // Logs the received data
-
-if (!isset($data["items"]) || !is_array($data["items"])) {
-    echo json_encode(["error" => "Invalid data JSON"]);
-    exit();
-}
-
+// Calculate total price
 foreach ($data["items"] as $item) {
-    if (!isset($item["food_id"], $item["quantity"])) {
-        echo json_encode(["error" => "Missing food_id or quantity"]);
+    if (!isset($item["food_id"], $item["quantity"], $item["food_price"])) {
+        echo json_encode(["success" => false, "error" => "Invalid item data"]);
+        error_log("Total amount calculated: " . $total_amount);
         exit();
     }
-    
 
-// Validate input data
-if (empty($data['items'])) {
-    echo json_encode(["success" => false, "message" => "Invalid input data"]);
-    exit;
+    // Ensure numeric values are properly formatted
+    $food_id = intval($item["food_id"]);
+    $quantity = intval($item["quantity"]);
+    $price = floatval($item["food_price"]);
+
+    $total_amount += $quantity * $price;
 }
 
-// Extract data
-$userId = $_SESSION["user_id"]; // Get user ID from session
-$items = $data['items'];
+// Insert order into orders table
+$stmt = $conn->prepare("INSERT INTO orders (user_id, total_amount) VALUES (?, ?)");
+if (!$stmt) {
+    error_log("Prepare failed: " . $conn->error);
+    echo json_encode(["success" => false, "error" => "Prepare failed: " . $conn->error]);
+    exit();
+}
+$stmt->bind_param("id", $user_id, $total_amount);
 
-// Calculate total amount
-$totalAmount = 0;
-foreach ($items as $item) {
-    $totalAmount += $item['price'] * $item['quantity'];
+if (!$stmt->execute()) {
+    error_log("Execute failed: " . $stmt->error);
+    echo json_encode(["success" => false, "error" => "Execute failed: " . $stmt->error]);
+    exit();
 }
 
-// Insert order into the `orders` table
-$sql = "INSERT INTO orders (user_id, total_amount) VALUES (?, ?)";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("id", $userId, $totalAmount);
-
-if ($stmt->execute()) {
-    $orderId = $stmt->insert_id; // Get the ID of the newly inserted order
-
-    // Insert order items into the `order_items` table
-    foreach ($data["items"] as $item) {
-        $food_id = isset($item["food_id"]) ? $item["food_id"] : null;
-        $quantity = isset($item["quantity"]) ? $item["quantity"] : 1; // Default to 1 if missing
-    
-        if ($food_id === null) {
-            echo json_encode(["error" => "Missing food_id"]);
-            exit();
-        }
-    
-        // 🔹 Now $quantity is always set
-    }
-    
-
-    
-    echo json_encode(["success" => true, "message" => "Order submitted"]); // Success response
-} else {
-    echo json_encode(["success" => false, "message" => "Failed to insert order: " . $stmt->error]); // Error response
-}
-
-}
-
+$order_id = $stmt->insert_id;
 $stmt->close();
+
+
+// Insert order items
+foreach ($data["items"] as $item) {
+    $stmt = $conn->prepare("INSERT INTO order_items (orders_id, food_id, quantity, price) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("iiid", $order_id, $food_id, $quantity, $price);
+    $stmt->execute();
+    $stmt->close();
+}
+
+echo json_encode(["success" => true, "message" => "Order placed successfully", "order_id" => $order_id]);
+
 $conn->close();
 ?>
