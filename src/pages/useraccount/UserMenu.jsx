@@ -3,10 +3,12 @@ import axios from "axios";
 import UserNavbar from "../../components/UserNavbar";
 import Footer from "../../components/Footer";
 import { CartContext } from "../../context/CartContext"; // Import context
+import MenuPopup from "../../components/MenuPopUp"; // Import the new popup component
 
 const UserMenu = () => {
     const { cartItems, addToCart } = useContext(CartContext); // Use context
     const [foodItems, setFoodItems] = useState([]);
+    const [selectedFood, setSelectedFood] = useState(null); // Track selected food item
 
     useEffect(() => {
         axios.get('http://localhost/capstone-react/api/getFoodItems.php')
@@ -90,7 +92,8 @@ const UserMenu = () => {
                                     <div className="text-justify opacity-55">{food.food_description}</div>
                                     <div className="flex flex-row-reverse justify-between pt-4 mt-auto items-center">
                                         <div className="price text-sm font-semibold">₱{food.food_price}</div>
-                                            <button onClick={() => addToCart({...food, quantity: 1})} className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer">
+                                            <button onClick={() => setSelectedFood(food)} // Open PopUp
+                                            className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer">
                                         <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
                                         <span>Add</span>
                                         </button>
@@ -105,6 +108,18 @@ const UserMenu = () => {
             
         </div>        
             <Footer />
+
+             {/* Render MenuPopup if a food item is selected */}
+             {selectedFood && (
+                <MenuPopup 
+                    food={selectedFood} 
+                    onClose={() => setSelectedFood(null)} 
+                    onAddToCart={(food) => {
+                        addToCart({...food, quantity: 1});
+                        setSelectedFood(null);
+                    }} 
+                />
+            )}
         </div>
       )
     }
