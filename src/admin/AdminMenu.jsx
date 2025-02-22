@@ -319,7 +319,7 @@ const AdminMenu = () => {
                       <td className=" px-4 py-2">₱{item.food_price}</td>
                       <td className=" px-4 py-2">{item.food_size}</td>
 
-                      <td className=" px-4 py-2">{item.availability}</td>
+                      <td className=" px-4 py-2 font-black text-[#1C359A] ">{item.availability}</td>
 
                       <td className=" px-4 py-2">{item.food_description}</td>
                       <td className="px-4 py-2 relative">
