@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { FaEllipsisV } from "react-icons/fa";
+
 
 const AdminMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+
   const [formData, setFormData] = useState({
     food_name: "",
     food_description: "",
@@ -15,7 +19,20 @@ const AdminMenu = () => {
     food_img: null,
   });
 
+  //availability
+  
+  const toggleDropdown = (id) => {
+    setDropdownOpen(dropdownOpen === id ? null : id);
+};
 
+const handleAvailabilityChange = async (id, status) => {
+    console.log(`Updating availability for ID ${id} to ${status}`); // Debugging log
+    await updateAvailability(id, status);
+    setDropdownOpen(null); // Close dropdown after selection
+};
+
+
+//get menu
   useEffect(() => {
     axios
       .get("http://localhost/capstone-react/api/getMenuItems.php") // Update to your actual API path
@@ -25,6 +42,8 @@ const AdminMenu = () => {
       .catch((error) => {
         console.error("Error fetching menu items:", error);
       });
+
+      
   }, []);
 
   const handleLogout = () => {
@@ -101,8 +120,67 @@ const AdminMenu = () => {
   };
 
 
+//availability
+const updateAvailability = async (id, status) => {
+  try {
+    const response = await axios.post("http://localhost/capstone-react/api/updateAvailability.php", {
+      food_id: id,
+      availability: status,
+    });
+
+    if (response.data.success) {
+      // Update state directly to reflect changes instantly
+      setMenuItems((prevItems) =>
+        prevItems.map((item) =>
+          item.food_id === id ? { ...item, availability: status } : item
+        )
+      );
+    } else {
+      console.error("Failed to update availability:", response.data.message);
+    }
+  } catch (error) {
+    console.error("Error updating availability:", error);
+  }
+};
+
+
+//deleting from admin and database
+const [confirmDelete, setConfirmDelete] = useState(null); // Store item ID to delete
+const [foodList, setFoodList] = useState([]); // Assuming you store the menu items here
+
+const handleDeleteClick = (food_id) => {
+    setConfirmDelete(food_id); // Set item to be deleted
+};
+
+const handleConfirmDelete = async () => {
+    if (confirmDelete) {
+        try {
+            const response = await fetch("http://localhost/capstone-react/api/delete_food.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ food_id: confirmDelete }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Remove the deleted item from UI
+                setFoodList((prevList) => prevList.filter((item) => item.food_id !== confirmDelete));
+            } else {
+                alert("Failed to delete item");
+            }
+        } catch (error) {
+            console.error("Error deleting item:", error);
+        }
+    }
+    setConfirmDelete(null); // Close modal
+};
+
+
+
   return (
     <div className="flex flex-col h-screen bg-[#DCDEEA]">
+      
       {/* Navbar */}
       <div className="w-full flex items-center justify-between py-4 px-12 shadow-md bg-white">
         <div className="flex items-center justify-center md:justify-start w-full md:w-auto">
@@ -117,6 +195,7 @@ const AdminMenu = () => {
 
       {/* Sidebar & Main Content */}
       <div className="flex flex-row h-full">
+
         {/* Sidebar */}
         <div className="w-64 flex-none bg-white shadow-md h-full flex flex-col p-4">
           <nav className="flex flex-col space-y-4">
@@ -215,11 +294,35 @@ const AdminMenu = () => {
 
                       <td className=" px-4 py-2">{item.availability}</td>
 
-                      <td className=" px-4 py-2">
-                        {item.food_description}
-                      </td>
-                      <td className=" px-4 py-2">{item.action}</td>
+                      <td className=" px-4 py-2">{item.food_description}</td>
+                      <td className="px-4 py-2 relative">
+                                    <button onClick={() => toggleDropdown(item.food_id)} className="p-2">
+                                        <FaEllipsisV />
+                                    </button>
+                                    {dropdownOpen === item.food_id && (
+                                        <div className=" absolute right-0 bg-white rounded drop-shadow-lg w-36 z-100">
+                                            <button
+                                                onClick={() => handleAvailabilityChange(item.food_id, "Available")}
+                                                className=" block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-200"
+                                            >
+                                                Available
+                                            </button>
+                                            <button
+                                                onClick={() => handleAvailabilityChange(item.food_id, "Not Available")}
+                                                className=" -black mt-2 block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-200"
+                                            >
+                                                Not Available
+                                            </button>
 
+                                            <button onClick={() => handleDeleteClick(item.food_id)} className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200">
+                                                  Delete
+                                            </button>
+
+                                        </div>
+                                    )}
+                        </td>
+
+                        
                     </tr>
                   ))
                 ) : (
@@ -244,7 +347,7 @@ const AdminMenu = () => {
 
       {/**popup ADD product  */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="fixed inset-0 bg-white-20 bg-opacity-100 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[500px] relative">
             <button onClick={handleCloseModal} className="absolute top-3 right-3 text-gray-600 text-xl">
               &times;
@@ -254,7 +357,8 @@ const AdminMenu = () => {
             {/* Image Upload */}
             <div onClick={() => document.getElementById("fileInput").click()} className="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center cursor-pointer">
               <input id="fileInput" type="file" className="hidden" onChange={handleImageChange} accept="image/*" />
-              {previewImage ? <img src={previewImage} className="w-24 h-24 object-cover mb-2 rounded-md" alt="Preview" /> : <p>Drag or Browse image</p>}
+              {previewImage ? <img src={previewImage} className="w-24 h-24 object-cover mb-2 rounded-md " alt="Preview" /> : <p className="text-bold text-gray-500 cursor-pointer">Drag or Browse image <br/> or <br/> <span class="text-blue-600 underline cursor-pointer">Browse
+              image</span></p>}
             </div>
 
             {/* Product Form */}
@@ -299,6 +403,8 @@ const AdminMenu = () => {
               </button>
             </form>
           </div>
+
+          
         </div>
       )}
 
@@ -347,6 +453,24 @@ const AdminMenu = () => {
           )}
 
 */}
+
+  {/* Delete Confirmation Modal */}
+  {confirmDelete && (
+            <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
+                <div className="bg-white p-5 rounded shadow-lg">
+                    <p>Are you sure you want to delete this item?</p>
+                    <div className="flex justify-end mt-3">
+                        <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 bg-gray-400 text-white rounded mr-2">
+                            Cancel
+                        </button>
+                        <button onClick={handleConfirmDelete} className="px-4 py-2 bg-red-600 text-white rounded">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+
     </div>
 
 

@@ -14,15 +14,22 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
+$category = isset($_POST["category"]) ? trim($_POST["category"]) : "";
+
+if ($category === "") {
+    echo json_encode(["success" => false, "message" => "Category is required"]);
+    exit;
+}
+
 $food_name = isset($_POST["food_name"]) ? trim($_POST["food_name"]) : "";
 $food_description = isset($_POST["food_description"]) ? trim($_POST["food_description"]) : "";
 $food_size = isset($_POST["food_size"]) ? trim($_POST["food_size"]) : "";
 $food_price = isset($_POST["food_price"]) ? floatval($_POST["food_price"]) : 0;
-$category = isset($_POST["category"]) ? intval($_POST["category"]) : 0;
+$category = isset($_POST["category"]) ? trim($_POST["category"]) : "";
 $food_img = null;
 
 // Ensure required fields are filled
-if (empty($food_name) || empty($food_description) || empty($food_size) || $food_price <= 0 || $category <= 0) {
+if (empty($food_name) || empty($food_description) || empty($food_size) || $food_price <= 0 || empty($category)) {
     echo json_encode(["success" => false, "message" => "All fields are required and must be valid"]);
     exit;
 }
@@ -57,7 +64,7 @@ if (!empty($_FILES["food_img"]["name"])) {
 $sql = "INSERT INTO food (food_name, food_description, food_size, food_price, category, food_img) 
         VALUES (?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sssdis", $food_name, $food_description, $food_size, $food_price, $category, $food_img);
+$stmt->bind_param("sssdss", $food_name, $food_description, $food_size, $food_price, $category, $food_img);
 
 if ($stmt->execute()) {
     echo json_encode(["success" => true, "message" => "Product added successfully"]);
