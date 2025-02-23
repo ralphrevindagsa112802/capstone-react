@@ -8,6 +8,7 @@ const AdminMenu = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(null);
+  const [editingFoodId, setEditingFoodId] = useState(null);
 
   const [formData, setFormData] = useState({
     food_name: "",
@@ -19,7 +20,6 @@ const AdminMenu = () => {
   });
 
   //availability
-
   const toggleDropdown = (id) => {
     setDropdownOpen(dropdownOpen === id ? null : id);
   };
@@ -45,13 +45,14 @@ const AdminMenu = () => {
   const handleLogout = () => {
     console.log("Logout function triggered");
 
-    // Add logout functionality here if needed
+    //  logout functionality here if needed
   };
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setPreviewImage(null);
+    setEditingFoodId(null);
     setFormData({
       food_name: "",
       food_description: "",
@@ -76,6 +77,8 @@ const AdminMenu = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
+  //handling submit form add product and edit
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -89,16 +92,26 @@ const AdminMenu = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost/capstone-react/api/add_product.php",
-        data,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      let response;
+      if (editingFoodId) {
+        // **Edit Product API Call**
+        data.append("food_id", editingFoodId);
+        response = await axios.post(
+          "http://localhost/capstone-react/api/updateProduct.php",
+          data,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      } else {
+        // **Add Product API Call**
+        response = await axios.post(
+          "http://localhost/capstone-react/api/add_product.php",
+          data,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      }
 
       if (response.data.success) {
-        alert("Product added successfully!");
+        alert(editingFoodId ? "Product updated successfully!" : "Product added successfully!");
         handleCloseModal();
         // Refresh menu items
         axios
@@ -110,8 +123,8 @@ const AdminMenu = () => {
         alert(response.data.message);
       }
     } catch (error) {
-      console.error("Error adding product:", error);
-      alert("Failed to add product.");
+      console.error(editingFoodId ? "Error updating product:" : "Error adding product:", error);
+      alert(editingFoodId ? "Failed to update product." : "Failed to add product.");
     }
   };
 
@@ -177,6 +190,28 @@ const AdminMenu = () => {
     }
     setConfirmDelete(null); // Close modal
   };
+
+
+  //edit item
+  // Open Edit Modal and populate form
+  const handleEditItem = (food_id) => {
+    const itemToEdit = menuItems.find((item) => item.food_id === food_id);
+    if (itemToEdit) {
+      setFormData({
+        food_name: itemToEdit.food_name,
+        food_description: itemToEdit.food_description,
+        food_size: itemToEdit.food_size || "",
+        category: itemToEdit.category || "",
+        food_price: itemToEdit.food_price,
+      });
+      setPreviewImage(itemToEdit.food_image);
+      setEditingFoodId(food_id);
+      setIsModalOpen(true);
+    }
+  };
+
+
+
 
   return (
     <div className="flex flex-col h-screen bg-[#DCDEEA]">
@@ -319,7 +354,14 @@ const AdminMenu = () => {
                       <td className=" px-4 py-2">₱{item.food_price}</td>
                       <td className=" px-4 py-2">{item.food_size}</td>
 
-                      <td className=" px-4 py-2 font-black text-[#1C359A] ">{item.availability}</td>
+                      <td className=" px-4 py-2 font-black text-[#1C359A] ">
+                        <span
+                          className={`font-bold ${item.availability === "Available" ? "text-blue-600" : "text-red-600"
+                            }`}
+                        >
+                          {item.availability}
+                        </span>
+                      </td>
 
                       <td className=" px-4 py-2">{item.food_description}</td>
                       <td className="px-4 py-2 relative">
@@ -331,6 +373,13 @@ const AdminMenu = () => {
                         </button>
                         {dropdownOpen === item.food_id && (
                           <div className=" absolute right-0 bg-white rounded drop-shadow-lg w-36 z-100">
+                            <button
+                              onClick={() => handleEditItem(item.food_id)}
+                              className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200"
+                            >
+                              Edit
+                            </button>
+
                             <button
                               onClick={() =>
                                 handleAvailabilityChange(
@@ -381,18 +430,21 @@ const AdminMenu = () => {
         </div>
       </div>
 
-      {/**popup ADD product  */}
+      {/**popup ADD product and EDIT  */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-white-20 bg-opacity-100 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[500px] relative">
+            {/* Close Button */}
             <button
               onClick={handleCloseModal}
               className="absolute top-3 right-3 text-gray-600 text-xl"
             >
               &times;
             </button>
+
+            {/* Dynamic Modal Title */}
             <h2 className="text-xl font-bold text-blue-800 mb-4">
-              New Product
+              {editingFoodId ? "Editing Product" : "New Product"}
             </h2>
 
             {/* Image Upload */}
@@ -410,13 +462,13 @@ const AdminMenu = () => {
               {previewImage ? (
                 <img
                   src={previewImage}
-                  className="w-24 h-24 object-cover mb-2 rounded-md "
+                  className="w-24 h-24 object-cover mb-2 rounded-md"
                   alt="Preview"
                 />
               ) : (
                 <p className="text-bold text-gray-500 cursor-pointer">
                   Drag or Browse image <br /> or <br />{" "}
-                  <span class="text-blue-600 underline cursor-pointer">
+                  <span className="text-blue-600 underline cursor-pointer">
                     Browse image
                   </span>
                 </p>
@@ -436,6 +488,7 @@ const AdminMenu = () => {
                   required
                 />
               </label>
+
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Description:</div>
                 <textarea
@@ -445,6 +498,7 @@ const AdminMenu = () => {
                   className="w-full p-2 border rounded-md"
                 ></textarea>
               </label>
+
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Size:</div>
                 <select
@@ -459,6 +513,7 @@ const AdminMenu = () => {
                   <option value="Large">Large</option>
                 </select>
               </label>
+
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Category:</div>
                 <select
@@ -477,6 +532,7 @@ const AdminMenu = () => {
                   <option value="Snacks & Pasta">Snacks & Pasta</option>
                 </select>
               </label>
+
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Price (₱):</div>
                 <input
@@ -489,16 +545,22 @@ const AdminMenu = () => {
                 />
               </label>
 
+              {/* Dynamic Button */}
               <button
                 type="submit"
                 className="bg-blue-600 text-white p-2 rounded-md w-full hover:bg-blue-700"
               >
-                Add Product
+                {editingFoodId ? "Update Product" : "Add Product"}
               </button>
             </form>
           </div>
         </div>
       )}
+
+
+
+
+
 
       {/* Delete Confirmation Modal */}
       {confirmDelete && (
