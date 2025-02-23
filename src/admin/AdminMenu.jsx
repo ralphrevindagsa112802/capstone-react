@@ -275,9 +275,10 @@ const AdminMenu = () => {
               Order Management
             </div>
             <div className="flex gap-2">
-              <button className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md hover:bg-white">
+            {/** <button className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md hover:bg-white">
                 Post
               </button>
+            */}  
               <button
                 onClick={handleOpenModal}
                 className="px-4 py-2 border-2 border-[#1C359A] text-black font-bold rounded-md hover:bg-white"
