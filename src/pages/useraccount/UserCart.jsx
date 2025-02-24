@@ -27,6 +27,7 @@ const UserCart = () => {
         // Convert food_id and food_price to proper numbers
         const formattedCartItems = cartItems.map((item) => ({
             food_id: parseInt(item.food_id, 10), // Convert to integer
+            size: item.size || "Regular", // 🔹 Ensure size is always sent
             food_price: parseFloat(item.food_price), // Convert to float
             quantity: parseInt(item.quantity, 10), // Convert to integer
         }));
@@ -126,7 +127,12 @@ const UserCart = () => {
                                         <td className="text-center py-4">₱{(item.food_price * item.quantity)}</td>
                                         <td>
                                             <div>
-                                                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" onClick={() => removeFromCart(item.food_id)}>
+                                                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" 
+                                                onClick={(e) => {
+                                                    e.preventDefault(); // ✅ Prevent form submission
+                                                    removeFromCart(item.food_id, item.size); // ✅ Remove by size as well
+                                                }}
+                                                >
                                                     Remove
                                                 </button>
                                             </div>
