@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost/capstone-react/api/login.php", {
+      const response = await fetch("http://localhost:8000/login.php", {
         method: "POST",
         credentials: "include", // Important for session handling
         headers: { "Content-Type": "application/json" },
@@ -37,6 +37,7 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error:", error);
+      console.log("Sending data:", formData);
       setError("Failed to connect to server");
     }
   };
