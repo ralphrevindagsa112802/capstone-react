@@ -116,7 +116,7 @@ const UserCart = () => {
                                 {cartItems.length > 0 ? (cartItems.map((item) => (
                                     <tr key={item.food_id} className="border-b">
                                         <td className="py-4 flex items-center">
-                                            <img src={item.food_img} alt={item.food_name} className="w-16 h-16 rounded-md object-cover mr-4" />
+                                            <img src={item.image_path} alt={item.food_name} className="w-16 h-16 rounded-md object-cover mr-4" />
                                             <div>
                                                 <h3 className="font-semibold">{item.food_name}</h3>
                                             </div>

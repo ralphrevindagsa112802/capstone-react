@@ -1,82 +1,58 @@
 <?php
-session_start();
+include 'db_connection.php';
 
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
+$data = json_decode(file_get_contents("php://input"), true);
 
-$conn = new mysqli("localhost", "root", "", "yappari_db");
-
-if ($conn->connect_error) {
-    die(json_encode(["success" => false, "error" => "Database connection failed"]));
+if (!isset($data['items']) || !isset($data['user_id'])) {
+    echo json_encode(["success" => false, "message" => "Invalid request"]);
+    exit;
 }
 
-// Read raw JSON input
-$jsonData = file_get_contents("php://input");
-$data = json_decode($jsonData, true);
+$user_id = intval($data['user_id']);
+$items = $data['items'];
 
-// Debugging: Log received data
-error_log("Received Order Data: " . print_r($data, true));
+$conn->begin_transaction();
 
-if (!$data || !isset($data["items"]) || empty($data["items"])) {
-    echo json_encode(["success" => false, "error" => "Invalid order data"]);
-    exit();
-}
+try {
+    // Insert new order into orders table
+    $stmt = $conn->prepare("INSERT INTO orders (user_id, total_amount) VALUES (?, 0)");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $order_id = $conn->insert_id;
+    $stmt->close();
 
-if (!isset($_SESSION["user_id"])) {
-    echo json_encode(["success" => false, "error" => "User not logged in"]);
-    exit();
-}
+    $total_amount = 0;
 
-$user_id = $_SESSION["user_id"];
-$total_amount = 0;
+    // Insert each item into order_items table
+    $stmt = $conn->prepare("INSERT INTO order_items (orders_id, food_id, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
 
-// Calculate total price
-foreach ($data["items"] as $item) {
-    if (!isset($item["food_id"], $item["quantity"], $item["food_price"])) {
-        echo json_encode(["success" => false, "error" => "Invalid item data"]);
-        error_log("Total amount calculated: " . $total_amount);
-        exit();
+    foreach ($items as $item) {
+        $food_id = intval($item['food_id']);
+        $size = $item['size']; // Ensure size is included
+        $quantity = intval($item['quantity']);
+        $price = floatval($item['food_price']); // Ensure correct price is used
+
+        $total_amount += $price * $quantity;
+
+        $stmt->bind_param("iisid", $order_id, $food_id, $size, $quantity, $price);
+        $stmt->execute();
     }
 
-    // Ensure numeric values are properly formatted
-    $food_id = intval($item["food_id"]);
-    $quantity = intval($item["quantity"]);
-    $price = floatval($item["food_price"]);
+    $stmt->close();
 
-    $total_amount += $quantity * $price;
-}
-
-// Insert order into orders table
-$stmt = $conn->prepare("INSERT INTO orders (user_id, total_amount) VALUES (?, ?)");
-if (!$stmt) {
-    error_log("Prepare failed: " . $conn->error);
-    echo json_encode(["success" => false, "error" => "Prepare failed: " . $conn->error]);
-    exit();
-}
-$stmt->bind_param("id", $user_id, $total_amount);
-
-if (!$stmt->execute()) {
-    error_log("Execute failed: " . $stmt->error);
-    echo json_encode(["success" => false, "error" => "Execute failed: " . $stmt->error]);
-    exit();
-}
-
-$order_id = $stmt->insert_id;
-$stmt->close();
-
-
-// Insert order items
-foreach ($data["items"] as $item) {
-    $stmt = $conn->prepare("INSERT INTO order_items (orders_id, food_id, quantity, price) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("iiid", $order_id, $food_id, $quantity, $price);
+    // Update total amount in orders table
+    $stmt = $conn->prepare("UPDATE orders SET total_amount = ? WHERE orders_id = ?");
+    $stmt->bind_param("di", $total_amount, $order_id);
     $stmt->execute();
     $stmt->close();
-}
 
-echo json_encode(["success" => true, "message" => "Order placed successfully", "order_id" => $order_id]);
+    $conn->commit();
+    echo json_encode(["success" => true, "order_id" => $order_id]);
+} catch (Exception $e) {
+    $conn->rollback();
+    echo json_encode(["success" => false, "message" => "Order submission failed: " . $e->getMessage()]);
+}
 
 $conn->close();
 ?>

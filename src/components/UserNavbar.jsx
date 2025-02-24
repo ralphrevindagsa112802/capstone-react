@@ -87,7 +87,7 @@ const UserNavbar = () => {
             </div>
 
        
-            <div className="flex gap-3 items-center">
+            <div className="flex gap-5 items-center">
                 {/* Notification Button */}
                 <div className="relative">
                     <button className="w-8 h-8 bg-[#1C359A] rounded-full flex items-center justify-center shadow-md hover:bg-blue-700 transition">
@@ -110,7 +110,7 @@ const UserNavbar = () => {
 
                     {/* Dropdown Menu */}
                     {isDropdownVisible && (
-                        <div id="profileDropdown" className="absolute right-22 mt-8 w-64 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
+                        <div id="profileDropdown" className="absolute right-15 mt-8 w-64 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
                             {/* ✅ Profile Picture & Username Section */}
                             <div className="p-3 border-b border-gray-300">
                                 <div className="flex items-center">

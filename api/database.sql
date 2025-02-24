@@ -22,22 +22,24 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create food table
+-- Create food table with size-based pricing
 CREATE TABLE food (
     food_id INT AUTO_INCREMENT PRIMARY KEY,
-    food_name VARCHAR(222) NOT NULL,
-    food_description VARCHAR(222) NOT NULL,
-    food_price INT(222) NOT NULL,
-    food_img VARCHAR(222) NOT NULL,
-    size VARCHAR(255)
+    food_name VARCHAR(255) NOT NULL,
+    category ENUM('Rice Meal', 'Drink', 'Dessert', 'Other') NOT NULL,
+    price_small DECIMAL(10,2) DEFAULT NULL,
+    price_medium DECIMAL(10,2) DEFAULT NULL,
+    price_large DECIMAL(10,2) DEFAULT NULL,
+    image_path VARCHAR(255) DEFAULT NULL,
+    description TEXT NOT NULL
 );
 
--- Insert sample food items
-INSERT INTO food (food_name, food_description, food_price, food_img, size) VALUES
-('Cafe Vienna', 'Viannese Coffee that serves Americano topped with a heavy whipped cream. Dashed with cocoa powder', 130, '../img//CLASSIC COFFEES/Cafe Vienna.jpg', 'Regular'),
-('Pork Katsudon', 'Fried panko-breaded pork cutlet with egg cooked in Japanese soy sauce over rice.', 120, '../img/katsudon.jpg', 'Regular'),
-('Caramel Macchiato', 'Milk espresso-based coffee with freshly steamed milk, caramel syrup, and caramel drizzle on top.', 125, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg', 'Regular'),
-('Seafood Pasta', 'A tomato-based pasta that is served with shrimp.', 160, '../img/2022-11-21 (2).jpg', 'Regular');
+-- Insert sample food items with size-based pricing
+INSERT INTO food (food_name, category, price_small, price_medium, price_large, image_path, description) VALUES
+('Cafe Vienna', 'Drink', 100, 130, 150, '../img/CLASSIC COFFEES/Cafe Vienna.jpg', 'Viennese coffee with Americano topped with whipped cream and cocoa powder.'),
+('Pork Katsudon', 'Rice Meal', 120, 150, 180, '../img/katsudon.jpg', 'Fried panko-breaded pork cutlet with egg cooked in Japanese soy sauce over rice.'),
+('Caramel Macchiato', 'Drink', 110, 125, 145, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg', 'Milk espresso-based coffee with caramel syrup and caramel drizzle on top.'),
+('Seafood Pasta', 'Other', 160, NULL, NULL, '../img/2022-11-21 (2).jpg', 'Tomato-based pasta served with shrimp.');
 
 -- Create orders table
 CREATE TABLE orders (
@@ -48,11 +50,12 @@ CREATE TABLE orders (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Create order items table (✅ Fixed `order_id` to `orders_id`)
+-- Create order items table (✅ Includes size selection)
 CREATE TABLE order_items (
     order_items_id INT AUTO_INCREMENT PRIMARY KEY,
     orders_id INT NOT NULL,
     food_id INT NOT NULL,
+    size ENUM('Small', 'Medium', 'Large', 'Regular') NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
     price DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
