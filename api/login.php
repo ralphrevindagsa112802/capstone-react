@@ -1,7 +1,7 @@
 <?php
 session_start(); // Start session at the top
 
-header("Access-Control-Allow-Origin: *"); // Allow React frontend
+header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow React frontend
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -10,23 +10,10 @@ header("Content-Type: application/json");
 // Database connection
 include 'db.php';
 
-if (!$data) {
-    error_log("JSON Decode Failed"); // Logs if decoding fails
-}
-
-if (!$conn) {
-    die(json_encode(["error" => "Failed to connect to database: " . mysqli_connect_error()]));
-}
-
-
-$input = file_get_contents("php://input");
-$data = json_decode($input, true);
-error_log("Raw Input: " . $input);
-
+$data = json_decode(file_get_contents("php://input"), true);
 
 // Check if required fields are provided
 if (!isset($data["username"], $data["password"])) {
-    http_response_code(400); // Bad Request
     echo json_encode(["error" => "Missing username or password"]);
     exit();
 }

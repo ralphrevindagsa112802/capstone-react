@@ -1,13 +1,17 @@
 <?php
-$host = "localhost";
-$user = "root"; // Default for XAMPP
-$password = ""; // Default is empty in XAMPP
-$database = "yappari_db";
+$host = "localhost"; // Change this if your database is hosted elsewhere
+$username = "root"; // Your MySQL username (default is 'root' for XAMPP)
+$password = ""; // Your MySQL password (default is empty for XAMPP)
+$database = "yappari_db"; // Change this to your actual database name
 
-$conn = new mysqli($host, $user, $password, $database);
+// Create connection
+$conn = new mysqli($host, $username, $password, $database);
 
+// Check connection
 if ($conn->connect_error) {
-    die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
+    die(json_encode(["success" => false, "message" => "Database connection failed: " . $conn->connect_error]));
 }
 
+// Set charset to UTF-8
+$conn->set_charset("utf8mb4");
 ?>
