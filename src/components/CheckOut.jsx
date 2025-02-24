@@ -1,107 +1,129 @@
-import React from 'react'
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { CartContext } from "../context/CartContext"; // Import Cart Context
 
 const CheckOut = () => {
+  const navigate = useNavigate();
+  const { setCartItems } = useContext(CartContext); // Clear cart after checkout
+  const [cartItems, setCartItemsState] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [shippingMethod, setShippingMethod] = useState("delivery");
+  const [user, setUser] = useState({ name: "", address: "" });
+
+  useEffect(() => {
+    // Load cart from local storage
+    const storedCart = JSON.parse(localStorage.getItem("checkoutOrder")) || [];
+    const storedTotal = localStorage.getItem("totalAmount") || 0;
+
+    setCartItemsState(storedCart);
+    setTotalAmount(storedTotal);
+
+    // Fetch user details from API
+    axios.get("http://localhost/capstone-react/api/getUserOrderDetails.php", { withCredentials: true })
+      .then(response => {
+        if (response.data.success) {
+          setUser({ name: response.data.name, address: response.data.address });
+        } else {
+          console.error(response.data.message);
+        }
+      })
+      .catch(error => console.error("Error fetching user details:", error));
+  }, []);
+
+  const handlePayment = async () => {
+    if (cartItems.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        "http://localhost/capstone-react/api/submitOrders.php", // ✅ Use API for order submission
+        {
+          items: cartItems.map((item) => ({
+            food_id: item.food_id,
+            size: item.size,
+            food_price: item.food_price,
+            quantity: item.quantity,
+          })),
+          shipping_method: shippingMethod,
+          payment_method: "Gcash",
+        },
+        { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      );
+
+      if (response.data.success) {
+        alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
+        setCartItems([]); // ✅ Clear cart
+        localStorage.removeItem("checkoutOrder");
+        localStorage.removeItem("totalAmount");
+        navigate("/user/cart"); // ✅ Redirect after checkout
+      } else {
+        alert("Order submission failed: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Error submitting order:", error);
+      alert("Failed to place order. Please try again.");
+    }
+  };
+
   return (
     <div className='bg-[#DCDEEA]'>
-  
-    <div class="flex items-center justify-center md:justify-start w-full md:w-auto shadow-md px-12 py-4 bg-white">
-      <img src="../img/YCB LOGO (BLUE).png" alt="Logo" class="h-20 w-auto object-contain block"/>
-    </div>
+      <div className="flex items-center justify-center w-full shadow-md px-12 py-4 bg-white">
+        <img src="../img/YCB LOGO (BLUE).png" alt="Logo" className="h-20 w-auto object-contain"/>
+      </div>
 
-    
-      <div class="min-h-screen p-6">
-        <div class="max-w-6xl mx-auto  rounded-lg p-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
+      <div className="min-h-screen p-6">
+        <div className="max-w-6xl mx-auto rounded-lg p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
             <div>
-        
-              <div class="mb-6">
-                <h2 class="text-xl font-bold text-[#1C359A] mb-4">Checkout</h2>
-                <div class="p-4 rounded-lg border-[2px] border-gray-200">
-                  <p class="font-semibold">
-                   
-                    <span id="customer-name"></span>
-                  </p>
-                  <p class="text-sm text-gray-600">
-                  
-                    <span id="customer-address"></span>
-                  </p>
-                  <p class="text-sm text-gray-600">
-                    Order number: 
-                   
-                    <span id="order-number"></span>
-                  </p>
-                  <a href="#" class="text-[#1C359A] text-sm mt-2 block">Edit</a>
-                </div>
-              </div>
-             
-              <div class="mb-6">
-                <h2 class="text-xl font-bold text-blue-800 mb-4">Shipping Information</h2>
-                <div class="flex gap-4">
-                  <label class="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
-                    <input type="radio" name="shipping-method" value="delivery" class="accent-[#1C359A]"/>
-                    <div>
-                      <p class="font-semibold text-sm">Delivery</p>
-                    </div>
-                  </label>
-                  
-                  <label class="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
-                    <input type="radio" name="shipping-method" value="pickup" class="accent-[#1C359A]"/>
-                    <div>
-                      <p class="font-semibold text-sm">Pick up</p>
-                    </div>
-                  </label>
-                </div>
-                <p class="text-sm text-gray-500 mt-2">
-                  *For pick-up customers, please arrive 20–30 minutes after receiving your order status "READY TO PICK-UP."
-                </p>
-              </div>
-      
-         
-              <div>
-                <h2 class="text-xl font-bold text-[#1C359A] mb-4">Payment Details</h2>
-                <p class="text-sm font-semibold">Payment method</p>
-
-                <div class="w-2/3 bg-white p-4 rounded-lg border-[2px] border-[#1C359A] flex justify-between items-center">
-                  <div>  
-                    <img src="https://images.seeklogo.com/logo-png/52/1/gcash-logo-png_seeklogo-522261.png" alt="" class="h-6 w-6" />              
-                    <p id="payment-method" class="text-sm text-gray-600"></p>
-                    
-                    <a href="#" class="text-blue-500 text-sm mt-2 block">Edit</a>
-                  </div>
-                  <div class="text-blue-600">
+              <h2 className="text-xl font-bold text-[#1C359A] mb-4">Checkout</h2>
               
-                    <span id="payment-icon"></span>
-                  </div>
+              <div className="p-4 rounded-lg border-[2px] border-gray-200">
+                <p className="font-semibold">{user.name || "Loading..."}</p>
+                <p className="text-sm text-gray-600">{user.address || "Loading..."}</p>
+              </div>
+
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-blue-800 mb-4">Shipping Information</h2>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
+                    <input type="radio" name="shipping-method" value="delivery" checked={shippingMethod === "delivery"} onChange={() => setShippingMethod("delivery")} />
+                    <p className="font-semibold text-sm">Delivery</p>
+                  </label>
+                  <label className="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
+                    <input type="radio" name="shipping-method" value="pickup" checked={shippingMethod === "pickup"} onChange={() => setShippingMethod("pickup")} />
+                    <p className="font-semibold text-sm">Pick up</p>
+                  </label>
                 </div>
               </div>
             </div>
-      
-          
-            <div class="">
-              <h2 class="text-xl font-bold text-[#1C359A] mb-4">Your order</h2>
-              <div class="bg-gray-50 p-4 rounded-lg  border-[#1C359A] border-[2px]">
-                <div id="order-items" class="space-y-4">
-                
-                </div>
-                <div class="border-t pt-4 mt-4">
-                  <div class="flex justify-between font-semibold text-gray-800">
-                    <p>Total</p>
-         
-                    <p id="total-price"></p>
+
+            <div>
+              <h2 className="text-xl font-bold text-[#1C359A] mb-4">Your order</h2>
+              <div className="bg-gray-50 p-4 rounded-lg border-[#1C359A] border-[2px]">
+                {cartItems.map((item) => (
+                  <div key={`${item.food_id}-${item.size}`} className="flex justify-between text-sm mb-2">
+                    <p>{item.food_name} ({item.size}) x {item.quantity}</p>
+                    <p>₱{item.food_price * item.quantity}</p>
                   </div>
+                ))}
+                <div className="border-t pt-4 mt-4 flex justify-between font-semibold text-gray-800">
+                  <p>Total</p>
+                  <p>₱{totalAmount}</p>
                 </div>
               </div>
-              <button class="mt-6 bg-blue-800 text-white w-full py-3 rounded-lg text-lg font-bold">
-                Pay <span id="pay-amount"></span>
+              <button onClick={handlePayment} className="mt-6 bg-blue-800 text-white w-full py-3 rounded-lg text-lg font-bold">
+                Pay ₱{totalAmount}
               </button>
             </div>
           </div>
         </div>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default CheckOut
+export default CheckOut;

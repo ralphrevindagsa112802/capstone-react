@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
 import axios from "axios";
 import UserNavbar from "../../components/UserNavbar";
@@ -8,49 +8,24 @@ import Footer from "../../components/Footer";
 const UserCart = () => {
     const { cartItems, removeFromCart, setCartItems } = useContext(CartContext);
     const [totalAmount, setTotalAmount] = useState(0);
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const total = cartItems.reduce((sum, item) => sum + item.food_price * item.quantity, 0);
         setTotalAmount(total);
     }, [cartItems]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        console.log("Submitting order with cart items:", cartItems);
-    
+    const handleCheckout = () => {
         if (cartItems.length === 0) {
             alert("Your cart is empty!");
             return;
         }
-    
-        // Convert food_id and food_price to proper numbers
-        const formattedCartItems = cartItems.map((item) => ({
-            food_id: parseInt(item.food_id, 10), // Convert to integer
-            size: item.size || "Regular", // 🔹 Ensure size is always sent
-            food_price: parseFloat(item.food_price), // Convert to float
-            quantity: parseInt(item.quantity, 10), // Convert to integer
-        }));
-    
-        try {
-            const response = await axios.post(
-                'http://localhost/capstone-react/api/submitOrders.php',
-                { items: formattedCartItems }, // Send formatted data
-                { headers: { "Content-Type": "application/json" }, withCredentials: true }
-            );
-    
-            console.log("Server Response:", response.data);
-    
-            if (response.data.success) {
-                alert(`Order submitted successfully! Order ID: ${response.data.order_id}`);
-                setCartItems([]); // Clear cart after checkout 
-            } else {
-                alert(`Error: ${response.data.message || "Failed to place order"}`);
-            }
-        } catch (error) {
-            console.error("Error submitting order:", error.response?.data || error.message);
-            alert("Failed to submit order. Please try again.");
-        }
+
+        // 🔹 Save order details before navigating to checkout
+        localStorage.setItem("checkoutOrder", JSON.stringify(cartItems));
+        localStorage.setItem("totalAmount", totalAmount);
+
+        navigate("/user/checkout"); // 🔹 Redirect to Checkout page
     };
     
     
@@ -103,7 +78,6 @@ const UserCart = () => {
                 </aside>
 
                 <div className="w-full mx-auto bg-white p-6">
-                    <form onSubmit={handleSubmit} id="cartForm">
                         <table className="w-full border-collapse">
                             <thead>
                                 <tr className="border-b">
@@ -114,51 +88,46 @@ const UserCart = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {cartItems.length > 0 ? (cartItems.map((item) => (
-                                    <tr key={item.food_id} className="border-b">
+                            {cartItems.length > 0 ? (
+                                cartItems.map((item) => (
+                                    <tr key={`${item.food_id}-${item.size}`} className="border-b">
                                         <td className="py-4 flex items-center">
                                             <img src={item.image_path} alt={item.food_name} className="w-16 h-16 rounded-md object-cover mr-4" />
                                             <div>
-                                                <h3 className="font-semibold">{item.food_name}</h3>
+                                                <h3 className="font-semibold">{item.food_name} ({item.size})</h3>
                                             </div>
                                         </td>
                                         <td className="text-center py-4">{item.quantity}</td>
                                         <td className="text-center py-4">₱{item.food_price}</td>
                                         <td className="text-center py-4">₱{(item.food_price * item.quantity)}</td>
                                         <td>
-                                            <div>
-                                                <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" 
+                                            <button className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" 
                                                 onClick={(e) => {
-                                                    e.preventDefault(); // ✅ Prevent form submission
-                                                    removeFromCart(item.food_id, item.size); // ✅ Remove by size as well
-                                                }}
-                                                >
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        </td>
-                                            
-                                    </tr>
-                                ))) : (
-                                    <tr>
-                                        <td className="py-4 flex items-center">
-                                            <p className="font-semibold">Your cart is empty</p>
+                                                    e.preventDefault();
+                                                    removeFromCart(item.food_id, item.size);
+                                                }}>
+                                                Remove
+                                            </button>
                                         </td>
                                     </tr>
-                                  )
-                                }
-                                
+                                ))
+                            ) : (
+                                <tr>
+                                    <td className="py-4 flex items-center">
+                                        <p className="font-semibold">Your cart is empty</p>
+                                    </td>
+                                </tr>
+                            )
+                        }
                             </tbody>
                         </table>
 
                         <div className="mt-6 flex justify-between">
                             <div className="text-lg font-semibold">Total: ₱{totalAmount}</div>
-                            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            <button onClick={handleCheckout} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                                 Proceed to Checkout
                             </button>
-                            
                         </div>
-                    </form>
                 </div>
             </div>
             <Footer />
