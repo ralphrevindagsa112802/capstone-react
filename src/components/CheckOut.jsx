@@ -33,40 +33,47 @@ const CheckOut = () => {
 
   const handlePayment = async () => {
     if (cartItems.length === 0) {
-      alert("Your cart is empty!");
-      return;
+        alert("Your cart is empty!");
+        return;
     }
 
-    try {
-      const response = await axios.post(
-        "http://localhost/capstone-react/api/submitOrders.php", // ✅ Use API for order submission
-        {
-          items: cartItems.map((item) => ({
+    const requestData = {
+        items: cartItems.map((item) => ({
             food_id: item.food_id,
             size: item.size,
             food_price: item.food_price,
             quantity: item.quantity,
-          })),
-          shipping_method: shippingMethod,
-          payment_method: "Gcash",
-        },
-        { headers: { "Content-Type": "application/json" }, withCredentials: true }
-      );
+        })),
+        shipping_method: shippingMethod,
+        payment_method: "Gcash",
+    };
 
-      if (response.data.success) {
-        alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
-        setCartItems([]); // ✅ Clear cart
-        localStorage.removeItem("checkoutOrder");
-        localStorage.removeItem("totalAmount");
-        navigate("/user/cart"); // ✅ Redirect after checkout
-      } else {
-        alert("Order submission failed: " + response.data.message);
-      }
+    console.log("Sending Order Data:", requestData); // ✅ Debug the request being sent
+
+    try {
+        const response = await axios.post(
+            "http://localhost/capstone-react/api/submitOrders.php", // ✅ Use correct API
+            requestData,
+            { headers: { "Content-Type": "application/json" }, withCredentials: true }
+        );
+
+        console.log("Server Response:", response.data); // ✅ Debug API response
+
+        if (response.data.success) {
+            alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
+            setCartItems([]); // ✅ Clear cart after order
+            localStorage.removeItem("checkoutOrder");
+            localStorage.removeItem("totalAmount");
+            navigate("/user/cart"); // ✅ Redirect to confirmation page
+        } else {
+            alert("Order submission failed: " + response.data.message);
+        }
     } catch (error) {
-      console.error("Error submitting order:", error);
-      alert("Failed to place order. Please try again.");
+        console.error("Error submitting order:", error);
+        alert("Failed to place order. Please try again.");
     }
   };
+
 
   return (
     <div className='bg-[#DCDEEA]'>
