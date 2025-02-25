@@ -2,7 +2,7 @@
 $host = "localhost"; // Change this if your database is hosted elsewhere
 $username = "root"; // Your MySQL username (default is 'root' for XAMPP)
 $password = ""; // Your MySQL password (default is empty for XAMPP)
-$database = "yappari_db"; // Change this to your actual database name
+$database = "yappari"; // Change this to your actual database name
 
 // Create connection
 $conn = new mysqli($host, $username, $password, $database);

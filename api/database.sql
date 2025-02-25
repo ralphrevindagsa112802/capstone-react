@@ -1,6 +1,6 @@
 -- Create the database (if it doesn't exist)
-CREATE DATABASE IF NOT EXISTS yappari_db;
-USE yappari_db;
+CREATE DATABASE IF NOT EXISTS yappari;
+USE yappari;
 
 -- Drop existing tables if they exist (for development purposes)
 DROP TABLE IF EXISTS order_items;
@@ -27,7 +27,7 @@ CREATE TABLE users (
 CREATE TABLE food (
     food_id INT AUTO_INCREMENT PRIMARY KEY,
     food_name VARCHAR(255) NOT NULL,
-    category ENUM('Rice Meal', 'Classic Coffees', 'Frappes', 'Smoothies', 'Refreshers', 'Milk Drinks' , 'Dessert', 'Other') NOT NULL,
+    category ENUM('Rice Meal', 'Classic Coffee', 'Frappes', 'Smoothies', 'Refreshers', 'Milk Drinks' , 'Dessert', 'Snacks & Pasta') NOT NULL,
     price_small DECIMAL(10,2) DEFAULT NULL,
     price_medium DECIMAL(10,2) DEFAULT NULL,
     price_large DECIMAL(10,2) DEFAULT NULL,
@@ -37,10 +37,10 @@ CREATE TABLE food (
 
 -- Insert sample food items with size-based pricing
 INSERT INTO food (food_name, category, price_small, price_medium, price_large, image_path, description) VALUES
-('Cafe Vienna', 'Classic Coffees', 100, 130, 150, '../img/CLASSIC COFFEES/Cafe Vienna.jpg', 'Viennese coffee with Americano topped with whipped cream and cocoa powder.'),
+('Cafe Vienna', 'Classic Coffee', 100, 130, 150, '../img/CLASSIC COFFEES/Cafe Vienna.jpg', 'Viennese coffee with Americano topped with whipped cream and cocoa powder.'),
 ('Pork Katsudon', 'Rice Meal', 120, 150, 180, '../img/katsudon.jpg', 'Fried panko-breaded pork cutlet with egg cooked in Japanese soy sauce over rice.'),
-('Caramel Macchiato', 'Classic Coffees', 110, 125, 145, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg', 'Milk espresso-based coffee with caramel syrup and caramel drizzle on top.'),
-('Seafood Pasta', 'Other', 160, NULL, NULL, '../img/2022-11-21 (2).jpg', 'Tomato-based pasta served with shrimp.');
+('Caramel Macchiato', 'Classic Coffee', 110, 125, 145, '../img/CLASSIC COFFEES/Caramel Macchiato.jpg', 'Milk espresso-based coffee with caramel syrup and caramel drizzle on top.'),
+('Seafood Pasta', 'Snacks & Pasta', 160, NULL, NULL, '../img/2022-11-21 (2).jpg', 'Tomato-based pasta served with shrimp.');
 
 -- Create orders table
 CREATE TABLE orders (

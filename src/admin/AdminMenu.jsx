@@ -32,15 +32,19 @@ const AdminMenu = () => {
 
   //get menu
   useEffect(() => {
-    axios
-      .get("http://localhost/capstone-react/api/getMenuItems.php") // Update to your actual API path
+    axios.get("http://localhost/capstone-react/api/getMenuItems.php")
       .then((response) => {
-        setMenuItems(response.data);
+        if (response.data.success) { // ✅ Ensure `success` is checked
+          setMenuItems(response.data.data); // ✅ Access `data`
+        } else {
+          console.error("Error fetching menu items:", response.data.message);
+        }
       })
       .catch((error) => {
         console.error("Error fetching menu items:", error);
       });
   }, []);
+
 
   const handleLogout = () => {
     console.log("Logout function triggered");
@@ -83,9 +87,12 @@ const AdminMenu = () => {
     e.preventDefault();
     const data = new FormData();
     data.append("food_name", formData.food_name);
-    data.append("food_description", formData.food_description);
-    data.append("food_size", formData.food_size);
-    data.append("food_price", formData.food_price);
+    data.append("food_description", formData.description);
+    data.append("food_size", formData.size);
+    data.append("price_small", formData.price_small);
+    data.append("price_medium", formData.price_medium);
+    data.append("price_large", formData.price_large);
+
     data.append("category", formData.category);
     if (formData.food_img) {
       data.append("food_img", formData.food_img);
@@ -220,7 +227,7 @@ const AdminMenu = () => {
         <div className="flex items-center justify-center md:justify-start w-full md:w-auto">
           <img
             className="h-20 w-auto object-contain block"
-            src="img/YCB LOGO (BLUE).png"
+            src="/img/YCB LOGO (BLUE).png"
             alt="Logo"
           />
         </div>
@@ -339,8 +346,9 @@ const AdminMenu = () => {
                 </tr>
               </thead>
               <tbody>
-                {menuItems.length > 0 ? (
-                  menuItems.map((item) => (
+                  {menuItems && menuItems.length > 0 ? (
+                    menuItems.map((item) => (
+
                     <tr
                       key={item.food_id}
                       className="border-t border-4 border-[#DCDEEA] hover:bg-gray-100"
@@ -352,8 +360,10 @@ const AdminMenu = () => {
                       <td className="  px-4 py-2">{item.food_name}</td>
                       <td className=" px-4 py-2">{item.category}</td>
 
-                      <td className=" px-4 py-2">₱{item.food_price}</td>
-                      <td className=" px-4 py-2">{item.food_size}</td>
+                      <td className="px-4 py-2">
+                        ₱{item.price_small || item.price_medium || item.price_large || "N/A"}
+                      </td>
+                      <td className=" px-4 py-2">{item.size}</td>
 
                       <td className=" px-4 py-2 font-black text-[#1C359A] ">
                         <span
@@ -364,7 +374,7 @@ const AdminMenu = () => {
                         </span>
                       </td>
 
-                      <td className=" px-4 py-2">{item.food_description}</td>
+                      <td className=" px-4 py-2">{item.description}</td>
                       <td className="px-4 py-2 relative">
                         <button
                           onClick={() => toggleDropdown(item.food_id)}

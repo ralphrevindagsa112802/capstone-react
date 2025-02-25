@@ -7,7 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
 
 
-$conn = new mysqli("localhost", "root", "", "yappari_db");
+include 'db.php';
 
 if ($conn->connect_error) {
     die(json_encode(["success" => false, "error" => "Database connection failed: " . $conn->connect_error]));

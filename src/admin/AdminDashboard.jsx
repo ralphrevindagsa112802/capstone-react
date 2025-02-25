@@ -49,7 +49,7 @@ const AdminDashboard = () => {
                 <div className="flex items-center justify-center md:justify-start w-full md:w-auto">
                     <img
                         className="h-20 w-auto object-contain block"
-                        src="img/YCB LOGO (BLUE).png"
+                        src="/img/YCB LOGO (BLUE).png"
                         alt="Logo"
                     />
                 </div>
@@ -60,20 +60,32 @@ const AdminDashboard = () => {
             <div className="flex flex-row h-full">
                 {/* Sidebar */}
                 <div className="w-64 flex-none bg-white shadow-md h-full flex flex-col p-4">
-                    <nav className="flex flex-col space-y-4">
-                        <Link to="/admin/dashboard" className="font-bold border-l-2 border-black hover:border-[#1C359A] sidebar-link flex items-center justify-center space-x-2 p-3 hover:bg-gray-200 text-gray-800">
-                            <span className="text-bold">Orders</span>
-                        </Link>
-                        <Link to="/admin/menu" className="font-bold border-l-2 border-black hover:border-[#1C359A] sidebar-link flex items-center justify-center space-x-2 p-3 hover:bg-gray-200 text-gray-800">
-                            <span>Menu</span>
-                        </Link>
-                        <Link to="/admin/feedback" className="font-bold border-l-2 border-black hover:border-[#1C359A] sidebar-link flex items-center justify-center space-x-2 p-3 hover:bg-gray-200 text-gray-800">
-                            <span>Feedback</span>
-                        </Link>
-                        <Link to="/admin/order-history" className="font-bold border-l-2 border-black hover:border-[#1C359A] sidebar-link flex items-center justify-center space-x-2 p-3 hover:bg-gray-200 text-gray-800">
-                            <span>Order History</span>
-                        </Link>
-                    </nav>
+                          <nav className="flex flex-col space-y-4">
+                            <Link
+                              to="/admin/dashboard"
+                              className="font-bold border-l-2 border-black hover:border-[#1C359A] sidebar-link flex items-center justify-center space-x-2 p-3 hover:bg-gray-200 text-gray-800"
+                            >
+                              <span>Orders</span>
+                            </Link>
+                            <Link
+                              to="/admin/menu"
+                              className="font-bold border-l-2 border-black hover:border-[#1C359A] sidebar-link flex items-center justify-center space-x-2 p-3 hover:bg-gray-200 text-gray-800"
+                            >
+                              <span>Menu</span>
+                            </Link>
+                            <Link
+                              to="/admin/feedback"
+                              className="font-bold border-l-2 border-black hover:border-[#1C359A] sidebar-link flex items-center justify-center space-x-2 p-3 hover:bg-gray-200 text-gray-800"
+                            >
+                              <span>Feedback</span>
+                            </Link>
+                            <Link
+                              to="/admin/order-history"
+                              className="font-bold border-l-2 border-black hover:border-[#1C359A] sidebar-link flex items-center justify-center space-x-2 p-3 hover:bg-gray-200 text-gray-800"
+                            >
+                              <span>Order History</span>
+                            </Link>
+                          </nav>
 
                     {/* Logout Button */}
                     <button onClick={handleLogout} className="mt-20 font-bold flex items-center justify-center bg-[#1C359A] text-white px-4 py-2 rounded-lg hover:bg-blue-800">
