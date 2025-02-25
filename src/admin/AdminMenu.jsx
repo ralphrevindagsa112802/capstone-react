@@ -64,7 +64,7 @@ const AdminMenu = () => {
 
   const handleLogout = () => {
     console.log("Logout function triggered");
-
+    navigate("/admin/logout");
     //  logout functionality here if needed
   };
 
@@ -291,12 +291,13 @@ const AdminMenu = () => {
           </nav>
 
           {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className="mt-20 font-bold flex items-center justify-center bg-[#1C359A] text-white px-4 py-2 rounded-lg hover:bg-blue-800"
-          >
-            SIGN OUT
-          </button>
+          <Link to={"/admin/logout"} onClick={handleLogout}>
+            <button
+              className="mt-20 font-bold flex items-center justify-center bg-[#1C359A] text-white px-8 py-4 rounded-lg hover:bg-blue-800"
+            >
+              SIGN OUT
+            </button>
+          </Link>
         </div>
 
         {/* Main Content (Menu Management) */}

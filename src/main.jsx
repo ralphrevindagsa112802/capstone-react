@@ -107,6 +107,10 @@ const router = createBrowserRouter([{
   path: '/admin/menu', 
   element: <RequireAuth><AdminMenu /></RequireAuth>, 
   errorElement: <NotFound/> 
+},{ 
+  path: '/admin/logout', 
+  element: <AdminLogin/>, 
+  errorElement: <NotFound/> 
 },]);
 
 createRoot(document.getElementById('root')).render(
