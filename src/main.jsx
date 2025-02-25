@@ -8,15 +8,20 @@ import App from './App'
 import Menu from './pages/Menu'
 import NotFound from './pages/NotFound'
 import SignIn from './pages/SignIn'
+import Company from './pages/Company'
+import Special from './pages/Special'
 import LogIn from './pages/LogIn'
 import UserHome from './pages/useraccount/UserHome'
 import UserMenu from './pages/useraccount/UserMenu'
+import UserCompany from './pages/useraccount/UserCompany'
+import UserSpecial from './pages/useraccount/UserSpecial'
 import UserAccount from './pages/useraccount/UserAccount'
 import UserCart from './pages/useraccount/UserCart'
 import CheckOut from './components/CheckOut'
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
 import AdminMenu from './admin/AdminMenu'
+
 
 const RequireAuth = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
@@ -32,6 +37,14 @@ const router = createBrowserRouter([{
   element: <Menu />,
   errorElement: <NotFound/>,
 }, {
+  path: '/company',
+  element: <Company />,
+  errorElement: <NotFound/>,
+}, {
+  path: '/special',
+  element: <Special />,
+  errorElement: <NotFound/>,
+},{
   path: '/signin',
   element: <SignIn />,
   errorElement: <NotFound/>,
@@ -46,6 +59,14 @@ const router = createBrowserRouter([{
 }, {
   path: '/user/menu',
   element: <UserMenu />,
+  errorElement: <NotFound/>,
+},  {
+  path: '/user/company',
+  element: <UserCompany />,
+  errorElement: <NotFound/>,
+}, {
+  path: '/user/special',
+  element: <UserSpecial />,
   errorElement: <NotFound/>,
 }, {
   path: '/user/account',
