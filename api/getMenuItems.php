@@ -6,7 +6,6 @@ include 'db.php'; // Ensure this connects to your database
 
 $category = isset($_GET['category']) ? $_GET['category'] : "All"; // Get category from URL
 
-// SQL query to fetch food items, filtering if a category is selected
 if ($category === "All") {
     $query = "SELECT * FROM food";
     $stmt = $conn->prepare($query);
@@ -29,6 +28,9 @@ while ($row = $result->fetch_assoc()) {
         "price_small" => $row["price_small"],
         "price_medium" => $row["price_medium"],
         "price_large" => $row["price_large"],
+        "availability_small" => $row["availability_small"] ?: "Not Available",
+        "availability_medium" => $row["availability_medium"] ?: "Not Available",
+        "availability_large" => $row["availability_large"] ?: "Not Available",
         "image_path" => $row["image_path"]
     ];
 }

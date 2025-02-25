@@ -22,14 +22,14 @@ const AdminMenu = () => {
   //availability
   const toggleDropdown = (id, size) => {
     setDropdownOpen(prevId => (prevId === `${id}-${size}` ? null : `${id}-${size}`));
-  };  
+  };    
     
 
-  const handleAvailabilityChange = async (id, status) => {
-    console.log(`Updating availability for ID ${id} to ${status}`); // Debugging log
-    await updateAvailability(id, status);
-    setDropdownOpen(null); // Close dropdown after selection
-  };
+  const handleAvailabilityChange = async (id, size, status) => {
+    console.log(`Updating availability for ID ${id}, Size ${size} to ${status}`); // Debugging
+    await updateAvailability(id, size, status);
+    setDropdownOpen(null);
+  };  
 
   //get menu
   useEffect(() => {
@@ -59,8 +59,6 @@ const AdminMenu = () => {
     };
   }, []);
   
-  
-
 
   const handleLogout = () => {
     console.log("Logout function triggered");
@@ -155,22 +153,29 @@ const AdminMenu = () => {
   };
 
   //availability
-  const updateAvailability = async (id, status) => {
+  const updateAvailability = async (id, size, status) => {
     try {
       const response = await axios.post(
         "http://localhost/capstone-react/api/updateAvailability.php",
         {
           food_id: id,
+          size: size.toLowerCase(), // Ensure lowercase to match PHP handling
           availability: status,
         }
       );
-
+  
       if (response.data.success) {
-        // Update state directly to reflect changes instantly
+        // ✅ Update state correctly for each size
         setMenuItems((prevItems) =>
-          prevItems.map((item) =>
-            item.food_id === id ? { ...item, availability: status } : item
-          )
+          prevItems.map((item) => {
+            if (item.food_id === id) {
+              return {
+                ...item,
+                [`availability_${size.toLowerCase()}`]: status, // Update only the correct size
+              };
+            }
+            return item;
+          })
         );
       } else {
         console.error("Failed to update availability:", response.data.message);
@@ -178,7 +183,8 @@ const AdminMenu = () => {
     } catch (error) {
       console.error("Error updating availability:", error);
     }
-  };
+  };   
+  
 
   //deleting from admin and database
   const [confirmDelete, setConfirmDelete] = useState(null); // Store item ID to delete
@@ -293,7 +299,7 @@ const AdminMenu = () => {
           {/* Logout Button */}
           <Link to={"/admin/logout"} onClick={handleLogout}>
             <button
-              className="mt-20 font-bold flex items-center justify-center bg-[#1C359A] text-white px-8 py-4 rounded-lg hover:bg-blue-800"
+              className="mt-20 font-bold flex items-center justify-center bg-[#1C359A] text-white px-18 py-2 rounded-lg hover:bg-blue-800"
             >
               SIGN OUT
             </button>
@@ -395,11 +401,17 @@ const AdminMenu = () => {
                           <td className="px-4 py-2">{sizeItem.size}</td>
                           <td className="px-4 py-2 font-black text-[#1C359A]">
                             <span
-                              className={`font-bold ${item.availability === "Available" ? "text-blue-600" : "text-red-600"}`}
+                              className={`font-bold ${
+                                item[`availability_${sizeItem.size.toLowerCase()}`] === "Available"
+                                  ? "text-blue-600"
+                                  : "text-red-600"
+                              }`}
                             >
-                              {item.availability}
+                              {item[`availability_${sizeItem.size.toLowerCase()}`] || "Not Available"}
                             </span>
                           </td>
+
+
                           <td className="px-4 py-2">{item.description}</td>
                           <td className="px-4 py-2 relative">
                             <button 
@@ -408,15 +420,15 @@ const AdminMenu = () => {
                               <FaEllipsisV />
                             </button>
 
-                            {dropdownOpen === `${item.food_id}-${sizeItem.size}` && ( // ✅ Unique key for each size
+                            {dropdownOpen === `${item.food_id}-${sizeItem.size}` && (
                               <div className="absolute right-0 bg-white rounded drop-shadow-lg w-36 z-50 dropdown-menu">
                                 <button onClick={() => handleEditItem(item.food_id, sizeItem.size)} className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200">
                                   Edit
                                 </button>
-                                <button onClick={() => handleAvailabilityChange(item.food_id, "Available")} className="block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-200">
+                                <button onClick={() => handleAvailabilityChange(item.food_id, sizeItem.size, "Available")} className="block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-200">
                                   Available
                                 </button>
-                                <button onClick={() => handleAvailabilityChange(item.food_id, "Not Available")} className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-200">
+                                <button onClick={() => handleAvailabilityChange(item.food_id, sizeItem.size, "Not Available")} className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-200">
                                   Not Available
                                 </button>
                                 <button onClick={() => handleDeleteClick(item.food_id)} className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200">
