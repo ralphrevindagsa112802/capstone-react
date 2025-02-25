@@ -19,6 +19,7 @@ CREATE TABLE users (
     phone VARCHAR(15) NOT NULL,
     address TEXT NOT NULL,
     password VARCHAR(255) NOT NULL,
+    profile_pic VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

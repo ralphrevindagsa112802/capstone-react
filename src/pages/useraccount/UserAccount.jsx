@@ -17,6 +17,21 @@ const UserAccount = () => {
     profile_pic: '',
   });
 
+  //edit password
+
+  // State for password change
+  const [passwordData, setPasswordData] = useState({
+    current_password: '',
+    new_password: '',
+    confirm_password: '',
+  });
+
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  // Handle password input change
+  const handlePasswordChange = (e) => {
+    setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
+  };
+
   /*fetch user 
   useEffect(() => {
     fetch('http://localhost/capstone-react/api/fetch_user.php', { // Adjust API URL if needed
@@ -34,6 +49,8 @@ const UserAccount = () => {
   }, []);
 */
   //fetch user
+
+  
   useEffect(() => {
     fetch('http://localhost/capstone-react/api/fetch_user.php', {
       credentials: 'include',
@@ -125,21 +142,6 @@ const UserAccount = () => {
       .catch(error => console.error("Error uploading profile picture:", error));
   };
 
-  //edit password
-
-  // State for password change
-  const [passwordData, setPasswordData] = useState({
-    current_password: '',
-    new_password: '',
-    confirm_password: '',
-  });
-
-  const [isEditingPassword, setIsEditingPassword] = useState(false);
-  // Handle password input change
-  const handlePasswordChange = (e) => {
-    setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
-  };
-
   // Handle password update
   const handlePasswordUpdate = () => {
     if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
@@ -160,10 +162,13 @@ const UserAccount = () => {
     })
       .then(response => response.json())
       .then(data => {
+
+        console.log("Updating password..."); // Debugging
+
         if (data.success) {
-          alert('Password updated successfully!');
           setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
           setIsEditingPassword(false);
+          alert('Password updated successfully!');
         } else {
           alert('Error: ' + data.error);
         }
