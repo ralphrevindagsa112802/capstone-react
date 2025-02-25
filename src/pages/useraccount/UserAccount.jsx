@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import UserNavbar from '../../components/UserNavbar';
 import Footer from '../../components/Footer';
 
 const UserAccount = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
 
     user_id: '',
@@ -144,16 +145,18 @@ const UserAccount = () => {
 
   // Handle password update
   const handlePasswordUpdate = () => {
+    console.log("Updating password..."); // Debugging
+  
     if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
-      alert('Please fill in all fields.');
+      window.alert('Please fill in all fields.');
       return;
     }
-
+  
     if (passwordData.new_password !== passwordData.confirm_password) {
-      alert('New passwords do not match.');
+      window.alert('New passwords do not match.');
       return;
     }
-
+  
     fetch('http://localhost/capstone-react/api/change_password.php', {
       method: 'POST',
       credentials: 'include',
@@ -162,19 +165,21 @@ const UserAccount = () => {
     })
       .then(response => response.json())
       .then(data => {
-
         console.log("API Response:", data); // Debugging
-
+  
         if (data.success) {
+          setTimeout(() => {
+            window.alert('Password updated successfully!'); // ✅ Ensure alert is shown
+          }, 100);
+  
           setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
           setIsEditingPassword(false);
-          alert('Password updated successfully!');
         } else {
-          alert('Error: ' + data.error);
+          window.alert('Error: ' + data.error);
         }
       })
       .catch(error => console.error('Error updating password:', error));
-  };
+  };  
 
   return (
     <div className='bg-[#DCDEEA]'>
