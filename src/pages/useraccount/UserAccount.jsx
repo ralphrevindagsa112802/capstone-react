@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 const UserAccount = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
+
     user_id: '',
     username: '',
     f_name: '',
@@ -124,8 +125,54 @@ const UserAccount = () => {
       .catch(error => console.error("Error uploading profile picture:", error));
   };
 
+  //edit password
+
+  // State for password change
+  const [passwordData, setPasswordData] = useState({
+    current_password: '',
+    new_password: '',
+    confirm_password: '',
+  });
+
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  // Handle password input change
+  const handlePasswordChange = (e) => {
+    setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
+  };
+
+  // Handle password update
+  const handlePasswordUpdate = () => {
+    if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    if (passwordData.new_password !== passwordData.confirm_password) {
+      alert('New passwords do not match.');
+      return;
+    }
+
+    fetch('http://localhost/capstone-react/api/change_password.php', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(passwordData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Password updated successfully!');
+          setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
+          setIsEditingPassword(false);
+        } else {
+          alert('Error: ' + data.error);
+        }
+      })
+      .catch(error => console.error('Error updating password:', error));
+  };
+
   return (
-    <div>
+    <div className='bg-[#DCDEEA]'>
       <UserNavbar />
 
       <div className="flex flex-row bg-[#1C359A] py-10 px-4 md:px-36 mt-32 ">
@@ -246,25 +293,47 @@ const UserAccount = () => {
         <div className="flex-grow ml-0 md:ml-6 p-4">
           <form id="profileForm" className="flex flex-col h-full space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <input type="text" name="f_name" className="w-full p-2 rounded-md border" placeholder="First Name"
-                value={userData.f_name || ''} onChange={handleChange} disabled={!isEditing} />
-              <input type="text" name="l_name" className="w-full p-2 rounded-md border" placeholder="Last Name"
-                value={userData.l_name || ''} onChange={handleChange} disabled={!isEditing} />
+              <div>
+                <label htmlFor="f_name" className="block text-[#1C359A] font-bold">First Name</label>
+                <input type="text" id="f_name" name="f_name" className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
+                  placeholder="First Name" value={userData.f_name || ''} onChange={handleChange} disabled={!isEditing} />
+              </div>
+
+              <div>
+                <label htmlFor="l_name" className="block text-[#1C359A] font-bold">Last Name</label>
+                <input type="text" id="l_name" name="l_name" className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
+                  placeholder="Last Name" value={userData.l_name || ''} onChange={handleChange} disabled={!isEditing} />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <input type="text" name="username" className="w-full p-2 rounded-md border" placeholder="User Name"
-                value={userData.username || ''} onChange={handleChange} disabled={!isEditing} />
-              <input type="email" name="email" className="w-full p-2 rounded-md border" placeholder="Email Address"
-                value={userData.email || ''} onChange={handleChange} disabled={!isEditing} />
+              <div>
+                <label htmlFor="username" className="block text-[#1C359A] font-bold">Username</label>
+                <input type="text" id="username" name="username" className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
+                  placeholder="User Name" value={userData.username || ''} onChange={handleChange} disabled={!isEditing} />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-[#1C359A] font-bold">Email Address</label>
+                <input type="email" id="email" name="email" className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
+                  placeholder="Email Address" value={userData.email || ''} onChange={handleChange} disabled={!isEditing} />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <input type="text" name="address" className="w-full p-2 rounded-md border" placeholder="Address"
-                value={userData.address || ''} onChange={handleChange} disabled={!isEditing} />
-              <input type="text" name="phone" className="w-full p-2 rounded-md border" placeholder="Phone Number"
-                value={userData.phone || ''} onChange={handleChange} disabled={!isEditing} />
+              <div>
+                <label htmlFor="address" className="block text-[#1C359A] font-bold">Address</label>
+                <input type="text" id="address" name="address" className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
+                  placeholder="Address" value={userData.address || ''} onChange={handleChange} disabled={!isEditing} />
+              </div>
+
+              <div>
+                <label htmlFor="phone" className="block text-[#1C359A] font-bold">Phone Number</label>
+                <input type="text" id="phone" name="phone" className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
+                  placeholder="Phone Number" value={userData.phone || ''} onChange={handleChange} disabled={!isEditing} />
+              </div>
             </div>
+
 
             <div className="flex justify-end">
               {isEditing && (
@@ -273,6 +342,55 @@ const UserAccount = () => {
                 </button>
               )}
             </div>
+
+            {isEditingPassword ? (
+              <div className="flex flex-col space-y-3 mt-2">
+                <h3 className="text-md font-semibold text-[#1C359A]">Change Password</h3>
+                <input
+                  type="password"
+                  name="current_password"
+                  placeholder="Current Password"
+                  value={passwordData.current_password}
+                  onChange={handlePasswordChange}
+                  className="p-2 bg-white rounded-md"
+                />
+                <input
+                  type="password"
+                  name="new_password"
+                  placeholder="New Password"
+                  value={passwordData.new_password}
+                  onChange={handlePasswordChange}
+                  className="p-2 bg-white rounded-md"
+                />
+                <input
+                  type="password"
+                  name="confirm_password"
+                  placeholder="Confirm New Password"
+                  value={passwordData.confirm_password}
+                  onChange={handlePasswordChange}
+                  className="p-2 bg-white rounded-md"
+                />
+                <button
+                  onClick={handlePasswordUpdate}
+                  className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+                >
+                  Save Password
+                </button>
+                <button
+                  onClick={() => setIsEditingPassword(false)}
+                  className="text-red-500 text-sm mt-2"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setIsEditingPassword(true)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-2"
+              >
+                Change Password
+              </button>
+            )}
           </form>
         </div>
       </div>
