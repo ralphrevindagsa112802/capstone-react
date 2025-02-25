@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: https://ralphrevindagsa112802.github.io/signup");
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
