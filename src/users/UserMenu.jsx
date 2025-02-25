@@ -81,11 +81,11 @@ const UserMenu = () => {
                             <span className="text-sm font-bold">Rice Meals</span>
                         </li>
 
-                        <li onClick={() => setSelectedCategory("Snacks & Pasta")}
+                        <li onClick={() => setSelectedCategory("Snacks and Pasta")}
                             className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                            ${selectedCategory === "Snacks & Pasta" ? "bg-blue-300" : "bg-white"}`}>
-                            <img src="/img/seafoodpasta.jpg" alt="Snacks & Pasta" className="w-8 h-8 object-fill rounded-xl" />
-                            <span className="text-sm font-bold">Snacks & Pasta</span>
+                            ${selectedCategory === "Snacks and Pasta" ? "bg-blue-300" : "bg-white"}`}>
+                            <img src="/img/seafoodpasta.jpg" alt="Snacks and Pasta" className="w-8 h-8 object-fill rounded-xl" />
+                            <span className="text-sm font-bold">Snacks and Pasta</span>
                         </li>
                     </ul>
                     

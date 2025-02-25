@@ -45,9 +45,9 @@ const PublicMenu = () => {
               <span className="text-sm font-bold">All</span>
             </li>
            
-            <li onClick={() => setSelectedCategory("Classic Coffees")}
+            <li onClick={() => setSelectedCategory("Classic Coffee")}
                 className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                ${selectedCategory === "Classic Coffees" ? "bg-blue-300" : "bg-white"}`}>
+                ${selectedCategory === "Classic Coffee" ? "bg-blue-300" : "bg-white"}`}>
               <img src="/img/cafeviennaNobg.png" alt="Classic Coffees" className="w-8 h-8 object-contain" />
               <span className="text-sm font-bold">Classic Coffees</span>
             </li>
@@ -87,11 +87,11 @@ const PublicMenu = () => {
                 <span className="text-sm font-bold">Rice Meals</span>
             </li>
 
-            <li onClick={() => setSelectedCategory("Other")}
+            <li onClick={() => setSelectedCategory("Snacks and Pasta")}
                 className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                ${selectedCategory === "Other" ? "bg-blue-300" : "bg-white"}`}>
-                <img src="/img/seafoodpasta.jpg" alt="Snacks & Pasta" className="w-8 h-8 object-fill rounded-xl" />
-                <span className="text-sm font-bold">Snacks & Pasta</span>
+                ${selectedCategory === "Snacks and Pasta" ? "bg-blue-300" : "bg-white"}`}>
+                <img src="/img/porkcurry.jpg" alt="RSnacks and Pasta" className="w-8 h-8 object-fill rounded-xl" />
+                <span className="text-sm font-bold">Snacks and Pasta</span>
             </li>
 
           </ul>
