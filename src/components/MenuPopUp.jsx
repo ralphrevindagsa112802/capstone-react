@@ -1,27 +1,32 @@
 import React, { useState } from "react";
 
 const MenuPopup = ({ food, onClose, onAddToCart }) => {
+  
   if (!food) return null;
 
   // Define size options and corresponding prices
-  const sizeOptions =
-    food.category === "Rice Meal"
-      ? [{ size: "Regular", price: food.price_small }, { size: "Large", price: food.price_large }]
-      : food.category === "Drink"
-      ? [{ size: "Small", price: food.price_small }, { size: "Medium", price: food.price_medium }, { size: "Large", price: food.price_large }]
-      : food.category === "Dessert"
-      ? [{ size: "Regular", price: food.price_small }]
-      : [];
+  const sizeOptions = [];
+  if (food.availability_small === "Available") {
+    sizeOptions.push({ size: "Small", price: food.price_small });
+  }
+  if (food.availability_medium === "Available") {
+    sizeOptions.push({ size: "Medium", price: food.price_medium });
+  }
+  if (food.availability_large === "Available") {
+    sizeOptions.push({ size: "Large", price: food.price_large });
+  }
+  
 
-  const [selectedSize, setSelectedSize] = useState(sizeOptions[0]?.size || "Regular");
-  const [selectedPrice, setSelectedPrice] = useState(sizeOptions[0]?.price || food.food_price);
+  const [selectedSize, setSelectedSize] = useState(sizeOptions[0]?.size || "Small");
+  const [selectedPrice, setSelectedPrice] = useState(sizeOptions[0]?.price || food.price_small);
+
 
   const handleSizeChange = (e) => {
     const newSize = e.target.value;
-    const newPrice = sizeOptions.find((option) => option.size === newSize)?.price || food.food_price;
+    const newPrice = sizeOptions.find(option => option.size === newSize)?.price || food.price_small;
     setSelectedSize(newSize);
     setSelectedPrice(newPrice);
-  };
+  };  
 
   const handleAddToCart = () => {
     onAddToCart({ ...food, size: selectedSize, food_price: selectedPrice, quantity: 1 });

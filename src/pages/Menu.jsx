@@ -108,8 +108,27 @@ const PublicMenu = () => {
             </div>
             <hr className="border-t border-black mx-4 my-2 w-full"/>
             <div className="container-fluid grid grid-cols-3 gap-36 p-5">
-              {foodItems
+            {foodItems
                 .filter(food => selectedCategory === "All" || food.category === selectedCategory)
+                .flatMap(food => {
+                  // Create an array to hold only available sizes
+                  const availableSizes = [];
+                  
+                  if (food.availability_small === "Available") {
+                    availableSizes.push({ size: "Small", price: food.price_small });
+                  }
+                  if (food.availability_medium === "Available") {
+                    availableSizes.push({ size: "Medium", price: food.price_medium });
+                  }
+                  if (food.availability_large === "Available") {
+                    availableSizes.push({ size: "Large", price: food.price_large });
+                  }
+
+                  // If no sizes are available, exclude this item
+                  if (availableSizes.length === 0) return [];
+
+                  return [{ ...food, availableSizes }];
+                })
                 .map(food => (
                   <div key={food.food_id} className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
                     <div className="w-full flex flex-wrap justify-center gap-4">
@@ -118,14 +137,18 @@ const PublicMenu = () => {
                     <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col">
                       <div className="text-[#1C359A] font-bold flex">{food.food_name}</div>
                       <div className="text-justify opacity-55">{food.description}</div>
-                      <div className="flex flex-row-reverse justify-between pt-4 mt-auto items-center">
-                        <div className="price text-sm font-semibold">₱{food.price_small}</div>
-                        <button 
-                          onClick={() => handleAddToCart(food)}
-                          className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer">
-                          <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4"/>
-                          <span>Add</span>
-                        </button>
+                      <div className="mt-2">
+                        {food.availableSizes.map(size => (
+                          <div key={size.size} className="flex justify-between items-center mt-1">
+                            <span className="text-sm font-semibold">{size.size}: ₱{size.price}</span>
+                            <button 
+                              onClick={() => handleAddToCart(food)}
+                              className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer">
+                              <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4"/>
+                              <span>Add</span>
+                            </button>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
