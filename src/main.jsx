@@ -19,6 +19,7 @@ import UserCompany from './users/UserCompany'
 import UserSpecial from './users/UserSpecial'
 import UserContact from './users/UserContact'
 import UserAccount from './users/UserAccount'
+import UserStatus from './users/UserStatus'
 import UserCart from './users/UserCart'
 import CheckOut from './components/CheckOut'
 import AdminLogin from './admin/AdminLogin'
@@ -82,6 +83,10 @@ const router = createBrowserRouter([{
 }, {
   path: '/user/account',
   element: <UserAccount />,
+  errorElement: <NotFound/>,
+}, {
+  path: '/user/status',
+  element: <UserStatus />,
   errorElement: <NotFound/>,
 }, {
   path: '/user/cart',

@@ -63,10 +63,10 @@ const UserCart = () => {
                         <Link to="/user/cart" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
                             <span className="font-semibold">Cart</span>
                         </Link>
-                        <Link to="/user/orderstatus" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+                        <Link to="/user/status" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
                             <span className="font-semibold">Order Status</span>
                         </Link>
-                        <Link to="/user/orderhistory" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+                        <Link to="/user/history" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
                             <span className="font-semibold">Order History</span>
                         </Link>
                     </nav>
