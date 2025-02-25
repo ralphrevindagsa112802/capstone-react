@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import UserNavbar from '../../components/UserNavbar';
-import Footer from '../../components/Footer';
+import UserNavbar from '../components/UserNavbar';
+import Footer from '../components/Footer';
 
 const UserAccount = () => {
   const [isEditing, setIsEditing] = useState(false);

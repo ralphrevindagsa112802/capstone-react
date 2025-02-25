@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate} from "react-router-dom";
-import { CartContext } from "../../context/CartContext";
+import { CartContext } from "../context/CartContext";
 import axios from "axios";
-import UserNavbar from "../../components/UserNavbar";
-import Footer from "../../components/Footer";
+import UserNavbar from "../components/UserNavbar";
+import Footer from "../components/Footer";
 
 const UserCart = () => {
     const { cartItems, removeFromCart, setCartItems } = useContext(CartContext);
