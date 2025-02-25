@@ -33,62 +33,62 @@ const UserMenu = () => {
                     
                     <ul className="space-y-3">
                         <li onClick={() => setSelectedCategory("All")}
-                            className={`flex items-center space-x-3 p-3 bg-white shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                            ${selectedCategory === "All" ? "bg-blue-300" : ""}`}>
+                            className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
+                            ${selectedCategory === "All" ? "bg-blue-300" : "bg-white"}`}>
                             <img src="/img/YCB LOGO (BLACK).png" alt="All" className="w-8 h-8 object-contain" />
                             <span className="text-sm font-bold">All</span>
                         </li>
 
-                        <li onClick={() => setSelectedCategory("Drink")}
-                            className={`flex items-center space-x-3 p-3 bg-white shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                            ${selectedCategory === "Classic Coffees" ? "bg-blue-300" : ""}`}>
+                        <li onClick={() => setSelectedCategory("Classic Coffees")}
+                            className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
+                            ${selectedCategory === "Classic Coffees" ? "bg-blue-300" : "bg-white"}`}>
                             <img src="/img/cafeviennaNobg.png" alt="Classic Coffees" className="w-8 h-8 object-contain" />
                             <span className="text-sm font-bold">Classic Coffees</span>
                         </li>
 
-                        <li onClick={() => setSelectedCategory("Drink")}
-                            className={`flex items-center space-x-3 p-3 bg-white shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                            ${selectedCategory === "Frappes" ? "bg-blue-300" : ""}`}>
+                        <li onClick={() => setSelectedCategory("Frappes")}
+                            className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
+                            ${selectedCategory === "Frappes" ? "bg-blue-300" : "bg-white"}`}>
                             <img src="/img/SMOOTHIES AND FRAPPES/Strawberry Frappe.jpg" alt="Frappes" className="w-8 h-8 object-fill rounded-xl" />
                             <span className="text-sm font-bold">Frappes</span>
                         </li>
 
-                        <li onClick={() => setSelectedCategory("Drink")}
-                            className={`flex items-center space-x-3 p-3 bg-white shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                            ${selectedCategory === "Smoothies" ? "bg-blue-300" : ""}`}>
+                        <li onClick={() => setSelectedCategory("Smoothies")}
+                            className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
+                            ${selectedCategory === "Smoothies" ? "bg-blue-300" : "bg-white"}`}>
                             <img src="/img/SMOOTHIES AND FRAPPES/Strawberry Smoothie.jpg" alt="Smoothies" className="w-8 h-8 object-fill rounded-xl" />
                             <span className="text-sm font-bold">Smoothies</span>
                         </li>
 
-                        <li onClick={() => setSelectedCategory("Drink")}
-                            className={`flex items-center space-x-3 p-3 bg-white shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                            ${selectedCategory === "Smoothies" ? "bg-blue-300" : ""}`}>
+                        <li onClick={() => setSelectedCategory("Refreshers")}
+                            className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
+                            ${selectedCategory === "Refreshers" ? "bg-blue-300" : "bg-white"}`}>
                             <img src="/img/REFRESHERS/BLUE BUTTERFLY PEA LEMONADE ICON.jpg" alt="Refreshers" className="w-8 h-8 object-fill rounded-xl" />
                             <span className="text-sm font-bold">Refreshers</span>
                         </li>
 
-                        <li onClick={() => setSelectedCategory("Drink")}
-                            className={`flex items-center space-x-3 p-3 bg-white shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                            ${selectedCategory === "Smoothies" ? "bg-blue-300" : ""}`}>
+                        <li onClick={() => setSelectedCategory("Milk Drinks")}
+                            className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
+                            ${selectedCategory === "Milk Drinks" ? "bg-blue-300" : "bg-white"}`}>
                             <img src="/img/MILK DRINKS/Mango Milk.jpg" alt="Milk Drinks" className="w-8 h-8 object-fill rounded-xl" />
                             <span className="text-sm font-bold">Milk Drinks</span>
                         </li>
 
                         <li onClick={() => setSelectedCategory("Rice Meal")}
-                            className={`flex items-center space-x-3 p-3 bg-white shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                            ${selectedCategory === "Rice Meal" ? "bg-blue-300" : ""}`}>
+                            className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
+                            ${selectedCategory === "Rice Meal" ? "bg-blue-300" : "bg-white"}`}>
                             <img src="/img/porkcurry.jpg" alt="Rice Meals" className="w-8 h-8 object-fill rounded-xl" />
                             <span className="text-sm font-bold">Rice Meals</span>
                         </li>
 
                         <li onClick={() => setSelectedCategory("Other")}
-                            className={`flex items-center space-x-3 p-3 bg-white shadow rounded-lg hover:bg-blue-100 cursor-pointer 
-                            ${selectedCategory === "Other" ? "bg-blue-300" : ""}`}>
+                            className={`flex items-center space-x-3 p-3 shadow rounded-lg hover:bg-blue-100 cursor-pointer 
+                            ${selectedCategory === "Other" ? "bg-blue-300" : "bg-white"}`}>
                             <img src="/img/seafoodpasta.jpg" alt="Snacks & Pasta" className="w-8 h-8 object-fill rounded-xl" />
-                            <span className="text-sm font-bold">Snacks & Pasta </span>
+                            <span className="text-sm font-bold">Snacks & Pasta</span>
                         </li>
                     </ul>
-
+                    
                 </div>
     
                 <div id="best-seller" className="w-full flex flex-col space-y-4 mt-4 py">
