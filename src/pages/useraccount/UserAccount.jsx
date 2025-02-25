@@ -184,7 +184,7 @@ const UserAccount = () => {
       console.error('Error updating password:', error);
       window.alert('Something went wrong. Please try again.');
     }
-  };  
+  };
 
   return (
     <div className='bg-[#DCDEEA]'>
