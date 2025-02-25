@@ -144,7 +144,8 @@ const UserAccount = () => {
   };
 
   // Handle password update
-  const handlePasswordUpdate = () => {
+  const handlePasswordUpdate = (e) => {
+    e.preventDefault();
     console.log("Updating password..."); // Debugging
   
     if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
@@ -156,29 +157,32 @@ const UserAccount = () => {
       window.alert('New passwords do not match.');
       return;
     }
-  
-    fetch('http://localhost/capstone-react/api/change_password.php', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(passwordData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log("API Response:", data); // Debugging
-  
-        if (data.success) {
-          setTimeout(() => {
-            window.alert('Password updated successfully!'); // ✅ Ensure alert is shown
-          }, 100);
-  
-          setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
-          setIsEditingPassword(false);
-        } else {
-          window.alert('Error: ' + data.error);
-        }
+
+    try{
+      fetch('http://localhost/capstone-react/api/change_password.php', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(passwordData),
       })
-      .catch(error => console.error('Error updating password:', error));
+        .then(response => response.json())
+        .then(data => {
+          console.log("API Response:", data); // Debugging
+    
+          if (data.success) {
+            setTimeout(() => {
+              window.alert('Password updated successfully!'); // ✅ Ensure alert is shown
+            }, 100);
+    
+            setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
+            setIsEditingPassword(false);
+          } else {
+            window.alert('Error: ' + data.error);
+          }
+        })
+    } catch (error) {
+      console.error('Error updating password:', error);
+    }
   };  
 
   return (
