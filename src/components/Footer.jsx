@@ -9,7 +9,7 @@ const Footer = () => {
         <footer className="grid grid-cols-[500px_1fr] bottom-0 bg-[#1C359A] w-full h-auto p-8">
             
             <div className=" flex justify-start ">
-            <img src="../img/YCB LOGO (CREAM) (1).png" alt="" className="w-96"/>
+            <img src="img/YCB LOGO (CREAM) (1).png" alt="" className="w-96"/>
 
             </div>
 
@@ -27,10 +27,10 @@ const Footer = () => {
             
                 <div className="flex items-center space-x-4 ml-auto">
                 <a href="#" className="hover:opacity-80">
-                    <img src="../img/communication.png" alt="Facebook" className="w-8 h-8"/>
+                    <img src="img/communication.png" alt="Facebook" className="w-8 h-8"/>
                 </a>
                 <a href="#" className="hover:opacity-80">
-                    <img src="../img/instagram.png" alt="Instagram" className="w-8 h-8 rounded-full"/>
+                    <img src="img/instagram.png" alt="Instagram" className="w-8 h-8 rounded-full"/>
                 </a>
                 </div>
             </div>

@@ -9,7 +9,7 @@ const Navbar = () => {
             <div className="container mx-auto flex items-center justify-between py-6 px-12">
             
             <div className="flex items-center justify-center md:justify-start w-full md:w-auto">
-                <img src="../img/YCB LOGO (BLUE).png" alt="Logo" className="h-20 w-auto object-contain block"/>
+                <img src="img/YCB LOGO (BLUE).png" alt="Logo" className="h-20 w-auto object-contain block"/>
             </div>
 
             

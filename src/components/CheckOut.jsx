@@ -78,7 +78,7 @@ const CheckOut = () => {
   return (
     <div className='bg-[#DCDEEA]'>
       <div className="flex items-center justify-center w-full shadow-md px-12 py-4 bg-white">
-        <img src="../img/YCB LOGO (BLUE).png" alt="Logo" className="h-20 w-auto object-contain"/>
+        <img src="img/YCB LOGO (BLUE).png" alt="Logo" className="h-20 w-auto object-contain"/>
       </div>
 
       <div className="min-h-screen p-6">

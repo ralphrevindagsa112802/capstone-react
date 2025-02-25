@@ -32,7 +32,7 @@ const UserHome = () => {
               <div className="relative">
                
                 <div className="absolute inset-0">
-                  <img src="../img/FLAVORED LATTES/SPANISH LATTE.jpg" alt="Coffee Splash" className="w-full h-auto" />
+                  <img src="img/FLAVORED LATTES/SPANISH LATTE.jpg" alt="Coffee Splash" className="w-full h-auto" />
                 </div>
 
                
@@ -45,19 +45,19 @@ const UserHome = () => {
                     <div className="relative flex justify-around items-center mt-20 px-10">
                       
                       <div className="w-36 h-36 rounded-full shadow-md flex items-center justify-center">
-                        <img src="../img/CLASSIC COFFEES/Cafe Vienna.jpg" alt="Food Item 1"
+                        <img src="img/CLASSIC COFFEES/Cafe Vienna.jpg" alt="Food Item 1"
                           className="w-32 h-32 rounded-full object-cover" />
                       </div>
 
                       
                       <div className="w-48 h-48  rounded-full shadow-lg flex items-center justify-center">
-                        <img src="../img/FLAVORED LATTES/CARAMEL LATTE ICON.jpg" alt="Drink"
+                        <img src="img/FLAVORED LATTES/CARAMEL LATTE ICON.jpg" alt="Drink"
                           className="w-44 h-44 rounded-full object-cover" />
                       </div>
 
                     
                       <div className="w-36 h-36 rounded-full shadow-md flex items-center justify-center">
-                        <img src="../img/SMOOTHIES AND FRAPPES/Mango Tango.jpg" alt="Food Item 2"
+                        <img src="img/SMOOTHIES AND FRAPPES/Mango Tango.jpg" alt="Food Item 2"
                           className="w-32 h-32 rounded-full object-cover"/>
                       </div>
                     </div>
@@ -90,7 +90,7 @@ const UserHome = () => {
 
               <div id="card1" className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
                 <div className="justify-center flex items-center"> 
-                  <img src="../img/CLASSIC COFFEES/Cafe Vienna.jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
+                  <img src="img/CLASSIC COFFEES/Cafe Vienna.jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
                 </div>
 
                 <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col "> 
@@ -105,7 +105,7 @@ const UserHome = () => {
                     <div className="price text-sm font-semibold">₱130 - ₱140</div>
                     <button className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
                       onClick={ () => window.location.href()}>
-                      <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
+                      <img src="img/cart.png" alt="Add Icon" className="w-4 h-4"/>
                       <span>Add</span>
                     </button>
                   </div>
@@ -114,7 +114,7 @@ const UserHome = () => {
 
               <div id="card2" className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
                 <div className="justify-center flex items-center"> 
-                  <img src="../img/katsudon.jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
+                  <img src="img/katsudon.jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
                 </div>
 
                 <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col"> 
@@ -128,7 +128,7 @@ const UserHome = () => {
                     <div className="price text-sm font-semibold">₱120</div>
                     <button className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
                       onClick={ () => window.location.href('your-page-url-here.html')}>
-                      <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
+                      <img src="img/cart.png" alt="Add Icon" className="w-4 h-4"/>
                       <span>Add</span>
                     </button>
                   </div>
@@ -137,7 +137,7 @@ const UserHome = () => {
 
               <div id="card3" className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg"> 
                 <div className="justify-center flex items-center"> 
-                  <img src="../img/CLASSIC COFFEES/Caramel Macchiato.jpg" alt="" className="w-[213px] h-48 rounded-md object-cover" />
+                  <img src="img/CLASSIC COFFEES/Caramel Macchiato.jpg" alt="" className="w-[213px] h-48 rounded-md object-cover" />
                 </div>
 
                 <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col"> 
@@ -151,7 +151,7 @@ const UserHome = () => {
                     <div className="price text-sm font-semibold">₱125 - 135</div>
                     <button className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
                       onClick={ () => window.location.href('your-page-url-here.html')}>
-                      <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
+                      <img src="img/cart.png" alt="Add Icon" className="w-4 h-4"/>
                       <span>Add</span>
                     </button>
                   </div>
@@ -160,7 +160,7 @@ const UserHome = () => {
 
               <div id="card4" className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
                 <div className="justify-center flex items-center">
-                  <img src="../img/2022-11-21 (2).jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
+                  <img src="img/2022-11-21 (2).jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
                 </div>
 
                 <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col">
@@ -174,7 +174,7 @@ const UserHome = () => {
                     <div className="price text-sm font-semibold">₱160</div>
                     <button className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
                       onClick={ () => window.location.href('your-page-url-here.html')}>
-                      <img src="../img/cart.png" alt="Add Icon" className="w-4 h-4"/>
+                      <img src="img/cart.png" alt="Add Icon" className="w-4 h-4"/>
                       <span>Add</span>
                     </button>
                   </div>
@@ -193,7 +193,7 @@ const UserHome = () => {
             <div className="text-4xl sm:text-5xl font-black text-[#1C359A]">Why Yappari Coffee Bar ?</div>
             <div className="flex flex-row justify-center mt-6">
               <div className="float-left">
-                <img src="../img/pngwing.com (2).png" alt=""/>
+                <img src="img/pngwing.com (2).png" alt=""/>
               </div>
               <div className="flex flex-col justify-center mt-4 sm:mt-0 sm:ml-6 text-left max-w-md space-y-6">
 
@@ -263,7 +263,7 @@ const UserHome = () => {
               </div>
 
               <div className="float-left">
-                <img className="h-96" src="../img/pngwing.com (6).png" alt="" />
+                <img className="h-96" src="img/pngwing.com (6).png" alt="" />
               </div>
 
             </div>
