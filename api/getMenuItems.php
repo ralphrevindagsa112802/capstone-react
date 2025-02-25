@@ -1,25 +1,40 @@
 <?php
-header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET");
+header("Content-Type: application/json");
 
-// Database connection
-include 'db.php';
+include 'db.php'; // Ensure this connects to your database
 
-// Fetch menu items
-$sql = "SELECT * FROM food";
+$category = isset($_GET['category']) ? $_GET['category'] : "All"; // Get category from URL
 
-$result = $conn->query($sql);
-
-$menuItems = [];
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $menuItems[] = $row;
-    }
+// SQL query to fetch food items, filtering if a category is selected
+if ($category === "All") {
+    $query = "SELECT * FROM food";
+    $stmt = $conn->prepare($query);
+} else {
+    $query = "SELECT * FROM food WHERE category = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $category);
 }
 
-// Return JSON response
-echo json_encode($menuItems);
+$stmt->execute();
+$result = $stmt->get_result();
+$menuItems = [];
+
+while ($row = $result->fetch_assoc()) {
+    $menuItems[] = [
+        "food_id" => $row["food_id"],
+        "food_name" => $row["food_name"],
+        "category" => $row["category"],
+        "description" => $row["description"],
+        "price_small" => $row["price_small"],
+        "price_medium" => $row["price_medium"],
+        "price_large" => $row["price_large"],
+        "image_path" => $row["image_path"]
+    ];
+}
+
+echo json_encode(["success" => true, "data" => $menuItems]);
+
+$stmt->close();
 $conn->close();
 ?>
