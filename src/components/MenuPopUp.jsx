@@ -5,28 +5,43 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
   if (!food) return null;
 
   // Define size options and corresponding prices
+  const sizeLabels = {
+    "Rice Meal": { small: "Regular", medium: "Large", large: "Extra Large" },
+    "Classic Coffee": { small: "Small", medium: "Medium", large: "Large" },
+    "Frappes": { small: "Small", medium: "Medium", large: "Large" },
+    "Smoothies": { small: "Small", medium: "Medium", large: "Large" },
+    "Refreshers": { small: "Small", medium: "Medium", large: "Large" },
+    "Milk Drinks": { small: "Small", medium: "Medium", large: "Large" },
+    "Dessert": { small: "Regular" }, // Only has one size
+    "Snacks and Pasta": { small: "Regular", medium: "Large", large: "Extra Large" }
+  };
+  
+  // Get category-specific labels or default to generic
+  const labels = sizeLabels[food.category] || { small: "Small", medium: "Medium", large: "Large" };
+  
   const sizeOptions = [];
   if (food.availability_small === "Available") {
-    sizeOptions.push({ size: "Small", price: food.price_small });
+    sizeOptions.push({ size: labels.small, price: food.price_small });
   }
   if (food.availability_medium === "Available") {
-    sizeOptions.push({ size: "Medium", price: food.price_medium });
+    sizeOptions.push({ size: labels.medium, price: food.price_medium });
   }
   if (food.availability_large === "Available") {
-    sizeOptions.push({ size: "Large", price: food.price_large });
+    sizeOptions.push({ size: labels.large, price: food.price_large });
   }
-  
 
-  const [selectedSize, setSelectedSize] = useState(sizeOptions[0]?.size || "Small");
+  const [selectedSize, setSelectedSize] = useState(sizeOptions[0]?.size || labels.small);
   const [selectedPrice, setSelectedPrice] = useState(sizeOptions[0]?.price || food.price_small);
 
 
   const handleSizeChange = (e) => {
     const newSize = e.target.value;
     const newPrice = sizeOptions.find(option => option.size === newSize)?.price || food.price_small;
+    
     setSelectedSize(newSize);
     setSelectedPrice(newPrice);
-  };  
+  };
+  
 
   const handleAddToCart = () => {
     onAddToCart({ ...food, size: selectedSize, food_price: selectedPrice, quantity: 1 });

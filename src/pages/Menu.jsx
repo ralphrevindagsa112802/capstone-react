@@ -138,17 +138,18 @@ const PublicMenu = () => {
                       <div className="text-[#1C359A] font-bold flex">{food.food_name}</div>
                       <div className="text-justify opacity-55">{food.description}</div>
                       <div className="mt-2">
-                        {food.availableSizes.map(size => (
-                          <div key={size.size} className="flex justify-between items-center mt-1">
-                            <span className="text-sm font-semibold">{size.size}: ₱{size.price}</span>
-                            <button 
-                              onClick={() => handleAddToCart(food)}
-                              className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer">
-                              <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4"/>
-                              <span>Add</span>
-                            </button>
+                      <div className="mt-2">
+                          <div className="flex justify-between items-center mt-1">
+                              <span className="text-sm font-semibold">₱{food.price_small}</span>
+                              <button 
+                                  onClick={handleAddToCart} // Open the popup
+                                  className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer">
+                                  <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4"/>
+                                  <span>Add</span>
+                              </button>
                           </div>
-                        ))}
+
+                      </div>
                       </div>
                     </div>
                   </div>
