@@ -1,22 +1,41 @@
 <?php
-session_start(); // Start session at the top
+session_start();
 
-header("Access-Control-Allow-Origin: http://localhost:5173"); // Allow React frontend
+header("Access-Control-Allow-Origin: http://localhost:5173"); // ✅ Allow Vite frontend
 header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
+
+// Handle preflight (OPTIONS) requests
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+    exit(0);
+}
 
 // Database connection
 include 'db.php';
 
-$data = json_decode(file_get_contents("php://input"), true);
+$raw_input = file_get_contents("php://input");
+$data = json_decode($raw_input, true);
 
-// Check if required fields are provided
-if (!isset($data["username"], $data["password"])) {
-    echo json_encode(["error" => "Missing username or password"]);
+// Debugging
+file_put_contents("debug.txt", "RAW: " . $raw_input);
+
+if ($data === null) {
+    // Fallback to $_POST if JSON fails
+    $data = $_POST;
+    file_put_contents("debug.txt", "FALLBACK TO POST: " . json_encode($data));
+}
+
+if (!isset($data["username"]) || !isset($data["password"])) {
+    echo json_encode([
+        "error" => "Missing username or password",
+        "received_data" => $data
+    ]);
     exit();
 }
+
+
 
 $username = trim($data["username"]);
 $password = trim($data["password"]);
@@ -50,9 +69,11 @@ if ($result->num_rows > 0) {
         ]);
     } else {
         echo json_encode(["error" => "Incorrect password"]);
+        exit();
     }
 } else {
     echo json_encode(["error" => "User not found"]);
+    exit();
 }
 
 $stmt->close();
