@@ -10,11 +10,13 @@ import NotFound from './pages/NotFound'
 import SignIn from './pages/SignIn'
 import Company from './pages/Company'
 import Special from './pages/Special'
+import Contact from './pages/Contact'
 import LogIn from './pages/LogIn'
 import UserHome from './pages/useraccount/UserHome'
 import UserMenu from './pages/useraccount/UserMenu'
 import UserCompany from './pages/useraccount/UserCompany'
 import UserSpecial from './pages/useraccount/UserSpecial'
+import UserContact from './pages/useraccount/UserContact'
 import UserAccount from './pages/useraccount/UserAccount'
 import UserCart from './pages/useraccount/UserCart'
 import CheckOut from './components/CheckOut'
@@ -44,6 +46,10 @@ const router = createBrowserRouter([{
   path: '/special',
   element: <Special />,
   errorElement: <NotFound/>,
+}, {
+  path: '/contact',
+  element: <Contact />,
+  errorElement: <NotFound/>,
 },{
   path: '/signin',
   element: <SignIn />,
@@ -67,6 +73,10 @@ const router = createBrowserRouter([{
 }, {
   path: '/user/special',
   element: <UserSpecial />,
+  errorElement: <NotFound/>,
+}, {
+  path: '/user/contact',
+  element: <UserContact />,
   errorElement: <NotFound/>,
 }, {
   path: '/user/account',
