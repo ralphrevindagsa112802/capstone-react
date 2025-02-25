@@ -220,7 +220,7 @@ const AdminMenu = () => {
         <div className="flex items-center justify-center md:justify-start w-full md:w-auto">
           <img
             className="h-20 w-auto object-contain block"
-            src="../img/YCB LOGO (BLUE).png"
+            src="img/YCB LOGO (BLUE).png"
             alt="Logo"
           />
         </div>
