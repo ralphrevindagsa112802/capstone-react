@@ -5,6 +5,7 @@ import './index.css'
 import { CartProvider } from "./context/CartContext";
 
 import App from './App'
+import Home from './pages/Home';
 import Menu from './pages/Menu'
 import NotFound from './pages/NotFound'
 import SignIn from './pages/SignIn'
@@ -30,7 +31,7 @@ const RequireAuth = ({ children }) => {
 
 const router = createBrowserRouter([{
   path: '/',
-  element: <App />,
+  element: <Home />,
   errorElement: <NotFound/>,
 }, {
   path: '/menu',

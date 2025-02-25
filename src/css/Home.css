@@ -1,0 +1,36 @@
+* {
+    font-family: 'Inter', sans-serif;
+}
+#navbar:hover {
+ color: #1C359A;
+}
+#navbar.active {
+   color: #1C359A;
+   font-weight: bold; 
+   border-bottom: 2px solid #1C359A;
+}
+#gradient-container {
+   width: 100%;
+   height: 400px; /* Adjust the height as needed */
+   background: linear-gradient(to bottom, #5C4033, #A0522D); /* Gradient colors */
+   border-top-left-radius: 100%; /* For the rounded effect */
+   border-top-right-radius: 100%; /* For the rounded effect */
+   position: relative;
+   margin-top: 12rem; /* Equivalent to Tailwind's mt-48 */
+   overflow: hidden;
+   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+ }
+
+ .lines {
+   display: flex;
+   justify-content: center;
+   gap: 30px; /* Space between the two lines */
+   align-items: center;
+ }
+
+ /* Line styles */
+ .line {
+   width: 200px; /* Length of each line */
+   height: 2px; /* Thickness of the line */
+   background-color: black; /* Line color */
+ }
