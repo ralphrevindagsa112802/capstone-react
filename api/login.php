@@ -18,13 +18,9 @@ include 'db.php';
 $raw_input = file_get_contents("php://input");
 $data = json_decode($raw_input, true);
 
-// Debugging
-file_put_contents("debug.txt", "RAW: " . $raw_input);
-
 if ($data === null) {
     // Fallback to $_POST if JSON fails
     $data = $_POST;
-    file_put_contents("debug.txt", "FALLBACK TO POST: " . json_encode($data));
 }
 
 if (!isset($data["username"]) || !isset($data["password"])) {

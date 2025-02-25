@@ -17,9 +17,6 @@ if ($conn->connect_error) {
 $input = file_get_contents("php://input");
 $data = json_decode($input, true);
 
-// Debugging: Save received data
-file_put_contents("debug_log.txt", "Received data: " . print_r($data, true) . "\n", FILE_APPEND);
-
 // Ensure `user_id` exists and is valid
 if (!isset($data['user_id']) || !is_numeric($data['user_id'])) {
     die(json_encode(["success" => false, "error" => "Invalid or missing user ID."]));
