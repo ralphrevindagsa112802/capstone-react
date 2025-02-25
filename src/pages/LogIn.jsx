@@ -16,12 +16,10 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    console.log("Sending login request:", formData); // ✅ Debug the request
-
     try {
       const response = await fetch("http://localhost/capstone-react/api/login.php", {
         method: "POST",
-        credentials: "include", // ✅ Ensures session cookies are sent
+        credentials: "include", // Important for session handling
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: formData.username, 
@@ -30,21 +28,18 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log("Login Response:", data); // ✅ Debug response from backend
-
       if (data.success) {
         alert(`Welcome back, ${data.user.f_name} ${data.user.l_name}!`);
         localStorage.setItem("loggedInUser", JSON.stringify({ id: data.user.id, username: data.user.username }));
         navigate("/user/home"); 
       } else {
-        setError(data.message || "Login failed");
+        setError(data.error);
       }
     } catch (error) {
       console.error("Error:", error);
       setError("Failed to connect to server");
     }
   };
-
 
   
 
