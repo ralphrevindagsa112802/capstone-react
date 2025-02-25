@@ -54,8 +54,10 @@ const UserNavbar = () => {
 
       // Handle Logout
       const handleLogout = () => {
-        localStorage.removeItem("loggedInUser"); // Remove user session
-        localStorage.removeItem(`cartItems_${user_id}`); // Remove cart for that user
+        sessionStorage.removeItem("user_id"); // ✅ Remove user session
+        sessionStorage.removeItem("user_name");
+        localStorage.removeItem("cartItems_guest"); // ✅ Remove guest cart
+        window.location.reload(); // ✅ Reload to apply changes
         setCartItems([]); // Clear cart state
         navigate("/");
       };

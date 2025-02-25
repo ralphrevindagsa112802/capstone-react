@@ -33,6 +33,8 @@ const Login = () => {
       console.log("Login Response:", data); // ✅ Debug backend response
   
       if (data.success) {
+        sessionStorage.setItem("user_id", data.user.id); // ✅ Store user_id in sessionStorage
+        sessionStorage.setItem("user_name", data.user.username); // ✅ Store username (optional)
         alert(`Welcome back, ${data.user.f_name} ${data.user.l_name}!`);
         navigate("/user/home");
       } else {

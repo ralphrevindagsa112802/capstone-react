@@ -4,12 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$host = "localhost";
-$username = "root"; 
-$password = ""; 
-$database = "yappari"; 
-
-$conn = new mysqli($host, $username, $password, $database);
+include 'db.php';
 
 if ($conn->connect_error) {
     die(json_encode(["error" => "Database connection failed"]));

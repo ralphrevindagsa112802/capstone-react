@@ -59,7 +59,7 @@ CREATE TABLE order_items (
     order_items_id INT AUTO_INCREMENT PRIMARY KEY,
     orders_id INT NOT NULL,
     food_id INT NOT NULL,
-    size ENUM('Small', 'Medium', 'Large', 'Regular') NOT NULL,
+    size ENUM('Small', 'Medium', 'Large', 'Regular', 'Extra Large') NOT NULL,
     quantity INT NOT NULL DEFAULT 1,
     price DECIMAL(10, 2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
