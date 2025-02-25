@@ -20,9 +20,10 @@ const AdminMenu = () => {
   });
 
   //availability
-  const toggleDropdown = (id) => {
-    setDropdownOpen(dropdownOpen === id ? null : id);
-  };
+  const toggleDropdown = (id, size) => {
+    setDropdownOpen(prevId => (prevId === `${id}-${size}` ? null : `${id}-${size}`));
+  };  
+    
 
   const handleAvailabilityChange = async (id, status) => {
     console.log(`Updating availability for ID ${id} to ${status}`); // Debugging log
@@ -45,6 +46,21 @@ const AdminMenu = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".dropdown-menu") && !event.target.closest(".action-button")) {
+        setDropdownOpen(null);
+      }
+    };
+  
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+  
+  
+
 
   const handleLogout = () => {
     console.log("Logout function triggered");
@@ -61,11 +77,14 @@ const AdminMenu = () => {
       food_name: "",
       food_description: "",
       food_size: "",
-      food_price: "",
+      price_small: "",
+      price_medium: "",
+      price_large: "",
       category: "",
       food_img: null,
     });
   };
+  
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -202,21 +221,27 @@ const AdminMenu = () => {
   //edit item
   // Open Edit Modal and populate form
   const handleEditItem = (food_id) => {
-    const itemToEdit = menuItems.find((item) => item.food_id === food_id);
-    if (itemToEdit) {
-      setFormData({
-        food_name: itemToEdit.food_name,
-        food_description: itemToEdit.food_description,
-        food_size: itemToEdit.food_size || "",
-        category: itemToEdit.category || "",
-        food_price: itemToEdit.food_price,
-      });
-      setPreviewImage(itemToEdit.food_image);
-      setEditingFoodId(food_id);
-      setIsModalOpen(true);
-    }
+    setIsModalOpen(false); // Close any existing modal before opening a new one
+  
+    setTimeout(() => {
+      const itemToEdit = menuItems.find((item) => item.food_id === food_id);
+      if (itemToEdit) {
+        setFormData({
+          food_name: itemToEdit.food_name,
+          food_description: itemToEdit.food_description,
+          food_size: itemToEdit.food_size || "",
+          category: itemToEdit.category || "",
+          price_small: itemToEdit.price_small || "",
+          price_medium: itemToEdit.price_medium || "",
+          price_large: itemToEdit.price_large || "",
+        });
+        setPreviewImage(itemToEdit.food_image);
+        setEditingFoodId(food_id);
+        setIsModalOpen(true);
+      }
+    }, 50); // Small delay ensures modal resets before reopening
   };
-
+  
 
 
 
@@ -345,97 +370,71 @@ const AdminMenu = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
+                <tbody>
                   {menuItems && menuItems.length > 0 ? (
-                    menuItems.map((item) => (
+                    menuItems.flatMap((item) => {
+                      // Create an array to hold rows for different sizes
+                      const sizes = [
+                        { size: "Small", price: item.price_small },
+                        { size: "Medium", price: item.price_medium },
+                        { size: "Large", price: item.price_large }
+                      ].filter(s => s.price !== null); // Remove sizes with NULL price
 
-                    <tr
-                      key={item.food_id}
-                      className="border-t border-4 border-[#DCDEEA] hover:bg-gray-100"
-                    >
-                      {/**  <td className=" px-4 py-2">{item.food_id}</td>  */}
-                      <td className="p-3">
-                        <input type="checkbox" />
-                      </td>
-                      <td className="  px-4 py-2">{item.food_name}</td>
-                      <td className=" px-4 py-2">{item.category}</td>
-
-                      <td className="px-4 py-2">
-                        ₱{item.price_small || item.price_medium || item.price_large || "N/A"}
-                      </td>
-                      <td className=" px-4 py-2">{item.size}</td>
-
-                      <td className=" px-4 py-2 font-black text-[#1C359A] ">
-                        <span
-                          className={`font-bold ${item.availability === "Available" ? "text-blue-600" : "text-red-600"
-                            }`}
+                      return sizes.map((sizeItem, index) => (
+                        <tr
+                          key={`${item.food_id}-${sizeItem.size}`} // Unique key using food_id and size
+                          className="border-t border-4 border-[#DCDEEA] hover:bg-gray-100"
                         >
-                          {item.availability}
-                        </span>
-                      </td>
-
-                      <td className=" px-4 py-2">{item.description}</td>
-                      <td className="px-4 py-2 relative">
-                        <button
-                          onClick={() => toggleDropdown(item.food_id)}
-                          className="p-2"
-                        >
-                          <FaEllipsisV />
-                        </button>
-                        {dropdownOpen === item.food_id && (
-                          <div className=" absolute right-0 bg-white rounded drop-shadow-lg w-36 z-100">
-                            <button
-                              onClick={() => handleEditItem(item.food_id)}
-                              className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200"
+                          <td className="p-3">
+                            <input type="checkbox" />
+                          </td>
+                          <td className="px-4 py-2">{item.food_name}</td>
+                          <td className="px-4 py-2">{item.category}</td>
+                          <td className="px-4 py-2">₱{sizeItem.price}</td>
+                          <td className="px-4 py-2">{sizeItem.size}</td>
+                          <td className="px-4 py-2 font-black text-[#1C359A]">
+                            <span
+                              className={`font-bold ${item.availability === "Available" ? "text-blue-600" : "text-red-600"}`}
                             >
-                              Edit
+                              {item.availability}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2">{item.description}</td>
+                          <td className="px-4 py-2 relative">
+                            <button 
+                              onClick={(e) => { e.stopPropagation(); toggleDropdown(item.food_id, sizeItem.size); }} 
+                              className="p-2 action-button">
+                              <FaEllipsisV />
                             </button>
 
-                            <button
-                              onClick={() =>
-                                handleAvailabilityChange(
-                                  item.food_id,
-                                  "Available"
-                                )
-                              }
-                              className=" block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-200"
-                            >
-                              Available
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleAvailabilityChange(
-                                  item.food_id,
-                                  "Not Available"
-                                )
-                              }
-                              className=" -black mt-2 block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-200"
-                            >
-                              Not Available
-                            </button>
-
-                            <button
-                              onClick={() => handleDeleteClick(item.food_id)}
-                              className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        )}
+                            {dropdownOpen === `${item.food_id}-${sizeItem.size}` && ( // ✅ Unique key for each size
+                              <div className="absolute right-0 bg-white rounded drop-shadow-lg w-36 z-50 dropdown-menu">
+                                <button onClick={() => handleEditItem(item.food_id, sizeItem.size)} className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200">
+                                  Edit
+                                </button>
+                                <button onClick={() => handleAvailabilityChange(item.food_id, "Available")} className="block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-200">
+                                  Available
+                                </button>
+                                <button onClick={() => handleAvailabilityChange(item.food_id, "Not Available")} className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-200">
+                                  Not Available
+                                </button>
+                                <button onClick={() => handleDeleteClick(item.food_id)} className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200">
+                                  Delete
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ));
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="8" className="border px-4 py-2 text-center text-gray-500">
+                        No menu items available
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="6"
-                      className="border px-4 py-2 text-center text-gray-500"
-                    >
-                      No menu items available
-                    </td>
-                  </tr>
-                )}
-              </tbody>
+                  )}
+                </tbody>
             </table>
           </div>
         </div>
@@ -443,13 +442,10 @@ const AdminMenu = () => {
 
       {/**popup ADD product and EDIT  */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-white-20 bg-opacity-100 flex justify-center items-center">
+        <div className="fixed inset-0 bg-white-20 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[500px] relative">
             {/* Close Button */}
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-3 right-3 text-gray-600 text-xl"
-            >
+            <button onClick={handleCloseModal} className="absolute top-3 right-3 text-gray-600 text-xl">
               &times;
             </button>
 
@@ -458,7 +454,6 @@ const AdminMenu = () => {
               {editingFoodId ? "Editing Product" : "New Product"}
             </h2>
 
-            {/* Image Upload */}
             <div
               onClick={() => document.getElementById("fileInput").click()}
               className="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center cursor-pointer"
@@ -486,92 +481,40 @@ const AdminMenu = () => {
               )}
             </div>
 
-            {/* Product Form */}
+            {/* Form Fields */}
             <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Product name:</div>
-                <input
-                  type="text"
-                  name="food_name"
-                  value={formData.food_name}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded-md"
-                  required
-                />
+                <input type="text" name="food_name" value={formData.food_name} onChange={handleChange} className="w-full p-2 border rounded-md" required />
               </label>
 
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Description:</div>
-                <textarea
-                  name="food_description"
-                  value={formData.food_description}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded-md"
-                ></textarea>
+                <textarea name="food_description" value={formData.food_description} onChange={handleChange} className="w-full p-2 border rounded-md"></textarea>
               </label>
 
+              {/* Price Fields */}
               <label className="flex flex-row items-center w-full">
-                <div className="text-gray-700 w-1/3">Size:</div>
-                <select
-                  name="food_size"
-                  value={formData.food_size}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded-md"
-                >
-                  <option value="">Select size...</option>
-                  <option value="Regular">Regular</option>
-                  <option value="Tall">Tall</option>
-                  <option value="Large">Large</option>
-                </select>
+                <div className="text-gray-700 w-1/3">Small Price (₱):</div>
+                <input type="number" name="price_small" value={formData.price_small} onChange={handleChange} className="w-full p-2 border rounded-md" />
               </label>
-
               <label className="flex flex-row items-center w-full">
-                <div className="text-gray-700 w-1/3">Category:</div>
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded-md"
-                >
-                  <option value="">Select category</option>
-                  <option value="Classic Coffee">Classic Coffee</option>
-                  <option value="Frappes">Frappes</option>
-                  <option value="Smoothies">Smoothies</option>
-                  <option value="Refreshers">Refreshers</option>
-                  <option value="Milk Drinks">Milk Drinks</option>
-                  <option value="Rice Meals">Rice Meals</option>
-                  <option value="Snacks & Pasta">Snacks & Pasta</option>
-                </select>
+                <div className="text-gray-700 w-1/3">Medium Price (₱):</div>
+                <input type="number" name="price_medium" value={formData.price_medium} onChange={handleChange} className="w-full p-2 border rounded-md" />
               </label>
-
               <label className="flex flex-row items-center w-full">
-                <div className="text-gray-700 w-1/3">Price (₱):</div>
-                <input
-                  type="number"
-                  name="food_price"
-                  value={formData.food_price}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded-md"
-                  required
-                />
+                <div className="text-gray-700 w-1/3">Large Price (₱):</div>
+                <input type="number" name="price_large" value={formData.price_large} onChange={handleChange} className="w-full p-2 border rounded-md" />
               </label>
 
-              {/* Dynamic Button */}
-              <button
-                type="submit"
-                className="bg-blue-600 text-white p-2 rounded-md w-full hover:bg-blue-700"
-              >
+              {/* Submit Button */}
+              <button type="submit" className="bg-blue-600 text-white p-2 rounded-md w-full hover:bg-blue-700">
                 {editingFoodId ? "Update Product" : "Add Product"}
               </button>
             </form>
           </div>
         </div>
       )}
-
-
-
-
-
 
       {/* Delete Confirmation Modal */}
       {confirmDelete && (
