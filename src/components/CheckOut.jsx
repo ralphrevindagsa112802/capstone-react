@@ -126,6 +126,11 @@ const CheckOut = () => {
                 Pay ₱{totalAmount}
               </button>
             </div>
+
+            <p className="text-sm text-gray-500">
+                  *For pick-up customers, please arrive 20–30 minutes after receiving your order status "READY TO PICK-UP."
+            </p>
+
           </div>
         </div>
       </div>
