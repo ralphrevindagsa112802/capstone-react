@@ -182,6 +182,7 @@ const UserAccount = () => {
         })
     } catch (error) {
       console.error('Error updating password:', error);
+      alert('Something went wrong. Please try again.');
     }
   };  
 
