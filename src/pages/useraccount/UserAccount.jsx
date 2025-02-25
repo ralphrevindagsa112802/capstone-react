@@ -131,7 +131,7 @@ const UserAccount = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("Server response:", data);
+
         if (data.success) {
           setUserData(prev => ({ ...prev, profile_pic: data.profile_pic }));
           alert("Profile picture updated successfully!");
@@ -163,7 +163,7 @@ const UserAccount = () => {
       .then(response => response.json())
       .then(data => {
 
-        console.log("Updating password..."); // Debugging
+        console.log("API Response:", data); // Debugging
 
         if (data.success) {
           setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
