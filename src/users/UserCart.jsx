@@ -108,7 +108,8 @@ const UserCart = () => {
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     removeFromCart(item.food_id, item.size);
-                                                }}>
+                                                    setCartItems((prevCart) => [...prevCart]); // ✅ Force state update
+                                                  }}>
                                                 Remove
                                             </button>
                                         </td>

@@ -60,11 +60,12 @@ const CheckOut = () => {
         console.log("Server Response:", response.data); // ✅ Debug API response
 
         if (response.data.success) {
-            alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
             setCartItems([]); // ✅ Clear cart after order
             localStorage.removeItem("checkoutOrder");
             localStorage.removeItem("totalAmount");
+            alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
             navigate("/user/cart"); // ✅ Redirect to confirmation page
+            window.location.reload();
         } else {
             alert("Order submission failed: " + response.data.message);
         }

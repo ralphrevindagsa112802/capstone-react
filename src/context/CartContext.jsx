@@ -50,12 +50,10 @@ export const CartProvider = ({ children }) => {
 
   // ✅ Save cart changes to localStorage (prevents overwriting with empty cart)
   useEffect(() => {
-    if (cartItems.length > 0) { 
-      if (userId) {
-        localStorage.setItem(`cartItems_${userId}`, JSON.stringify(cartItems));
-      } else {
-        localStorage.setItem("cartItems_guest", JSON.stringify(cartItems));
-      }
+    if (userId) {
+      localStorage.setItem(`cartItems_${userId}`, JSON.stringify(cartItems));
+    } else {
+      localStorage.setItem("cartItems_guest", JSON.stringify(cartItems));
     }
   }, [cartItems, userId]);  
 
@@ -84,10 +82,20 @@ export const CartProvider = ({ children }) => {
 
   // ✅ Remove item from cart
   const removeFromCart = (foodId, size) => {
-    setCartItems((prevCart) =>
-      prevCart.filter(item => !(item.food_id === foodId && item.size === size))
-    );
+    setCartItems((prevCart) => {
+      const updatedCart = prevCart.filter(item => !(item.food_id === foodId && item.size === size));
+      
+      // ✅ Update localStorage
+      if (userId) {
+        localStorage.setItem(`cartItems_${userId}`, JSON.stringify(updatedCart));
+      } else {
+        localStorage.setItem("cartItems_guest", JSON.stringify(updatedCart));
+      }
+  
+      return updatedCart;
+    });
   };
+  
 
   return (
     <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, setCartItems }}>
