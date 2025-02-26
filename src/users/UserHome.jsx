@@ -1,10 +1,9 @@
-import React from 'react'
 import UserNavbar from '../components/UserNavbar'
 import Footer from '../components/Footer'
 
 const UserHome = () => {
   return (
-    <div className='md-overflow-y-hidden bg-[#DCDEEA]'>
+    <div className='md-overflow-y-hidden bg-[#484952]'>
       <UserNavbar />
 
       <main className="mt-32"> 
@@ -13,13 +12,13 @@ const UserHome = () => {
 
             <div className="header flex flex-col items-center text-center py-8 relative">
               
-              <div className="text-[#1C359A] text-sm flex justify-center w-full space-x-[290px]">
+              <div className="text-[#04091b] text-sm flex justify-center w-full space-x-[290px]">
                 <div>No Lines, Just Good Coffee</div>
                 <div>Monday - Sunday 10:00 AM - 2:00 AM</div>
               </div>
 
               <div className="title">
-                <div className="text-4xl sm:text-5xl font-black text-[#1C359A] mb-2">Brewed Fresh, Ready to Go</div>
+                <div className="text-4xl sm:text-5xl font-black text-[#222222] mb-2">Brewed Fresh, Ready to Go</div>
                 <div className="text-3xl sm:text-4xl font-black text-black">Anytime, Anywhere!</div>
               </div>
 

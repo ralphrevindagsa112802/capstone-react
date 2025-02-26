@@ -27,7 +27,7 @@ const UserMenu = () => {
     return (
         <div className='bg-[#DCDEEA]'>
             <UserNavbar />
-            <div className=" flex justify-center items-start w-full mt-34 py-6 px-14 h-screen gap-12">
+            <div className=" flex justify-center items-start w-full mt-34 py-6 px-14 h-full gap-12">
                 <div className=" w-60 h-auto items-center flex flex-col p-4">
                     <h2 className="text-lg font-bold text-[#1C359A] text-center mb-4">Categories</h2>
                         <ul className="space-y-4">
@@ -104,7 +104,7 @@ const UserMenu = () => {
                         <hr className="border-t border-black mx-4 my-2 w-auto" />
 
                         {/* 🔹 Make the cards display in a row */}
-                        <div className="container-fluid grid grid-cols-3 gap-36 p-5">
+                        <div className="container-fluid grid grid-cols-3 gap-22 p-2">
 
 
                             {/* Filter and display food items based on selected category */}

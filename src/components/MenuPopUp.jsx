@@ -51,18 +51,18 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
 
   return (
     <div className=" fixed inset-0 bg-opacity-50 backdrop-blur-xs flex w-full justify-center items-center z-[50] ">
-      <div className="bg-[#DCDEEA] rounded-lg p-6 w-2/3 h-2/3">
-        <button onClick={onClose} className="text-gray-500 text-sm mb-2">← Back</button>
+      <div className="bg-white rounded-lg p-6 w-2/3 h-2/3">
+        <button onClick={onClose} className="text-[#1C359A] text-sm mb-2">← Back</button>
 
-        <div className="grid grid-cols-2 gap-4 bg-white">
-          <img src={food.image_path} className="w-full h-1/3 object-cover rounded-lg" alt={food.food_name} />
-          <div>
+        <div className="grid grid-cols-2 gap-10">
+          <img src={food.image_path} className="w-full h-96 object-cover rounded-lg" alt={food.food_name} />
+          <div className="">
             <h3 className="text-xl font-bold text-[#1C359A] underline">{food.food_name}</h3>
-            <p className="text-gray-600 text-sm">{food.food_description}</p>
+            <p className="text-gray-600 text-sm">{food.description}</p>
 
             {/* Size Selection */}
-            <div className="mt-2">
-              <span className="font-bold">Size:</span>
+            <div className="mt-4">
+              <span className="text-[#1C359A] font-bold">Size:</span>
               <select value={selectedSize} onChange={handleSizeChange} className="block w-full p-2 mt-1 border rounded">
                 {sizeOptions.map((option) => (
                   <option key={option.size} value={option.size}>{option.size}</option>
@@ -71,8 +71,8 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
             </div>
 
             {/* Display updated price */}
-            <div className="mt-2">
-              <span className="font-bold">Price:</span>
+            <div className="mt-4">
+              <span className="text-[#1C359A] font-bold">Price:</span>
               <p className="text-lg">₱{selectedPrice}</p>
             </div>
 

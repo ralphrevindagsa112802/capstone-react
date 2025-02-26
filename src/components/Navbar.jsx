@@ -5,11 +5,11 @@ import '../css/Navbar.css'
 const Navbar = () => {
   return (
     <div>
-        <nav className="bg-white shadow-md fixed top-0 z-100 w-full ">
-            <div className="container mx-auto flex items-center justify-between py-6 px-12">
+        <nav className="bg-white shadow-md fixed top-0 z-50 w-full ">
+            <div className="container mx-auto flex items-center justify-between py-6 px-22">
             
             <div className="flex items-center justify-center md:justify-start w-full md:w-auto">
-                <img src="../img/YCB LOGO (BLUE).png" alt="Logo" className="h-20 w-auto object-contain block"/>
+                <img src="../img/YCB LOGO (BLUE).png" alt="Logo" className="h-24 w-auto object-contain block"/>
             </div>
 
             
@@ -19,13 +19,15 @@ const Navbar = () => {
                 </button>
             </div>
 
-            <div className="hidden md:flex space-x-16">
-                <Link to="/" className="uppercase text-black font-bold tracking-wide text-xs">Home</Link>
-                <Link to="/menu" className="uppercase text-black font-bold tracking-wide text-xs">Menu</Link>
-                <Link to="/company" className="uppercase text-black font-bold tracking-wide text-xs">Company</Link>
-                <Link to="/special" className="uppercase text-black font-bold tracking-wide text-xs">Special</Link>
-                <Link to="/contact" className="uppercase text-black font-bold tracking-wide text-xs">Contact</Link>
-            </div>
+            
+              <div className="hidden md:flex space-x-16">
+                        <Link to="/" className="uppercase text-black font-bold tracking-wide text-sm ">Home</Link>
+                        <Link to="/menu" className="uppercase text-black font-bold tracking-wide text-sm">Menu</Link>
+                        <Link to="/company" className="uppercase text-black font-bold tracking-wide text-sm">Company</Link>
+                        <Link to="/special" className="uppercase text-black font-bold tracking-wide text-sm">Special</Link>
+                        <Link to="/contact" className="uppercase text-black font-bold tracking-wide text-sm">Contact</Link>
+                </div>
+                
 
             <div className="hidden md:block">
                 <Link to="/signin" className="bg-[#1C359A] text-white px-6 py-2.5 rounded-md text-xs font-medium">
