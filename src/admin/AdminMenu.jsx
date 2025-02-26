@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { FaEllipsisV } from "react-icons/fa";
@@ -82,18 +82,20 @@ const AdminMenu = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setPreviewImage(null);
-    setEditingFoodId(null);
-    setFormData({
-      food_name: "",
-      food_description: "",
-      food_size: "",
-      price_small: "",
-      price_medium: "",
-      price_large: "",
-      category: "",
-      food_img: null,
-    });
+
+    if (!editingFoodId) {  // ✅ Only reset form if NOT editing
+        setFormData({
+            food_name: "",
+            food_description: "",
+            category: "",
+            price_small: "",
+            price_medium: "",
+            price_large: "",
+            food_img: null,
+        });
+    }
   };
+
   
 
   const handleImageChange = (event) => {
@@ -114,59 +116,65 @@ const AdminMenu = () => {
   //handling submit form add product and edit
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log("Submitting Form...");
+    console.log("Editing Food ID:", editingFoodId); // ✅ Debug
+
+    if (!editingFoodId && editingFoodId !== null) {
+        alert("Error: Editing Food ID is undefined!");
+        return;
+    }
+
     const data = new FormData();
     data.append("food_name", formData.food_name);
-    data.append("food_description", formData.description);
-    const selectedCategory = formData.category;
-    const labels = sizeLabels[selectedCategory] || { small: "Small", medium: "Medium", large: "Large" };
-
-    data.append("food_size", labels.small); // Store correct size label
+    data.append("food_description", formData.food_description);
+    data.append("category", formData.category);
     data.append("price_small", formData.price_small);
     data.append("price_medium", formData.price_medium);
     data.append("price_large", formData.price_large);
 
-
-    data.append("category", formData.category);
     if (formData.food_img) {
-      data.append("food_img", formData.food_img);
+        data.append("food_img", formData.food_img);
     }
 
     try {
-      let response;
-      if (editingFoodId) {
-        // **Edit Product API Call**
-        data.append("food_id", editingFoodId);
-        response = await axios.post(
-          "http://localhost/capstone-react/api/updateProduct.php",
-          data,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
-      } else {
-        // **Add Product API Call**
-        response = await axios.post(
-          "http://localhost/capstone-react/api/add_product.php",
-          data,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
-      }
+        let response;
+        if (editingFoodId) {
+            // **Edit Product API Call**
+            data.append("food_id", editingFoodId);
+            response = await axios.post(
+                "http://localhost/capstone-react/api/updateProduct.php",
+                data,
+                { headers: { "Content-Type": "multipart/form-data" } }
+            );
+        } else {
+            // **Add Product API Call**
+            response = await axios.post(
+                "http://localhost/capstone-react/api/add_product.php",
+                data,
+                { headers: { "Content-Type": "multipart/form-data" } }
+            );
+        }
 
-      if (response.data.success) {
-        alert(editingFoodId ? "Product updated successfully!" : "Product added successfully!");
-        handleCloseModal();
-        // Refresh menu items
-        axios
-          .get("http://localhost/capstone-react/api/getMenuItems.php")
-          .then((res) => {
-            setMenuItems(res.data);
-          });
-      } else {
-        alert(response.data.message);
-      }
+        console.log("Server Response:", response.data); // ✅ Debug API response
+
+        if (response.data.success) {
+            alert(editingFoodId ? "Product updated successfully!" : "Product added successfully!");
+            handleCloseModal();
+            // Refresh menu items
+            axios.get("http://localhost/capstone-react/api/getMenuItems.php")
+                .then((res) => {
+                    setMenuItems(res.data);
+                });
+        } else {
+            alert(response.data.message);
+        }
     } catch (error) {
-      console.error(editingFoodId ? "Error updating product:" : "Error adding product:", error);
-      alert(editingFoodId ? "Failed to update product." : "Failed to add product.");
+        console.error(editingFoodId ? "Error updating product:" : "Error adding product:", error);
+        alert(editingFoodId ? "Failed to update product." : "Failed to add product.");
     }
   };
+
 
   // Availability
   const updateAvailability = async (id, size, status) => {
@@ -247,32 +255,33 @@ const AdminMenu = () => {
   };
 
 
-  //edit item
+
   // Open Edit Modal and populate form
   const handleEditItem = (food_id) => {
-    setIsModalOpen(false); // Close any existing modal before opening a new one
-  
-    setTimeout(() => {
-      const itemToEdit = menuItems.find((item) => item.food_id === food_id);
-      if (itemToEdit) {
-        const labels = sizeLabels[itemToEdit.category] || { small: "Small", medium: "Medium", large: "Large" };
+    console.log("Clicked Edit - Food ID:", food_id); // ✅ Debug
 
-        setFormData({
-          food_name: itemToEdit.food_name,
-          food_description: itemToEdit.food_description,
-          category: itemToEdit.category || "",
-          price_small: itemToEdit.price_small || "",
-          price_medium: itemToEdit.price_medium || "",
-          price_large: itemToEdit.price_large || "",
-          food_size: labels.small, // Set default size label
-        });
+    const itemToEdit = menuItems.find((item) => item.food_id === food_id);
+    if (!itemToEdit) {
+        console.error("Error: Item not found!", { food_id, menuItems });
+        return;
+    }
 
-        setPreviewImage(itemToEdit.food_image);
-        setEditingFoodId(food_id);
-        setIsModalOpen(true);
-      }
-    }, 50); // Small delay ensures modal resets before reopening
+    setFormData({
+        food_name: itemToEdit.food_name,
+        food_description: itemToEdit.description,
+        category: itemToEdit.category,
+        price_small: itemToEdit.price_small || "",
+        price_medium: itemToEdit.price_medium || "",
+        price_large: itemToEdit.price_large || "",
+    });
+
+    setPreviewImage(itemToEdit.image_path);
+    setEditingFoodId(food_id); // ✅ Ensure Food ID is set
+    console.log("Set Editing Food ID:", food_id); // ✅ Debugging
+    setIsModalOpen(true);
   };
+
+
   
 
 
@@ -450,7 +459,9 @@ const AdminMenu = () => {
 
                             {dropdownOpen === `${item.food_id}-${sizeItem.size}` && (
                               <div className="absolute right-0 bg-white rounded drop-shadow-lg w-36 z-50 dropdown-menu">
-                                <button onClick={() => handleEditItem(item.food_id, sizeItem.size)} className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200">
+                                <button 
+                                  onClick={() => handleEditItem(item.food_id)} 
+                                  className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200">
                                   Edit
                                 </button>
                                 <button onClick={() => handleAvailabilityChange(item.food_id, sizeItem.size, "Available")} className="block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-200">
