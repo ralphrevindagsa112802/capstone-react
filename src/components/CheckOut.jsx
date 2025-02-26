@@ -38,7 +38,7 @@ const CheckOut = () => {
     }
 
     const requestData = {
-      items: cartItems.map((item) => ({
+      items: cartItems?.map((item) => ({
         food_id: item.food_id,
         size: item.size,
         food_price: item.food_price,
@@ -116,7 +116,7 @@ const CheckOut = () => {
             <div>
               <h2 className="text-xl font-bold text-[#1C359A] mb-4">Your order</h2>
               <div className="bg-gray-50 p-4 rounded-lg border-[#1C359A] border-[2px]">
-                {cartItems.map((item) => (
+                {cartItems?.map((item) => (
                   <div key={`${item.food_id}-${item.size}`} className="flex justify-between text-sm mb-2">
                     <p>{item.food_name} ({item.size}) x {item.quantity}</p>
                     <p>₱{item.food_price * item.quantity}</p>

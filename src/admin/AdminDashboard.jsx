@@ -27,16 +27,32 @@ const AdminDashboard = () => {
     const [dropdownOpen, setDropdownOpen] = useState(null);
 
     useEffect(() => {
-        const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
-        if (!isAuthenticated) {
-            navigate('/admin/login');
-        }
+        fetch("http://localhost/capstone-react/api/check_admin_session.php", {
+            credentials: "include", // ✅ Sends session cookie
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            if (!data.success) {
+                navigate("/admin/login");
+            }
+        })
+        .catch(() => navigate("/admin/login"));
     }, [navigate]);
+    
 
-    const handleLogout = () => {
-        localStorage.removeItem('isAdminAuthenticated');
-        navigate('/admin/login');
+    const handleLogout = async () => {
+        try {
+            await fetch("http://localhost/capstone-react/api/admin_logout.php", {
+                method: "POST",
+                credentials: "include",
+            });
+    
+            navigate("/admin/login");
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     };
+    
 
     const toggleDropdown = (orderId) => {
         setDropdownOpen(dropdownOpen === orderId ? null : orderId);

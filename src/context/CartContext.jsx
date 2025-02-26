@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 
-export const CartProvider = ({ children }) => { 
+export const CartProvider = ({children}) => { 
   // ✅ Initialize userId properly
   const [userId, setUserId] = useState(sessionStorage.getItem("user_id") || null);
 
@@ -28,7 +28,11 @@ export const CartProvider = ({ children }) => {
 
   // ✅ Load correct cart initially (User's cart if logged in, otherwise Guest cart)
   const initialCart = JSON.parse(localStorage.getItem(userId ? `cartItems_${userId}` : "cartItems_guest")) || [];
-  const [cartItems, setCartItems] = useState(initialCart);
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : []; // ✅ Always an array, never null
+  });
+  
 
   // ✅ Load user's cart when userId changes (prevents losing cart on refresh)
   useEffect(() => {
@@ -98,7 +102,7 @@ export const CartProvider = ({ children }) => {
   
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, setCartItems }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, setCartItems, logoutUser }}>
       {children}
     </CartContext.Provider>
   );

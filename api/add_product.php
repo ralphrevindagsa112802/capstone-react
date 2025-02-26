@@ -1,16 +1,23 @@
 <?php
 session_start();
-include 'db.php';
 
 header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json");
+
+include 'db.php';
 
 if (!isset($_SESSION["admin_id"])) {
-    echo json_encode(["success" => false, "message" => "Unauthorized: Admin login required"]);
+    echo json_encode([
+        "success" => false,
+        "message" => "Unauthorized: Admin login required",
+        "session_data" => $_SESSION // ✅ Debug: Check session data
+    ]);
     exit();
 }
+
 
 $data = json_decode(file_get_contents("php://input"), true);
 $food_name = $data["food_name"];

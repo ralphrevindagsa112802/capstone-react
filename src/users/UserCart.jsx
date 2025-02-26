@@ -91,7 +91,7 @@ const UserCart = () => {
                         </thead>
                         <tbody>
                             {cartItems.length > 0 ? (
-                                cartItems.map((item) => (
+                                cartItems?.map((item) => (
                                     <tr key={`${item.food_id}-${item.size}`} className="border-b">
                                         <td className="py-4 flex items-center">
                                             <img src={item.image_path} alt={item.food_name} className="w-16 h-16 rounded-md object-cover mr-4" />

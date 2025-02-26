@@ -60,7 +60,7 @@ const UserNavbar = () => {
     localStorage.removeItem("cartItems_guest"); // ✅ Remove guest cart
     window.location.reload(); // ✅ Reload to apply changes
     setCartItems([]); // Clear cart state
-    navigate("/");
+    navigate("/user/logout");
   };
 
 

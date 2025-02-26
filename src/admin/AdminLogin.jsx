@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [admin_username, setAdminUsername] = useState('');
+  const [admin_password, setAdminPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -13,21 +13,18 @@ const AdminLogin = () => {
     try {
       const response = await fetch("http://localhost/capstone-react/api/admin_login.php", {
         method: "POST",
-        credentials: "include", // ✅ Automatically sends session cookie
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ admin_username, admin_password }),
       });
-
-      if (!response.ok) {
-        throw new Error("Server error");
-      }
-
+  
       const data = await response.json();
-      
+  
       if (data.success) {
-        sessionStorage.setItem("admin_username", data.admin.username); // ✅ Store only non-sensitive info
         alert("Login successful!");
-        window.location.href = "/admin/dashboard";
+        
+        // ✅ Wait before navigating to let the session persist
+        setTimeout(() => navigate("/admin/dashboard"), 500);
       } else {
         setError(data.message);
       }
@@ -36,6 +33,7 @@ const AdminLogin = () => {
       console.error("Error:", error);
     }
   };
+   
 
   
 
@@ -49,27 +47,31 @@ const AdminLogin = () => {
 
         <form onSubmit={handleLogin} className="mt-6">
           <div className="mb-4">
-            <label className="block text-gray-700">Username</label>
+            <label className="block text-gray-700">Username
             <input
               type="text"
+              id='admin_username'
               className="w-full p-3 mt-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your admin username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={admin_username}
+              onChange={(e) => setAdminUsername(e.target.value)}
               required
             />
+            </label>
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
+            <label className="block text-gray-700">Password
             <input
               type="password"
+              id='admin_password'
               className="w-full p-3 mt-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your admin password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={admin_password}
+              onChange={(e) => setAdminPassword(e.target.value)}
               required
             />
+            </label>
           </div>
 
           <button type="submit" className="w-full bg-blue-800 text-white py-3 rounded-lg hover:bg-blue-700 transition">

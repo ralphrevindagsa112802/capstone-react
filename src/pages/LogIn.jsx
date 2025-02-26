@@ -44,7 +44,6 @@ const Login = () => {
     
             alert(`Welcome back, ${data.user.f_name} ${data.user.l_name}!`);
             navigate("/user/home");
-            window.location.reload();
         } else {
             setError(data.error || "Login failed");
         }

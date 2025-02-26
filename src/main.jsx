@@ -3,9 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import './index.css'
 import { CartProvider } from "./context/CartContext";
-
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 
 import Home from './pages/Home';
@@ -35,18 +33,15 @@ const RequireAuth = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    axios.get("http://localhost/capstone-react/api/check_admin_session.php", {
-      withCredentials: true // ✅ Ensures cookies are sent
+    fetch("http://localhost/capstone-react/api/check_admin_session.php", {
+      credentials: "include", // ✅ Sends session cookie
     })
-    .then(response => {
-      setIsAuthenticated(response.data.success);
-    })
-    .catch(() => {
-      setIsAuthenticated(false);
-    });
+      .then((res) => res.json())
+      .then((data) => setIsAuthenticated(data.success))
+      .catch(() => setIsAuthenticated(false));
   }, []);
 
-  if (isAuthenticated === null) return null; // ✅ Prevents flickering
+  if (isAuthenticated === null) return <p>Loading...</p>; // ✅ Avoids flickering
 
   return isAuthenticated ? children : <Navigate to="/admin/login" />;
 };

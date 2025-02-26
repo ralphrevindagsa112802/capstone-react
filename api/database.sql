@@ -69,8 +69,8 @@ CREATE TABLE order_items (
 
 -- Create the admin table
 CREATE TABLE admin_users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    admin_username VARCHAR(50) NOT NULL,
+    admin_password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

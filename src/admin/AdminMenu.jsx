@@ -554,6 +554,27 @@ const AdminMenu = () => {
                 ></textarea>
               </label>
 
+              <label className="flex flex-row items-center w-full">
+                <div className="text-gray-700 w-1/3">Category:</div>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                >
+                  <option value="">Select a Category</option> {/* Default Placeholder */}
+                  <option value="Rice Meal">Rice Meal</option>
+                  <option value="Classic Coffee">Classic Coffee</option>
+                  <option value="Frappes">Frappes</option>
+                  <option value="Smoothies">Smoothies</option>
+                  <option value="Refreshers">Refreshers</option>
+                  <option value="Milk Drinks">Milk Drinks</option>
+                  <option value="Dessert">Dessert</option>
+                  <option value="Snacks and Pasta">Snacks and Pasta</option>
+                </select>
+              </label>
+
+
               {/* Price Fields */}
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Small Price (₱):</div>
