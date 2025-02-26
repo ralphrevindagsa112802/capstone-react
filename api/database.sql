@@ -74,6 +74,3 @@ CREATE TABLE admin_users (
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
--- Insert a default admin account
-INSERT INTO admin_users (username, password) VALUES ('admin', 'password123');

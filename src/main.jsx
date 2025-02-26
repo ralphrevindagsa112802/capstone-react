@@ -4,6 +4,9 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import './index.css'
 import { CartProvider } from "./context/CartContext";
 
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 
 import Home from './pages/Home';
 import Menu from './pages/Menu'
@@ -26,11 +29,26 @@ import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
 import AdminMenu from './admin/AdminMenu'
 
-
 const RequireAuth = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    axios.get("http://localhost/capstone-react/api/check_admin_session.php", {
+      withCredentials: true // ✅ Ensures cookies are sent
+    })
+    .then(response => {
+      setIsAuthenticated(response.data.success);
+    })
+    .catch(() => {
+      setIsAuthenticated(false);
+    });
+  }, []);
+
+  if (isAuthenticated === null) return null; // ✅ Prevents flickering
+
   return isAuthenticated ? children : <Navigate to="/admin/login" />;
 };
+
 
 const router = createBrowserRouter([{
   path: '/',

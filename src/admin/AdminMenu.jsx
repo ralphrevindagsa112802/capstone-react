@@ -168,38 +168,45 @@ const AdminMenu = () => {
     }
   };
 
-  //availability
+  // Availability
   const updateAvailability = async (id, size, status) => {
+    console.log("Sending Availability Update:", { id, size, status }); // ✅ Debug request
+
     try {
-      const response = await axios.post(
-        "http://localhost/capstone-react/api/updateAvailability.php",
-        {
-          food_id: id,
-          size: size.toLowerCase(), // Ensure lowercase to match PHP handling
-          availability: status,
-        }
-      );
-  
-      if (response.data.success) {
-        // ✅ Update state correctly for each size
-        setMenuItems((prevItems) =>
-          prevItems.map((item) => {
-            if (item.food_id === id) {
-              return {
-                ...item,
-                [`availability_${size.toLowerCase()}`]: status, // Update only the correct size
-              };
+        const response = await axios.post(
+            "http://localhost/capstone-react/api/updateAvailability.php",
+            {
+                food_id: id,
+                size: size.toLowerCase(), // ✅ Ensure lowercase match
+                availability: status
+            },
+            {
+                withCredentials: true,
+                headers: { "Content-Type": "application/json" }
             }
-            return item;
-          })
         );
-      } else {
-        console.error("Failed to update availability:", response.data.message);
-      }
+
+        console.log("Update Response:", response.data); // ✅ Debug API response
+
+        if (response.data.success) {
+            alert("Availability updated successfully!");
+            setMenuItems((prevItems) =>
+                prevItems.map((item) =>
+                    item.food_id === id
+                        ? { ...item, [`availability_${size.toLowerCase()}`]: status }
+                        : item
+                )
+            );
+        } else {
+            alert("Failed to update availability: " + response.data.message);
+        }
     } catch (error) {
-      console.error("Error updating availability:", error);
+        console.error("Error updating availability:", error);
+        alert("Error: Could not update availability.");
     }
-  };   
+  };
+
+
   
 
   //deleting from admin and database

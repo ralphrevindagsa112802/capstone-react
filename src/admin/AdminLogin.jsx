@@ -16,18 +16,27 @@ const AdminLogin = () => {
         credentials: "include", // ✅ Automatically sends session cookie
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
-    });
-    const data = await response.json();
-    
-    if (data.success) {
+      });
+
+      if (!response.ok) {
+        throw new Error("Server error");
+      }
+
+      const data = await response.json();
+      
+      if (data.success) {
         sessionStorage.setItem("admin_username", data.admin.username); // ✅ Store only non-sensitive info
-    } else {
+        alert("Login successful!");
+        window.location.href = "/admin/dashboard";
+      } else {
         setError(data.message);
       }
     } catch (error) {
-      setError('Failed to connect to the server');
+      setError("Failed to connect to the server");
+      console.error("Error:", error);
     }
   };
+
   
 
   return (
