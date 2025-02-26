@@ -23,7 +23,7 @@ const CheckOut = () => {
     axios.get("http://localhost/capstone-react/api/getUserOrderDetails.php", { withCredentials: true })
       .then(response => {
         if (response.data.success) {
-          setUser({ name: response.data.name, address: response.data.address });
+          setUser({ name: response.data.name, address: response.data.address, phone: response.data.phone });
         } else {
           console.error(response.data.message);
         }
@@ -33,45 +33,45 @@ const CheckOut = () => {
 
   const handlePayment = async () => {
     if (cartItems.length === 0) {
-        alert("Your cart is empty!");
-        return;
+      alert("Your cart is empty!");
+      return;
     }
 
     const requestData = {
-        items: cartItems.map((item) => ({
-            food_id: item.food_id,
-            size: item.size,
-            food_price: item.food_price,
-            quantity: item.quantity,
-        })),
-        shipping_method: shippingMethod,
-        payment_method: "Gcash",
+      items: cartItems.map((item) => ({
+        food_id: item.food_id,
+        size: item.size,
+        food_price: item.food_price,
+        quantity: item.quantity,
+      })),
+      shipping_method: shippingMethod,
+      payment_method: "Gcash",
     };
 
     console.log("Sending Order Data:", requestData); // ✅ Debug the request being sent
 
     try {
-        const response = await axios.post(
-            "http://localhost/capstone-react/api/submitOrders.php", // ✅ Use correct API
-            requestData,
-            { headers: { "Content-Type": "application/json" }, withCredentials: true }
-        );
+      const response = await axios.post(
+        "http://localhost/capstone-react/api/submitOrders.php", // ✅ Use correct API
+        requestData,
+        { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      );
 
-        console.log("Server Response:", response.data); // ✅ Debug API response
+      console.log("Server Response:", response.data); // ✅ Debug API response
 
-        if (response.data.success) {
-            setCartItems([]); // ✅ Clear cart after order
-            localStorage.removeItem("checkoutOrder");
-            localStorage.removeItem("totalAmount");
-            alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
-            navigate("/user/cart"); // ✅ Redirect to confirmation page
-            window.location.reload();
-        } else {
-            alert("Order submission failed: " + response.data.message);
-        }
+      if (response.data.success) {
+        setCartItems([]); // ✅ Clear cart after order
+        localStorage.removeItem("checkoutOrder");
+        localStorage.removeItem("totalAmount");
+        alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
+        navigate("/user/cart"); // ✅ Redirect to confirmation page
+        window.location.reload();
+      } else {
+        alert("Order submission failed: " + response.data.message);
+      }
     } catch (error) {
-        console.error("Error submitting order:", error);
-        alert("Failed to place order. Please try again.");
+      console.error("Error submitting order:", error);
+      alert("Failed to place order. Please try again.");
     }
   };
 
@@ -79,22 +79,26 @@ const CheckOut = () => {
   return (
     <div className='bg-[#DCDEEA]'>
       <div className="flex items-center justify-center w-full shadow-md px-12 py-4 bg-white">
-        <img src="../img/YCB LOGO (BLUE).png" alt="Logo" className="h-20 w-auto object-contain"/>
+        <img src="../img/YCB LOGO (BLUE).png" alt="Logo" className="h-20 w-auto object-contain" />
       </div>
 
       <div className="min-h-screen p-6">
         <div className="max-w-6xl mx-auto rounded-lg p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
+
             <div>
               <h2 className="text-xl font-bold text-[#1C359A] mb-4">Checkout</h2>
-              
-              <div className="p-4 rounded-lg border-[2px] border-gray-200">
-                <p className="font-semibold">{user.name || "Loading..."}</p>
-                <p className="text-sm text-gray-600">{user.address || "Loading..."}</p>
+              <div className="flex p-4 rounded-lg border-[2px] border-[#1C359A] gap-6">
+                <div>
+                  <img src="../img/location.png" className="h-12 w-12" alt="" />
+                </div>
+                <div>
+                  <p className="font-semibold">{user.name || "Loading..."} &nbsp; &nbsp; <span className="text-black font-sm font-light">{user.phone || "Loading..."}</span></p>
+                  <p className="text-sm text-gray-600">{user.address || "Loading..."}</p>
+                  <p className="text-sm text-gray-600">{user.order_id || "Loading..."}</p>
+                </div>
               </div>
-
-              <div className="mb-6">
+              <div className="mb-6 mt-6">
                 <h2 className="text-xl font-bold text-blue-800 mb-4">Shipping Information</h2>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
@@ -129,7 +133,7 @@ const CheckOut = () => {
             </div>
 
             <p className="text-sm text-gray-500">
-                  *For pick-up customers, please arrive 20–30 minutes after receiving your order status "READY TO PICK-UP."
+              *For pick-up customers, please arrive 20–30 minutes after receiving your order status "READY TO PICK-UP."
             </p>
 
           </div>
