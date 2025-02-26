@@ -1,21 +1,31 @@
 <?php
 session_start();
+include 'db.php';
 
 header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Credentials: true");
-header("Content-Type: application/json");
+header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Headers: Content-Type");
 
-if (isset($_SESSION["user_id"])) {
-    echo json_encode([
-        "success" => true,
-        "user" => [
-            "id" => $_SESSION["user_id"],
-            "f_name" => $_SESSION["f_name"],
-            "l_name" => $_SESSION["l_name"],
-            "username" => $_SESSION["username"]
-        ]
-    ]);
-} else {
-    echo json_encode(["success" => false, "error" => "User not logged in"]);
+if (!isset($_SESSION["user_id"])) {
+    echo json_encode(["success" => false, "message" => "Unauthorized: Login required"]);
+    exit();
 }
+
+$user_id = $_SESSION["user_id"];
+
+$stmt = $conn->prepare("SELECT id, username, f_name, l_name, email, phone, address, profile_pic FROM users WHERE id=?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+if ($user) {
+    echo json_encode(["success" => true, "user" => $user]);
+} else {
+    echo json_encode(["success" => false, "message" => "User not found"]);
+}
+
+$stmt->close();
+$conn->close();
 ?>

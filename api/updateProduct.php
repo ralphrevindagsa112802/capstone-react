@@ -9,11 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Get data from request
     $food_id = $_POST["food_id"];
     $food_name = $_POST["food_name"];
-    $food_description = $_POST["food_description"];
-    $food_size = $_POST["food_size"];
+    $food_description = $_POST["food_description"]; // Ensure consistency
     $category = $_POST["category"];
+    $size = $_POST["food_size"]; // Custom size name (e.g., "Regular", "Large")
     $food_price = $_POST["food_price"];
-    
+
     // Check if food_id is provided
     if (empty($food_id)) {
         echo json_encode(["success" => false, "message" => "Missing food_id"]);
@@ -30,17 +30,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $target_file = $_POST["existing_image"] ?? ""; // Use existing image if available
     }
 
-    // Debug: Check if values are received correctly
-    error_log("Updating food_id: " . $food_id);
+    // Reverse size mapping to match database fields
+    $sizeMapping = [
+        "Rice Meal" => ["Regular" => "price_small", "Large" => "price_medium", "Extra Large" => "price_large"],
+        "Classic Coffee" => ["Small" => "price_small", "Medium" => "price_medium", "Large" => "price_large"],
+        "Frappes" => ["Small" => "price_small", "Medium" => "price_medium", "Large" => "price_large"],
+        "Smoothies" => ["Small" => "price_small", "Medium" => "price_medium", "Large" => "price_large"],
+        "Refreshers" => ["Small" => "price_small", "Medium" => "price_medium", "Large" => "price_large"],
+        "Milk Drinks" => ["Small" => "price_small", "Medium" => "price_medium", "Large" => "price_large"],
+        "Dessert" => ["Regular" => "price_small"], // Only one size
+        "Snacks and Pasta" => ["Regular" => "price_small", "Large" => "price_medium", "Extra Large" => "price_large"]
+    ];
 
-    // Prepare SQL statement
-    $query = "UPDATE food SET food_name=?, food_description=?, food_size=?, category=?, food_price=?, food_img=? WHERE food_id=?";
+    // Get the correct column for the selected size
+    $price_column = $sizeMapping[$category][$size] ?? null;
+    if (!$price_column) {
+        echo json_encode(["success" => false, "message" => "Invalid size for category"]);
+        exit();
+    }
+
+    // Prepare SQL statement to update the correct price field
+    $query = "UPDATE food SET food_name=?, food_description=?, category=?, $price_column=?, image_path=? WHERE food_id=?";
     $stmt = $conn->prepare($query);
     if (!$stmt) {
         die(json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]));
     }
 
-    $stmt->bind_param("ssssssi", $food_name, $food_description, $food_size, $category, $food_price, $target_file, $food_id);
+    $stmt->bind_param("sssssi", $food_name, $food_description, $category, $food_price, $target_file, $food_id);
+
     if ($stmt->execute()) {
         echo json_encode(["success" => true, "message" => "Product updated successfully"]);
     } else {

@@ -11,21 +11,17 @@ const AdminLogin = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch('http://localhost/capstone-react/api/admin_login.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: username.trim(),  // Trim whitespace
-          password: password.trim(),
-        }),
-      });
-  
-      const data = await response.json();
-  
-      if (data.success) {
-        localStorage.setItem('isAdminAuthenticated', 'true'); // Store login state
-        navigate('/admin/dashboard'); // Redirect to Admin Home
-      } else {
+      const response = await fetch("http://localhost/capstone-react/api/admin_login.php", {
+        method: "POST",
+        credentials: "include", // ✅ Automatically sends session cookie
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
+    const data = await response.json();
+    
+    if (data.success) {
+        sessionStorage.setItem("admin_username", data.admin.username); // ✅ Store only non-sensitive info
+    } else {
         setError(data.message);
       }
     } catch (error) {

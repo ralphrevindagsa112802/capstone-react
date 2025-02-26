@@ -53,7 +53,7 @@ const UserAccount = () => {
 
   
   useEffect(() => {
-    fetch('http://localhost/capstone-react/api/fetch_user.php', {
+    fetch('http://localhost/capstone-react/api/getUser.php', {
       credentials: 'include',
     })
       .then(response => response.json())

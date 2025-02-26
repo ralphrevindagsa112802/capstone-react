@@ -1,53 +1,27 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-
+session_start();
 include 'db.php';
 
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed"]));
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
+if (!isset($_SESSION["admin_id"])) {
+    echo json_encode(["success" => false, "message" => "Unauthorized: Admin login required"]);
+    exit();
 }
 
 $data = json_decode(file_get_contents("php://input"), true);
+$order_id = $data["order_id"];
 
-if (!isset($data['orderId'])) {
-    die(json_encode(["error" => "Order ID is required"]));
-}
-
-$orderId = $conn->real_escape_string($data['orderId']);
-
-// Check current order status
-$queryCheck = "SELECT order_status FROM orders WHERE order_number = ?";
-$stmtCheck = $conn->prepare($queryCheck);
-$stmtCheck->bind_param("s", $orderId);
-$stmtCheck->execute();
-$result = $stmtCheck->get_result();
-$row = $result->fetch_assoc();
-$stmtCheck->close();
-
-if (!$row) {
-    die(json_encode(["error" => "Order not found"]));
-}
-
-$currentStatus = $row['order_status'];
-
-if ($currentStatus === "Cancelled") {
-    die(json_encode(["error" => "Cancelled orders cannot be received."]));
-} elseif ($currentStatus === "Received") {
-    die(json_encode(["error" => "Order is already marked as received."]));
-}
-
-// Update order status to "Received"
-$query = "UPDATE orders SET order_status = 'Received' WHERE order_number = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("s", $orderId);
+$stmt = $conn->prepare("UPDATE orders SET status='Received' WHERE orders_id=?");
+$stmt->bind_param("i", $order_id);
 
 if ($stmt->execute()) {
-    echo json_encode(["success" => "Order marked as received"]);
+    echo json_encode(["success" => true, "message" => "Order marked as received"]);
 } else {
-    echo json_encode(["error" => "Failed to update order status"]);
+    echo json_encode(["success" => false, "message" => "Failed to update order status"]);
 }
 
 $stmt->close();

@@ -1,29 +1,27 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
+session_start();
+include 'db.php';
+
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
 
-require_once "db.php"; // Ensure this file correctly connects to your database
-
-$data = json_decode(file_get_contents("php://input"), true);
-
-if (!isset($data["food_id"])) {
-    echo json_encode(["success" => false, "message" => "Missing food ID"]);
-    exit;
+if (!isset($_SESSION["admin_id"])) {
+    echo json_encode(["success" => false, "message" => "Unauthorized: Admin login required"]);
+    exit();
 }
 
-$food_id = intval($data["food_id"]);
+$data = json_decode(file_get_contents("php://input"), true);
+$food_id = $data["food_id"];
 
-// Delete query
-$sql = "DELETE FROM food WHERE food_id = ?";
-$stmt = $conn->prepare($sql);
+$stmt = $conn->prepare("DELETE FROM food WHERE food_id=?");
 $stmt->bind_param("i", $food_id);
 
 if ($stmt->execute()) {
-    echo json_encode(["success" => true, "message" => "Item deleted successfully"]);
+    echo json_encode(["success" => true, "message" => "Product deleted successfully"]);
 } else {
-    echo json_encode(["success" => false, "message" => "Failed to delete item"]);
+    echo json_encode(["success" => false, "message" => "Failed to delete product"]);
 }
 
 $stmt->close();

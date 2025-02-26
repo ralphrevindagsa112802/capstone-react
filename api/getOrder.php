@@ -1,32 +1,27 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
+session_start();
+include 'db.php';
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "yappari  "; // Change to your database
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Headers: Content-Type");
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Database connection failed"]));
+if (!isset($_SESSION["user_id"])) {
+    echo json_encode(["success" => false, "message" => "Unauthorized: Login required"]);
+    exit();
 }
 
-if (!isset($_GET['orderId'])) {
-    die(json_encode(["error" => "Order ID is required"]));
-}
+$user_id = $_SESSION["user_id"];
 
-$orderId = $conn->real_escape_string($_GET['orderId']);
-$query = "SELECT * FROM orders WHERE order_number = '$orderId'";
-$result = $conn->query($query);
+$stmt = $conn->prepare("SELECT * FROM orders WHERE user_id=? ORDER BY created_at DESC");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$orders = $result->fetch_all(MYSQLI_ASSOC);
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    echo json_encode($row);
-} else {
-    echo json_encode(["error" => "Order not found"]);
-}
+echo json_encode(["success" => true, "orders" => $orders]);
 
+$stmt->close();
 $conn->close();
 ?>

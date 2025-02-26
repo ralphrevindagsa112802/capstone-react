@@ -3,6 +3,18 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { FaEllipsisV } from "react-icons/fa";
 
+const sizeLabels = {
+  "Rice Meal": { small: "Regular", medium: "Large", large: "Extra Large" },
+  "Classic Coffee": { small: "Small", medium: "Medium", large: "Large" },
+  "Frappes": { small: "Small", medium: "Medium", large: "Large" },
+  "Smoothies": { small: "Small", medium: "Medium", large: "Large" },
+  "Refreshers": { small: "Small", medium: "Medium", large: "Large" },
+  "Milk Drinks": { small: "Small", medium: "Medium", large: "Large" },
+  "Dessert": { small: "Regular" }, // Only one size
+  "Snacks and Pasta": { small: "Regular", medium: "Large", large: "Extra Large" }
+};
+
+
 const AdminMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -105,10 +117,14 @@ const AdminMenu = () => {
     const data = new FormData();
     data.append("food_name", formData.food_name);
     data.append("food_description", formData.description);
-    data.append("food_size", formData.size);
+    const selectedCategory = formData.category;
+    const labels = sizeLabels[selectedCategory] || { small: "Small", medium: "Medium", large: "Large" };
+
+    data.append("food_size", labels.small); // Store correct size label
     data.append("price_small", formData.price_small);
     data.append("price_medium", formData.price_medium);
     data.append("price_large", formData.price_large);
+
 
     data.append("category", formData.category);
     if (formData.food_img) {
@@ -232,15 +248,18 @@ const AdminMenu = () => {
     setTimeout(() => {
       const itemToEdit = menuItems.find((item) => item.food_id === food_id);
       if (itemToEdit) {
+        const labels = sizeLabels[itemToEdit.category] || { small: "Small", medium: "Medium", large: "Large" };
+
         setFormData({
           food_name: itemToEdit.food_name,
           food_description: itemToEdit.food_description,
-          food_size: itemToEdit.food_size || "",
           category: itemToEdit.category || "",
           price_small: itemToEdit.price_small || "",
           price_medium: itemToEdit.price_medium || "",
           price_large: itemToEdit.price_large || "",
+          food_size: labels.small, // Set default size label
         });
+
         setPreviewImage(itemToEdit.food_image);
         setEditingFoodId(food_id);
         setIsModalOpen(true);
@@ -379,14 +398,16 @@ const AdminMenu = () => {
               </thead>
                 <tbody>
                   {menuItems && menuItems.length > 0 ? (
-                    menuItems.flatMap((item) => {
-                      // Create an array to hold rows for different sizes
+                    menuItems.flatMap((item) => {                      
+                      // Get category-specific labels or fallback to default
+                      const labels = sizeLabels[item.category] || { small: "Small", medium: "Medium", large: "Large" };
+                      
                       const sizes = [
-                        { size: "Small", price: item.price_small },
-                        { size: "Medium", price: item.price_medium },
-                        { size: "Large", price: item.price_large }
-                      ].filter(s => s.price !== null); // Remove sizes with NULL price
-
+                        { size: labels.small, price: item.price_small },
+                        { size: labels.medium, price: item.price_medium },
+                        { size: labels.large, price: item.price_large }
+                      ].filter(s => s.price !== null);
+                      
                       return sizes.map((sizeItem, index) => (
                         <tr
                           key={`${item.food_id}-${sizeItem.size}`} // Unique key using food_id and size

@@ -1,37 +1,57 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Content-Type: application/json");
-
-// Database connection
+session_start();
 include 'db.php';
 
-// Get JSON data from request
-$data = json_decode(file_get_contents("php://input"), true);
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 
-// Debugging: Print received data
-file_put_contents("debug.log", print_r($data, true)); // This will create a debug.log file in the API folder
+$raw_input = file_get_contents("php://input");
+$data = json_decode($raw_input, true);
 
-if (!isset($data["username"]) || !isset($data["password"])) {
-    echo json_encode(["error" => "Missing username or password"]);
+if (!$data || !isset($data["username"]) || !isset($data["password"])) {
+    echo json_encode(["success" => false, "error" => "Invalid request"]);
     exit();
 }
 
-$username = $data["username"];
-$password = $data["password"];
+$username = trim($data["username"]);
+$password = trim($data["password"]);
 
-// Query the database
-$stmt = $conn->prepare("SELECT * FROM admin_users WHERE username = ? AND password = ?");
-$stmt->bind_param("ss", $username, $password);
+// ✅ Fetch admin details
+$stmt = $conn->prepare("SELECT id, username, password FROM admin_users WHERE username = ?");
+$stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
+$admin = $result->fetch_assoc();
 
-if ($result->num_rows > 0) {
-    echo json_encode(["success" => true, "message" => "Login successful"]);
+if ($admin && password_verify($password, $admin["password"])) {
+    // ✅ Set session variables
+    $_SESSION["admin_id"] = $admin["id"];
+    $_SESSION["admin_username"] = $admin["username"];
+
+    // ✅ Set secure HTTP-Only session cookie
+    setcookie("PHPSESSID", session_id(), [
+        "expires" => 0,
+        "path" => "/",
+        "domain" => "localhost",
+        "secure" => true,
+        "httponly" => true,
+        "samesite" => "Lax"
+    ]);
+
+    echo json_encode([
+        "success" => true,
+        "message" => "Admin login successful",
+        "admin" => [
+            "id" => $admin["id"],
+            "username" => $admin["username"]
+        ]
+    ]);
 } else {
-    echo json_encode(["success" => false, "message" => "Invalid credentials"]);
+    echo json_encode(["success" => false, "error" => "Invalid admin credentials"]);
 }
 
+$stmt->close();
 $conn->close();
 ?>
