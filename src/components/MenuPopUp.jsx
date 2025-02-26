@@ -50,14 +50,14 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-blend-hue bg-opacity-50 flex justify-center items-center">
-      <div className="bg-[#DCDEEA] rounded-lg p-6 w-2/3 h-auto">
+    <div className="fixed inset-0 bg-blend-hue bg-opacity-50 flex w-full justify-center items-center z-100">
+      <div className="bg-white rounded-lg p-6 w-2/3 h-2/3">
         <button onClick={onClose} className="text-gray-500 text-sm mb-2">← Back</button>
 
         <div className="grid grid-cols-2 gap-4">
-          <img src={food.image_path} className="w-full h-40 object-cover rounded-lg" alt={food.food_name} />
+          <img src={food.image_path} className="w-full h-1/3 object-cover rounded-lg" alt={food.food_name} />
           <div>
-            <h3 className="text-xl font-bold">{food.food_name}</h3>
+            <h3 className="text-xl font-bold text-[#1C359A] underline">{food.food_name}</h3>
             <p className="text-gray-600 text-sm">{food.food_description}</p>
 
             {/* Size Selection */}

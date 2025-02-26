@@ -29,7 +29,6 @@ const UserCart = () => {
     };
 
 
-
     return (
         <div className="bg-[#DCDEEA]">
             <UserNavbar />
@@ -105,7 +104,7 @@ const UserCart = () => {
                                         <td className="text-center py-4">₱{item.food_price}</td>
                                         <td className="text-center py-4">₱{(item.food_price * item.quantity)}</td>
                                         <td className="flex justify-end">
-                                            <button className=" text-sm text-red-700 font-bold hover:text-red-300 rounded cursor-pointer"
+                                            <button className=" text-sm text-red-700 items-center flex font-bold hover:text-red-300 rounded cursor-pointer"
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     removeFromCart(item.food_id, item.size);
