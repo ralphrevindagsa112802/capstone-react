@@ -7,6 +7,7 @@ header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     error_log("POST Data: " . print_r($_POST, true));
 
@@ -24,12 +25,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
     }
 
-    // ✅ Get Existing Image Path if No New Image is Uploaded
+    // ✅ Handle Image Upload
+    $target_file = null;
     if (!empty($_FILES["food_img"]["name"])) {
         $image = $_FILES["food_img"]["name"];
-        $target_dir = "uploads/";
-        $target_file = $target_dir . basename($image);
-        move_uploaded_file($_FILES["food_img"]["tmp_name"], $target_file);
+
+        // ✅ Set the correct path to React's public folder
+        $target_dir = $_SERVER["DOCUMENT_ROOT"] . "/capstone-react/public/uploads/";
+        $target_file = $target_dir . basename($_FILES["food_img"]["name"]);
+
+        // ✅ Ensure the directory exists
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0777, true); // Create uploads folder if missing
+        }
+
+        // ✅ Fix spaces in filenames
+        $image_name = str_replace(" ", "_", $_FILES["food_img"]["name"]);
+        $target_file = $target_dir . basename($image_name);
+
+        // ✅ Move the file to React's `public/uploads/`
+        if (move_uploaded_file($_FILES["food_img"]["tmp_name"], $target_file)) {
+            error_log("File uploaded successfully: " . $target_file);
+            $target_file = "/uploads/" . basename($image_name); // Relative path for frontend
+        } else {
+            error_log("Failed to upload file: " . $_FILES["food_img"]["error"]);
+            echo json_encode(["success" => false, "message" => "Failed to upload image"]);
+            exit();
+        }
+
+
     } else {
         // ✅ Keep the existing image if no new one is uploaded
         $query = "SELECT image_path FROM food WHERE food_id = ?";

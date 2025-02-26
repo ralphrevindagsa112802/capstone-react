@@ -67,7 +67,6 @@ const AdminMenu = () => {
                 )
             
             );
-            window.location.reload();
         } else {
             alert("Failed to update availability: " + response.data.message);
         }
@@ -106,6 +105,9 @@ const AdminMenu = () => {
     };
   }, []);
   
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleLogout = () => {
     console.log("Logout function triggered");
@@ -131,86 +133,83 @@ const AdminMenu = () => {
     }
   };
 
-  
-
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      // Update form data with the new image file
       setFormData({ ...formData, food_img: file });
+  
+      // Create a temporary URL for the uploaded file for preview
       const reader = new FileReader();
       reader.onload = (e) => setPreviewImage(e.target.result);
       reader.readAsDataURL(file);
     }
   };
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-
-  //handling submit form add product and edit
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     console.log("Submitting Form...");
     console.log("Editing Food ID:", editingFoodId);
-    console.log("Form Data:", formData); 
-
+    console.log("Form Data:", formData);
+  
     if (!formData.food_name || !formData.category) {
-        alert("Error: Required fields missing!");
-        return;
+      alert("Error: Required fields missing!");
+      return;
     }
-
+  
+    // Create FormData object
     const data = new FormData();
     data.append("food_name", formData.food_name);
-    data.append("food_description", formData.food_description);
+    data.append("description", formData.description);
     data.append("category", formData.category);
     data.append("price_small", formData.price_small || null);
     data.append("price_medium", formData.price_medium || null);
     data.append("price_large", formData.price_large || null);
-
-    // ✅ If no new image is selected, send the existing one
+  
+    // Append the image file if it exists
     if (formData.food_img) {
-        data.append("food_img", formData.food_img);
-    } else {
-        data.append("existing_image", formData.image_path); // ✅ Retain current image
+      data.append("food_img", formData.food_img);
+    } else if (formData.image_path) {
+      // If no new image is selected, send the existing image path
+      data.append("existing_image", formData.image_path);
     }
-
+  
     try {
-        let response;
-        if (editingFoodId) {
-            data.append("food_id", editingFoodId);
-            response = await axios.post(
-                "http://localhost/capstone-react/api/updateProduct.php",
-                data,
-                { headers: { "Content-Type": "multipart/form-data" } }
-            );
-        } else {
-            response = await axios.post(
-                "http://localhost/capstone-react/api/add_product.php",
-                data,
-                { headers: { "Content-Type": "multipart/form-data" } }
-            );
-        }
-
-        console.log("Server Response:", response.data);
-
-        if (response.data.success) {
-            alert(editingFoodId ? "Product updated successfully!" : "Product added successfully!");
-            handleCloseModal();
-            window.location.reload();
-            axios.get("http://localhost/capstone-react/api/getMenuItems.php")
-                .then((res) => setMenuItems(res.data));
-        } else {
-            alert(response.data.message);
-            window.location.reload();
-        }
+      let response;
+      if (editingFoodId) {
+        // If editing, append the food_id and send to update endpoint
+        data.append("food_id", editingFoodId);
+        response = await axios.post(
+          "http://localhost/capstone-react/api/updateProduct.php",
+          data,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      } else {
+        // If adding a new product, send to add endpoint
+        response = await axios.post(
+          "http://localhost/capstone-react/api/add_product.php",
+          data,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+      }
+  
+      console.log("Server Response:", response.data); // Log the response
+  
+      if (response.data.success) {
+        alert(response.data.message || "Product updated successfully!");
+        handleCloseModal();
+        window.location.reload(); // Refresh the page to reflect changes
+      } else {
+        alert(response.data.message || "Failed to update product.");
+      }
     } catch (error) {
-        console.error(editingFoodId ? "Error updating product:" : "Error adding product:", error);
-        alert(editingFoodId ? "Failed to update product." : "Failed to add product.");
-        window.location.reload();
+      console.error(editingFoodId ? "Error updating product:" : "Error adding product:", error);
+      alert(editingFoodId ? "Failed to update product." : "Failed to add product.");
     }
   };
+  
+    
 
   
 
@@ -503,6 +502,7 @@ const AdminMenu = () => {
               {editingFoodId ? "Editing Product" : "New Product"}
             </h2>
 
+            {/* Image Upload Section */}
             <div
               onClick={() => document.getElementById("fileInput").click()}
               className="border-2 border-dashed border-gray-300 p-6 flex flex-col items-center cursor-pointer"
@@ -534,30 +534,63 @@ const AdminMenu = () => {
             <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Product name:</div>
-                <input type="text" name="food_name" value={formData.food_name} onChange={handleChange} className="w-full p-2 border rounded-md" required />
+                <input
+                  type="text"
+                  name="food_name"
+                  value={formData.food_name}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                  required
+                />
               </label>
 
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Description:</div>
-                <textarea name="description" value={formData.description} onChange={handleChange} className="w-full p-2 border rounded-md"></textarea>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                ></textarea>
               </label>
 
               {/* Price Fields */}
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Small Price (₱):</div>
-                <input type="number" name="price_small" value={formData.price_small} onChange={handleChange} className="w-full p-2 border rounded-md" />
+                <input
+                  type="number"
+                  name="price_small"
+                  value={formData.price_small}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                />
               </label>
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Medium Price (₱):</div>
-                <input type="number" name="price_medium" value={formData.price_medium} onChange={handleChange} className="w-full p-2 border rounded-md" />
+                <input
+                  type="number"
+                  name="price_medium"
+                  value={formData.price_medium}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                />
               </label>
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Large Price (₱):</div>
-                <input type="number" name="price_large" value={formData.price_large} onChange={handleChange} className="w-full p-2 border rounded-md" />
+                <input
+                  type="number"
+                  name="price_large"
+                  value={formData.price_large}
+                  onChange={handleChange}
+                  className="w-full p-2 border rounded-md"
+                />
               </label>
 
               {/* Submit Button */}
-              <button type="submit" className="bg-blue-600 text-white p-2 rounded-md w-full hover:bg-blue-700">
+              <button
+                type="submit"
+                className="bg-blue-600 text-white p-2 rounded-md w-full hover:bg-blue-700"
+              >
                 {editingFoodId ? "Update Product" : "Add Product"}
               </button>
             </form>

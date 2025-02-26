@@ -132,7 +132,7 @@ const UserMenu = () => {
                                 .map(food => (
                                     <div key={food.food_id} className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
                                         <div className="w-full flex flex-wrap justify-center gap-4">
-                                            <img src={`http://localhost/capstone-react/${food.image_path}`} alt={food.food_name} className="w-[213px] h-48 rounded-md object-cover" />
+                                            <img src={`http://localhost/capstone-react${food.image_path}`} alt={food.food_name} className="w-[213px] h-48 rounded-md object-cover" />
                                         </div>
                                         <div className="bg-white rounded-md h-full w-full mt-4 p-5 flex flex-col">
                                             <div className="text-[#1C359A] font-bold flex">{food.food_name}</div>
