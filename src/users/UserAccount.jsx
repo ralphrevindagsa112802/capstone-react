@@ -8,7 +8,7 @@ const UserAccount = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
 
-    user_id: '',
+    id: '',
     username: '',
     f_name: '',
     l_name: '',
@@ -62,7 +62,7 @@ const UserAccount = () => {
         if (data.success) {
           setUserData({
             ...data.user,
-            user_id: data.user.user_id, // ✅ Ensures user_id is stored
+            user_id: data.user.id, // ✅ Ensures user_id is stored
           });
         } else {
           console.error("Error: User ID is missing in API response.");
