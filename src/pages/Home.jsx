@@ -36,7 +36,7 @@ const Home = () => {
               <div className="relative w-full h-[600px] flex justify-center items-center">
   
   {/* Plate Image - Back Layer */}
-  <img src="/img/plate.png" className="relative bottom-[-65%] w-[110vh] z-[10] opacity-0" style={{ animation: "spin 10s linear infinite" }}  alt="plate" />
+  <img src="/img/plate.png" className="relative bottom-[-65%] w-[110vh] z-[10] opacity-100" style={{ animation: "spin 10s linear infinite" }}  alt="plate" />
   
   {/* Drink Image - Front Layer */}
   <img 
@@ -48,7 +48,7 @@ const Home = () => {
 </div>
           </section>
 
-          <section className="absolute bg-white w-full h-auto flex flex-col justify-center items-center text-center py-6 z-10">
+          <section className="relative bg-white w-full h-auto flex flex-col justify-center items-center text-center py-6 z-10">
             <div className="text-4xl sm:text-5xl font-black text-[#09090a]"> Welcome to Yappari!</div>
             <div className="lines mt-4">
               <div className="line"></div>
@@ -129,7 +129,7 @@ const Home = () => {
                 </div>
               </div>
 
-              <div id="card4" className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
+              <div id="card4" className="relative w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
                 <div className="justify-center flex items-center">
                   <img src="img/2022-11-21 (2).jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
                 </div>
@@ -160,7 +160,7 @@ const Home = () => {
 
 
           
-          <section className="bg-white w-full h-auto text-center py-6 mt-6">
+          <section className="relative bg-white w-full h-auto text-center py-6 mt-6">
             <div className="text-4xl sm:text-5xl font-black text-[#1C359A]">Why Yappari Coffee Bar ?</div>
             <div className="flex flex-row justify-center mt-6">
               <div className="float-left">
@@ -213,7 +213,7 @@ const Home = () => {
 
 
           
-          <section className="bg-white w-full h-auto text-center py-6 mt-6">
+          <section className=" bg-white w-full h-auto text-center py-6 mt-6">
             <div className="text-4xl sm:text-5xl font-black text-[#1C359A] h-auto">Find Us & Our Hours</div>
 
             <div className="flex flex-row justify-center">
