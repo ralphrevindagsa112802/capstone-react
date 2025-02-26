@@ -18,7 +18,7 @@ const UserHome = () => {
               </div>
 
               <div className="title">
-                <div className="text-4xl sm:text-5xl font-black text-[#222222] mb-2">Brewed Fresh, Ready to Go</div>
+                <div className="text-4xl sm:text-5xl font-black text-[#9da4db] mb-2">Brewed Fresh, Ready to Go</div>
                 <div className="text-3xl sm:text-4xl font-black text-black">Anytime, Anywhere!</div>
               </div>
 
