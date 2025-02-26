@@ -21,10 +21,12 @@ import UserContact from './users/UserContact'
 import UserAccount from './users/UserAccount'
 import UserStatus from './users/UserStatus'
 import UserCart from './users/UserCart'
+import UserHistory from './users/UserHistory'
 import CheckOut from './components/CheckOut'
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
 import AdminMenu from './admin/AdminMenu'
+import AdminFeedback from './admin/AdminFeedback'
 
 
 const RequireAuth = ({ children }) => {
@@ -88,6 +90,10 @@ const router = createBrowserRouter([{
   path: '/user/status',
   element: <UserStatus />,
   errorElement: <NotFound/>,
+},  {
+  path: '/user/history',
+  element: <UserHistory />,
+  errorElement: <NotFound/>,
 }, {
   path: '/user/cart',
   element: <UserCart />,
@@ -112,7 +118,11 @@ const router = createBrowserRouter([{
   path: '/admin/menu', 
   element: <RequireAuth><AdminMenu /></RequireAuth>, 
   errorElement: <NotFound/> 
-},{ 
+}, {
+  path: '/admin/feedback',
+  element: <RequireAuth><AdminFeedback/></RequireAuth>,
+  errorElement: <NotFound/>
+}, { 
   path: '/admin/logout', 
   element: <AdminLogin/>, 
   errorElement: <NotFound/> 

@@ -32,9 +32,8 @@ const PublicMenu = () => {
     <div className="bg-[#DCDEEA]">
 
         <Navbar/>
-
-      <div className="flex mt-32">
-        <div className="ml-8 w-60 h-screen p-4">
+        <div className=" flex justify-center items-start w-full mt-34 py-6 px-14 h-full gap-12">
+        <div className=" w-60 h-auto items-center flex flex-col p-4">
           <h2 className="text-lg font-bold text-[#1C359A] text-center mb-4">Categories</h2>
 
           <ul className="space-y-3">
@@ -98,16 +97,17 @@ const PublicMenu = () => {
 
         </div>
 
-        <div id="best-seller" className="w-full flex flex-col space-y-4 mt-4 py">
-          <div className="w-3/4 flex flex-col ml-9">
-            <div className="w-full h-16 flex justify-between items-center px-4 relative">
+{/**content menu */}
+        <div id="best-seller" className="flex flex-col justify-center items-center w-[75%] space-y-4">
+        <div className="w-full flex flex-col">
+        <div className="w-full h-16 flex justify-between items-center px-4 relative">
               <h1 className="text-[#1C359A] font-bold text-lg">All Menu</h1>
               <div className="relative z-10">
                 <img src="/img/cart.png" alt="Cart" className="h-6 w-6"/>
               </div>
             </div>
             <hr className="border-t border-black mx-4 my-2 w-full"/>
-            <div className="container-fluid grid grid-cols-3 gap-36 p-5">
+        <div className="container-fluid grid grid-cols-3 gap-22 p-4">
             {foodItems
                 .filter(food => selectedCategory === "All" || food.category === selectedCategory)
                 .flatMap(food => {
