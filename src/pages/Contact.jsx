@@ -63,7 +63,7 @@ const Contact = () => {
   return (
     <div className="md-overflow-y-hidden bg-[#DCDEEA]">
       <Navbar />
-      <main className="flex flex-col items-center justify-center min-h-screen mt-22 max-w-5xl mx-auto p-5">
+      <main className="flex flex-col items-center justify-center min-h-screen  mt-34 md:mt-22 max-w-5xl mx-auto p-5">
         <div className="flex justify-center items-center flex-col mb-6">
           <h2 className="text-2xl font-bold text-[#1C359A]">Contact Us</h2>
           <p className="text-gray-600">Any question or remarks? Just write us a message!</p>
