@@ -1,4 +1,3 @@
-import React from "react";
 import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
 import { User, ChefHat, FileText } from "lucide-react"; // Import icons
