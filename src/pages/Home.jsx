@@ -145,7 +145,7 @@ const Home = () => {
                     <div className="price text-sm font-semibold">₱160</div>
                     <button className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
                       onClick={ () => window.location.href('your-page-url-here.html')}>
-                      <img src="img/cart.png" alt="Add Icon" className="w-4 h-4"/>
+                      <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4"/>
                       <span>Add</span>
                     </button>
                   </div>
