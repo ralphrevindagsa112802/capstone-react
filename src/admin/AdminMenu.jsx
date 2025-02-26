@@ -148,66 +148,70 @@ const AdminMenu = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     console.log("Submitting Form...");
     console.log("Editing Food ID:", editingFoodId);
     console.log("Form Data:", formData);
-  
+
     if (!formData.food_name || !formData.category) {
-      alert("Error: Required fields missing!");
-      return;
+        alert("Error: Required fields missing!");
+        return;
     }
-  
+
     // Create FormData object
     const data = new FormData();
     data.append("food_name", formData.food_name);
     data.append("description", formData.description);
     data.append("category", formData.category);
-    data.append("price_small", formData.price_small || null);
-    data.append("price_medium", formData.price_medium || null);
-    data.append("price_large", formData.price_large || null);
-  
+    data.append("price_small", formData.price_small || "");
+    data.append("price_medium", formData.price_medium || "");
+    data.append("price_large", formData.price_large || "");
+
     // Append the image file if it exists
     if (formData.food_img) {
-      data.append("food_img", formData.food_img);
+        data.append("food_img", formData.food_img);
     } else if (formData.image_path) {
-      // If no new image is selected, send the existing image path
-      data.append("existing_image", formData.image_path);
+        data.append("existing_image", formData.image_path);
     }
-  
+
     try {
-      let response;
-      if (editingFoodId) {
-        // If editing, append the food_id and send to update endpoint
-        data.append("food_id", editingFoodId);
-        response = await axios.post(
-          "http://localhost/capstone-react/api/updateProduct.php",
-          data,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
-      } else {
-        // If adding a new product, send to add endpoint
-        response = await axios.post(
-          "http://localhost/capstone-react/api/add_product.php",
-          data,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
-      }
-  
-      console.log("Server Response:", response.data); // Log the response
-  
-      if (response.data.success) {
-        alert(response.data.message || "Product updated successfully!");
-        handleCloseModal();
-        window.location.reload(); // Refresh the page to reflect changes
-      } else {
-        alert(response.data.message || "Failed to update product.");
-      }
+        let response;
+        if (editingFoodId) {
+            data.append("food_id", editingFoodId);
+            response = await axios.post(
+                "http://localhost/capstone-react/api/updateProduct.php",
+                data,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                    withCredentials: true, // ✅ Ensure session cookies are sent
+                }
+            );
+        } else {
+            response = await axios.post(
+                "http://localhost/capstone-react/api/add_product.php",
+                data,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                    withCredentials: true, // ✅ Ensure session cookies are sent
+                }
+            );
+        }
+
+        console.log("Server Response:", response.data); // ✅ Debug response
+
+        if (response.data.success) {
+            alert(response.data.message || "Product updated successfully!");
+            handleCloseModal();
+            window.location.reload();
+        } else {
+            alert(response.data.message || "Failed to update product.");
+        }
     } catch (error) {
-      console.error(editingFoodId ? "Error updating product:" : "Error adding product:", error);
-      alert(editingFoodId ? "Failed to update product." : "Failed to add product.");
+        console.error(editingFoodId ? "Error updating product:" : "Error adding product:", error);
+        alert(editingFoodId ? "Failed to update product." : "Failed to add product.");
     }
   };
+
   
     
 

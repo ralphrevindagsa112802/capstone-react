@@ -7,10 +7,6 @@ header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-if (!isset($_SESSION["admin_id"])) {
-    echo json_encode(["success" => false, "message" => "Unauthorized: Admin login required"]);
-    exit();
-}
 
 $data = json_decode(file_get_contents("php://input"), true);
 $order_id = $data["order_id"];

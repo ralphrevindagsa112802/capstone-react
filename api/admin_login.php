@@ -7,7 +7,6 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 include 'db.php';
 
-// Handle preflight requests
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
     exit(0);
 }
@@ -23,18 +22,24 @@ if (!$data || !isset($data["admin_username"]) || !isset($data["admin_password"])
 $admin_username = trim($data["admin_username"]);
 $admin_password = trim($data["admin_password"]);
 
-// ✅ Fetch hashed password from DB
+// ✅ Fetch admin from DB
 $stmt = $conn->prepare("SELECT admin_id, admin_username, admin_password FROM admin_users WHERE admin_username = ?");
 $stmt->bind_param("s", $admin_username);
 $stmt->execute();
 $result = $stmt->get_result();
 $admin = $result->fetch_assoc();
+$stmt->close();
+
+// ✅ Debugging: Log Fetched Admin
+error_log("Fetched admin: " . print_r($admin, true));
 
 if ($admin) {
-    error_log("Fetched admin: " . print_r($admin, true)); // ✅ Debug fetched data
+    error_log("Entered Password: " . $admin_password);
+    error_log("Stored Hash: " . $admin["admin_password"]);
 }
 
-if ($admin && password_verify($admin_password, $admin["admin_password"])) { // ⚠️ Use password_verify() if password is hashed
+// ✅ Verify password correctly
+if ($admin && password_verify($admin_password, $admin["admin_password"])) { 
     $_SESSION["admin_id"] = $admin["admin_id"];
     $_SESSION["admin_username"] = $admin["admin_username"];
 
@@ -42,16 +47,22 @@ if ($admin && password_verify($admin_password, $admin["admin_password"])) { // �
         "expires" => 0,
         "path" => "/",
         "domain" => "localhost",
-        "secure" => false, // ❗ Change to `true` for HTTPS
+        "secure" => false, // Change to `true` if using HTTPS
         "httponly" => true,
         "samesite" => "Lax"
     ]);
 
-    echo json_encode(["success" => true, "message" => "Admin login successful"]);
+    echo json_encode([
+        "success" => true,
+        "message" => "Login successful",
+        "admin_user" => [
+            "admin_id" => $admin["admin_id"],
+            "admin_username" => $admin["admin_username"],
+        ]
+    ]);
 } else {
     echo json_encode(["success" => false, "message" => "Invalid admin credentials"]);
 }
 
-$stmt->close();
 $conn->close();
 ?>

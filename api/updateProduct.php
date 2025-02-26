@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 include 'db.php';
 
 header("Access-Control-Allow-Origin: http://localhost:5173");
@@ -7,6 +8,16 @@ header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
+error_log("Session Data: " . print_r($_SESSION, true));
+
+if (!isset($_SESSION["admin_id"])) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Unauthorized: Admin login required",
+        "session_data" => $_SESSION // ✅ Debug: Check session data
+    ]);
+    exit();
+}
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     error_log("POST Data: " . print_r($_POST, true));
