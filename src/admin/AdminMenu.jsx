@@ -24,24 +24,59 @@ const AdminMenu = () => {
 
   const [formData, setFormData] = useState({
     food_name: "",
-    food_description: "",
+    description: "",
     food_size: "",
     food_price: "",
     category: "",
     food_img: null,
   });
 
-  //availability
+
   const toggleDropdown = (id, size) => {
     setDropdownOpen(prevId => (prevId === `${id}-${size}` ? null : `${id}-${size}`));
   };    
     
 
+  // Availability
   const handleAvailabilityChange = async (id, size, status) => {
-    console.log(`Updating availability for ID ${id}, Size ${size} to ${status}`); // Debugging
-    await updateAvailability(id, size, status);
-    setDropdownOpen(null);
-  };  
+    console.log("Sending Availability Update:", { id, size, status }); // ✅ Debug request
+
+    try {
+        const response = await axios.post(
+            "http://localhost/capstone-react/api/updateAvailability.php",
+            {
+                food_id: id,
+                size: size.toLowerCase(), // ✅ Ensure lowercase match
+                availability: status
+            },
+            {
+                withCredentials: true,
+                headers: { "Content-Type": "application/json" }
+            }
+        );
+
+        console.log("Update Response:", response.data); // ✅ Debug API response
+
+        if (response.data.success) {
+            alert("Availability updated successfully!");
+            setMenuItems((prevItems) =>
+                prevItems.map((item) =>
+                    item.food_id === id
+                        ? { ...item, [`availability_${size.toLowerCase()}`]: status }
+                        : item
+                )
+            
+            );
+            window.location.reload();
+        } else {
+            alert("Failed to update availability: " + response.data.message);
+        }
+    } catch (error) {
+        console.error("Error updating availability:", error);
+        alert("Error: Could not update availability.");
+    }
+  };
+
 
   //get menu
   useEffect(() => {
@@ -86,7 +121,7 @@ const AdminMenu = () => {
     if (!editingFoodId) {  // ✅ Only reset form if NOT editing
         setFormData({
             food_name: "",
-            food_description: "",
+            description: "",
             category: "",
             price_small: "",
             price_medium: "",
@@ -118,10 +153,11 @@ const AdminMenu = () => {
     e.preventDefault();
 
     console.log("Submitting Form...");
-    console.log("Editing Food ID:", editingFoodId); // ✅ Debug
+    console.log("Editing Food ID:", editingFoodId);
+    console.log("Form Data:", formData); 
 
-    if (!editingFoodId && editingFoodId !== null) {
-        alert("Error: Editing Food ID is undefined!");
+    if (!formData.food_name || !formData.category) {
+        alert("Error: Required fields missing!");
         return;
     }
 
@@ -129,18 +165,20 @@ const AdminMenu = () => {
     data.append("food_name", formData.food_name);
     data.append("food_description", formData.food_description);
     data.append("category", formData.category);
-    data.append("price_small", formData.price_small);
-    data.append("price_medium", formData.price_medium);
-    data.append("price_large", formData.price_large);
+    data.append("price_small", formData.price_small || null);
+    data.append("price_medium", formData.price_medium || null);
+    data.append("price_large", formData.price_large || null);
 
+    // ✅ If no new image is selected, send the existing one
     if (formData.food_img) {
         data.append("food_img", formData.food_img);
+    } else {
+        data.append("existing_image", formData.image_path); // ✅ Retain current image
     }
 
     try {
         let response;
         if (editingFoodId) {
-            // **Edit Product API Call**
             data.append("food_id", editingFoodId);
             response = await axios.post(
                 "http://localhost/capstone-react/api/updateProduct.php",
@@ -148,7 +186,6 @@ const AdminMenu = () => {
                 { headers: { "Content-Type": "multipart/form-data" } }
             );
         } else {
-            // **Add Product API Call**
             response = await axios.post(
                 "http://localhost/capstone-react/api/add_product.php",
                 data,
@@ -156,64 +193,24 @@ const AdminMenu = () => {
             );
         }
 
-        console.log("Server Response:", response.data); // ✅ Debug API response
+        console.log("Server Response:", response.data);
 
         if (response.data.success) {
             alert(editingFoodId ? "Product updated successfully!" : "Product added successfully!");
             handleCloseModal();
-            // Refresh menu items
+            window.location.reload();
             axios.get("http://localhost/capstone-react/api/getMenuItems.php")
-                .then((res) => {
-                    setMenuItems(res.data);
-                });
+                .then((res) => setMenuItems(res.data));
         } else {
             alert(response.data.message);
+            window.location.reload();
         }
     } catch (error) {
         console.error(editingFoodId ? "Error updating product:" : "Error adding product:", error);
         alert(editingFoodId ? "Failed to update product." : "Failed to add product.");
+        window.location.reload();
     }
   };
-
-
-  // Availability
-  const updateAvailability = async (id, size, status) => {
-    console.log("Sending Availability Update:", { id, size, status }); // ✅ Debug request
-
-    try {
-        const response = await axios.post(
-            "http://localhost/capstone-react/api/updateAvailability.php",
-            {
-                food_id: id,
-                size: size.toLowerCase(), // ✅ Ensure lowercase match
-                availability: status
-            },
-            {
-                withCredentials: true,
-                headers: { "Content-Type": "application/json" }
-            }
-        );
-
-        console.log("Update Response:", response.data); // ✅ Debug API response
-
-        if (response.data.success) {
-            alert("Availability updated successfully!");
-            setMenuItems((prevItems) =>
-                prevItems.map((item) =>
-                    item.food_id === id
-                        ? { ...item, [`availability_${size.toLowerCase()}`]: status }
-                        : item
-                )
-            );
-        } else {
-            alert("Failed to update availability: " + response.data.message);
-        }
-    } catch (error) {
-        console.error("Error updating availability:", error);
-        alert("Error: Could not update availability.");
-    }
-  };
-
 
   
 
@@ -268,7 +265,7 @@ const AdminMenu = () => {
 
     setFormData({
         food_name: itemToEdit.food_name,
-        food_description: itemToEdit.description,
+        description: itemToEdit.description,
         category: itemToEdit.category,
         price_small: itemToEdit.price_small || "",
         price_medium: itemToEdit.price_medium || "",
@@ -419,10 +416,10 @@ const AdminMenu = () => {
                       const labels = sizeLabels[item.category] || { small: "Small", medium: "Medium", large: "Large" };
                       
                       const sizes = [
-                        { size: labels.small, price: item.price_small },
-                        { size: labels.medium, price: item.price_medium },
-                        { size: labels.large, price: item.price_large }
-                      ].filter(s => s.price !== null);
+                        { size: labels.small, dbKey: "small", price: item.price_small },
+                        { size: labels.medium, dbKey: "medium", price: item.price_medium },
+                        { size: labels.large, dbKey: "large", price: item.price_large }
+                      ].filter(s => s.price !== null); // ✅ Remove sizes with no price
                       
                       return sizes.map((sizeItem, index) => (
                         <tr
@@ -439,12 +436,12 @@ const AdminMenu = () => {
                           <td className="px-4 py-2 font-black text-[#1C359A]">
                             <span
                               className={`font-bold ${
-                                item[`availability_${sizeItem.size.toLowerCase()}`] === "Available"
+                                item[`availability_${sizeItem.dbKey}`] === "Available"
                                   ? "text-blue-600"
                                   : "text-red-600"
                               }`}
                             >
-                              {item[`availability_${sizeItem.size.toLowerCase()}`] || "Not Available"}
+                              {item[`availability_${sizeItem.dbKey}`] || "Not Available"}
                             </span>
                           </td>
 
@@ -542,7 +539,7 @@ const AdminMenu = () => {
 
               <label className="flex flex-row items-center w-full">
                 <div className="text-gray-700 w-1/3">Description:</div>
-                <textarea name="food_description" value={formData.food_description} onChange={handleChange} className="w-full p-2 border rounded-md"></textarea>
+                <textarea name="description" value={formData.description} onChange={handleChange} className="w-full p-2 border rounded-md"></textarea>
               </label>
 
               {/* Price Fields */}

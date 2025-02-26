@@ -47,7 +47,7 @@ $category = $food["category"];
 
 // ✅ Map Sizes Based on Category
 $size_column_map = [
-    "Rice Meal" => ["regular" => "availability_small", "large" => "availability_medium"],
+    "Rice Meal" => ["regular" => "availability_small", "large" => "availability_medium", "extra large" => "availability_large"],
     "Classic Coffee" => ["small" => "availability_small", "medium" => "availability_medium", "large" => "availability_large"],
     "Frappes" => ["small" => "availability_small", "medium" => "availability_medium", "large" => "availability_large"],
     "Smoothies" => ["small" => "availability_small", "medium" => "availability_medium", "large" => "availability_large"],
