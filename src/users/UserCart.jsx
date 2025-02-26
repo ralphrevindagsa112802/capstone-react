@@ -86,7 +86,7 @@ const UserCart = () => {
                                 <th className="text-center py-2 text-[#1C359A]">Quantity</th>
                                 <th className="text-center py-2 text-[#1C359A]">Price</th>
                                 <th className="text-center py-2 text-[#1C359A]">Total</th>
-                                <th className="text-center py-2 flex justify-end text-[#1C359A]">Action</th>
+                                <th className="text-right py-2 text-[#1C359A]">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,8 +103,8 @@ const UserCart = () => {
                                         <td className="text-center py-4">{item.quantity}</td>
                                         <td className="text-center py-4">₱{item.food_price}</td>
                                         <td className="text-center py-4">₱{(item.food_price * item.quantity)}</td>
-                                        <td className="flex justify-end">
-                                            <button className=" text-sm text-red-700 items-center flex font-bold hover:text-red-300 rounded cursor-pointer"
+                                        <td className="text-right py-4">
+                                            <button className=" text-sm text-red-700 font-bold hover:text-red-300 rounded cursor-pointer"
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     removeFromCart(item.food_id, item.size);
