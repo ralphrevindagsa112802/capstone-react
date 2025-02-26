@@ -21,15 +21,37 @@ const Login = () => {
     try {
       const response = await fetch("http://localhost/capstone-react/api/login.php", {
         method: "POST",
-        credentials: "include",  // ✅ Ensures cookies are sent
+        credentials: "include", // ✅ Ensures session cookie is sent
         headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"  // ✅ Ensure JSON response
+            "Content-Type": "application/json",
+            "Accept": "application/json"
         },
         body: JSON.stringify(formData),
-      });
-  
-      const data = await response.json();
+    });
+    
+    const text = await response.text(); // ✅ Read raw response
+    console.log("Raw Response:", text); // ✅ Debug response
+    
+    try {
+        const data = JSON.parse(text); // ✅ Parse JSON
+        console.log("Parsed Response:", data);
+    
+        if (data.success && data.user) {
+            sessionStorage.setItem("user_id", data.user.id); 
+            sessionStorage.setItem("user_name", data.user.username);
+            sessionStorage.setItem("f_name", data.user.f_name);
+            sessionStorage.setItem("l_name", data.user.l_name);
+    
+            alert(`Welcome back, ${data.user.f_name} ${data.user.l_name}!`);
+            navigate("/user/home");
+            window.location.reload();
+        } else {
+            setError(data.error || "Login failed");
+        }
+    } catch (error) {
+        console.error("JSON Parse Error:", error);
+        setError("Server response was not valid JSON");
+    }    
       console.log("Login Response:", data); // ✅ Debug backend response
   
       if (data.success) {

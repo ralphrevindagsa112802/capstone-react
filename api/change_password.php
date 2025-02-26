@@ -11,10 +11,11 @@ include 'db.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION["user_id"])) {
-    die(json_encode(["success" => false, "error" => "User not logged in."]));
+    echo json_encode(["success" => false, "message" => "User not logged in"]);
+    exit();
 }
+$user_id = $_SESSION["user_id"]; // ✅ Get user ID from session
 
-$user_id = $_SESSION["user_id"];
 $data = json_decode(file_get_contents("php://input"), true);
 
 if (!$data) {
