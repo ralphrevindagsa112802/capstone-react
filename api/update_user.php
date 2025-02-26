@@ -13,6 +13,10 @@ if ($conn->connect_error) {
     die(json_encode(["success" => false, "error" => "Database connection failed: " . $conn->connect_error]));
 }
 
+if (!isset($_SESSION["user_id"])) {
+    die(json_encode(["success" => false, "error" => "User not logged in."]));
+}
+
 // Read JSON data
 $input = file_get_contents("php://input");
 $data = json_decode($input, true);
