@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate} from "react-router-dom";
 import axios from "axios";
 import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 
 
 const UserHistory = () => {
+  const navigate = useNavigate();
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,6 +15,19 @@ const UserHistory = () => {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [comment, setComment] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+        credentials: "include", // ✅ Sends session cookie
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        if (!data.success) {
+            navigate("/login");
+        }
+    })
+    .catch(() => navigate("/login"));
+  }, [navigate]);
 
   useEffect(() => {
     axios

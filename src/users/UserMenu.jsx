@@ -1,4 +1,5 @@
 import { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
@@ -6,10 +7,24 @@ import { CartContext } from "../context/CartContext"; // Import context
 import MenuPopup from "../components/MenuPopUp"; // Import the new popup component
 
 const UserMenu = () => {
+    const navigate = useNavigate();
     const { cartItems, addToCart } = useContext(CartContext); // Use context
     const [foodItems, setFoodItems] = useState([]);
     const [selectedFood, setSelectedFood] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("All"); // Track selected food item
+
+    useEffect(() => {
+        fetch("http://localhost/capstone-react/api/check_user_session.php", {
+            credentials: "include", // ✅ Sends session cookie
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            if (!data.success) {
+                navigate("/login");
+            }
+        })
+        .catch(() => navigate("/login"));
+      }, [navigate]);
 
     useEffect(() => {
         axios.get(`http://localhost/capstone-react/api/getMenuItems.php?category=${selectedCategory}`)

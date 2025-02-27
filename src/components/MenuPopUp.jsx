@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 const MenuPopup = ({ food, onClose, onAddToCart }) => {
-  
   if (!food) return null;
 
   // Define size options and corresponding prices

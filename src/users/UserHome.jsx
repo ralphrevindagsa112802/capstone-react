@@ -1,7 +1,25 @@
+import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import UserNavbar from '../components/UserNavbar'
 import Footer from '../components/Footer'
 
+
 const UserHome = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      fetch("http://localhost/capstone-react/api/check_user_session.php", {
+          credentials: "include", // ✅ Sends session cookie
+      })
+      .then((res) => res.json())
+      .then((data) => {
+          if (!data.success) {
+              navigate("/login");
+          }
+      })
+      .catch(() => navigate("/login"));
+    }, [navigate]);
+
   return (
     <div className='md-overflow-y-hidden bg-[#484952]'>
       <UserNavbar />

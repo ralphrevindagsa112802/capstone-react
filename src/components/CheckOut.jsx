@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartContext } from "../context/CartContext"; // Import Cart Context
@@ -10,6 +10,19 @@ const CheckOut = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [shippingMethod, setShippingMethod] = useState("delivery");
   const [user, setUser] = useState({ name: "", address: "" });
+
+  useEffect(() => {
+    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+        credentials: "include", // ✅ Sends session cookie
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        if (!data.success) {
+            navigate("/login");
+        }
+    })
+    .catch(() => navigate("/login"));
+  }, [navigate]);
 
   useEffect(() => {
     // Load cart from local storage

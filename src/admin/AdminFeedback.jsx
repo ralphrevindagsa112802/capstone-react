@@ -61,7 +61,7 @@ const AdminFeedback = () => {
           </nav>
 
           {/* Logout Button */}
-          <Link to="/admin/logout">
+          <Link to="/admin/login">
             <button className="mt-20 font-bold flex items-center justify-center bg-[#1C359A] text-white px-18 py-2 rounded-lg hover:bg-blue-800">
               SIGN OUT
             </button>

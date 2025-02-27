@@ -1,16 +1,30 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
 
 const UserStatus = () => {
+  const navigate = useNavigate();
   const { orderId } = useParams(); // Get orderId from URL params
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // Track modal state
+
+  useEffect(() => {
+    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+        credentials: "include", // ✅ Sends session cookie
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        if (!data.success) {
+            navigate("/login");
+        }
+    })
+    .catch(() => navigate("/login"));
+  }, [navigate]);
 
   useEffect(() => {
     axios.get(`http://localhost/capstone-react/api/getOrder.php?orderId=${orderId}`)
