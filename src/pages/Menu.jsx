@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import Swal from 'sweetalert2'
 
 const PublicMenu = () => {
   const [foodItems, setFoodItems] = useState([]);
@@ -24,8 +25,17 @@ const PublicMenu = () => {
   // Handler for Add to Cart
   const handleAddToCart = (food) => {
     // Here, since the user is not signed in, redirect them
-    alert("Please sign up or log in to add items to your cart!");
-    navigate("/login"); // Adjust the route as needed
+    Swal.fire({
+      title: 'Info!',
+      text: 'Please sign up or log in to add items to your cart!',
+      icon: 'info',
+      timer: 2000,
+      confirmButtonText: 'OK',
+    }).then(() => {
+      setTimeout(() => {
+        navigate("/login")
+      }, 500);
+    }) // Adjust the route as needed
   };
 
   return (

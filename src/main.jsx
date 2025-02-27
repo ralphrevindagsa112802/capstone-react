@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom'
 import './index.css'
 import { CartProvider } from "./context/CartContext";
 import { useState, useEffect } from "react";
@@ -31,6 +31,7 @@ import AdminFeedback from './admin/AdminFeedback'
 
 const RequireAuth = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost/capstone-react/api/check_admin_session.php", {
@@ -43,7 +44,24 @@ const RequireAuth = ({ children }) => {
 
   if (isAuthenticated === null) return <p>Loading...</p>; // ✅ Avoids flickering
 
-  return isAuthenticated ? children : <Navigate to="/admin/login" />;
+  return isAuthenticated ? children : navigate("/admin/login");
+};
+
+const UserRequireAuth = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+      credentials: "include", // ✅ Sends session cookie
+    })
+      .then((res) => res.json())
+      .then((data) => setIsAuthenticated(data.success))
+      .catch(() => setIsAuthenticated(false));
+  }, []);
+
+  if (isAuthenticated === null) return <p>Loading...</p>; // ✅ Avoids flickering
+
+  return isAuthenticated ? children : navigate("/login");
 };
 
 
@@ -77,47 +95,43 @@ const router = createBrowserRouter([{
   errorElement: <NotFound/>,
 }, {
   path: '/user/home',
-  element: <UserHome />,
+  element: <UserRequireAuth><UserHome /></UserRequireAuth>,
   errorElement: <NotFound/>,
 }, {
   path: '/user/menu',
-  element: <UserMenu />,
+  element: <UserRequireAuth><UserMenu /></UserRequireAuth>,
   errorElement: <NotFound/>,
 },  {
   path: '/user/company',
-  element: <UserCompany />,
+  element: <UserRequireAuth><UserCompany /></UserRequireAuth>,
   errorElement: <NotFound/>,
 }, {
   path: '/user/special',
-  element: <UserSpecial />,
+  element: <UserRequireAuth><UserSpecial /></UserRequireAuth>,
   errorElement: <NotFound/>,
 }, {
   path: '/user/contact',
-  element: <UserContact />,
+  element: <UserRequireAuth><UserContact /></UserRequireAuth>,
   errorElement: <NotFound/>,
 }, {
   path: '/user/account',
-  element: <UserAccount />,
+  element: <UserRequireAuth><UserAccount /></UserRequireAuth>,
   errorElement: <NotFound/>,
 }, {
   path: '/user/status',
-  element: <UserStatus />,
+  element: <UserRequireAuth><UserStatus /></UserRequireAuth>,
   errorElement: <NotFound/>,
 },  {
   path: '/user/history',
-  element: <UserHistory />,
+  element: <UserRequireAuth><UserHistory /></UserRequireAuth>,
   errorElement: <NotFound/>,
 }, {
   path: '/user/cart',
-  element: <UserCart />,
-  errorElement: <NotFound/>,
-}, {
-  path: '/user/logout',
-  element: <Home />,
+  element: <UserRequireAuth><UserCart /></UserRequireAuth>,
   errorElement: <NotFound/>,
 }, {
   path: '/user/checkout',
-  element: <CheckOut />,
+  element: <UserRequireAuth><CheckOut /></UserRequireAuth>,
   errorElement: <NotFound/>,
 }, {
   path: '/admin/login',

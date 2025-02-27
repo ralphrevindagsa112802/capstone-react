@@ -18,6 +18,19 @@ const AdminFeedback = () => {
     fetchFeedback();
   }, []);
 
+  const handleLogout = async () => {
+    try {
+        await fetch("http://localhost/capstone-react/api/admin_logout.php", {
+            method: "POST",
+            credentials: "include",
+        });
+
+        navigate("/admin/login");
+    } catch (error) {
+        console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen bg-[#DCDEEA]">
       {/* Navbar */}

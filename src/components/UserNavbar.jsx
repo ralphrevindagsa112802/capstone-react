@@ -1,10 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { Link, useLocation } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 
 const UserNavbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const navigate = useNavigate();
+  const { logoutUser } = useContext(CartContext);
   const dropdownRef = useRef(null);
   const [user, setUser] = useState(null);
   const location = useLocation();
@@ -14,6 +18,19 @@ const UserNavbar = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);
   };
+
+  useEffect(() => {
+    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+        credentials: "include", // ✅ Sends session cookie
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        if (!data.success) {
+            navigate("/login");
+        }
+    })
+    .catch(() => navigate("/login"));
+  }, [navigate]);
 
   // Close dropdown if clicking outside
   useEffect(() => {
@@ -52,18 +69,6 @@ const UserNavbar = () => {
 
     fetchUserData();
   }, []);
-
-  // Handle Logout
-  const handleLogout = () => {
-    sessionStorage.removeItem("user_id"); // ✅ Remove user session
-    sessionStorage.removeItem("user_name");
-    localStorage.removeItem("cartItems_guest"); // ✅ Remove guest cart
-    window.location.reload(); // ✅ Reload to apply changes
-    setCartItems([]); // Clear cart state
-    navigate("/user/logout");
-  };
-
-
 
   return (
     <nav className="bg-white shadow-md fixed top-0 z-50 w-full">
@@ -166,7 +171,7 @@ const UserNavbar = () => {
                 </div>
                 <Link to="/user/account" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Account</Link>
                 <Link to={{ pathname: '/user/cart', state: { cartItems } }} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">My Cart</Link>
-                <Link to="/user/logout" onClick={handleLogout} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</Link>
+                <Link to="/" onClick={logoutUser} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</Link>
               </div>
             )}
           </div>

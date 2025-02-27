@@ -18,10 +18,21 @@ export const CartProvider = ({children}) => {
     };
   }, []);
 
-  const logoutUser = () => {
-    sessionStorage.removeItem("user_id"); // ✅ Clear session
-    setUserId(null);
-    setCartItems([]); // ✅ Clear cart
+  const logoutUser = async () => {
+      try {
+        await fetch("http://localhost/capstone-react/api/logout.php", {
+            method: "POST",
+            credentials: "include",
+        });
+        
+        sessionStorage.removeItem("user_id"); // ✅ Remove user session
+        sessionStorage.removeItem("user_name");
+        localStorage.removeItem("cartItems_guest"); // ✅ Remove guest cart
+        setUserId(null);
+        setCartItems([]); // ✅ Clear cart
+    } catch (error) {
+        console.error("Logout failed:", error);
+    }
   };
   
   

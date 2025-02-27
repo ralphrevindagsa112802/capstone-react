@@ -109,11 +109,18 @@ const AdminMenu = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleLogout = () => {
-    console.log("Logout function triggered");
-    navigate("/admin/logout");
-    //  logout functionality here if needed
-  };
+  const handleLogout = async () => {
+    try {
+        await fetch("http://localhost/capstone-react/api/admin_logout.php", {
+            method: "POST",
+            credentials: "include",
+        });
+
+        navigate("/admin/login");
+    } catch (error) {
+        console.error("Logout failed:", error);
+    }
+};
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => {

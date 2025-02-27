@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -16,8 +17,6 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
   
-    console.log("Form Data Before Sending:", JSON.stringify(formData)); // ✅ Debug form data
-  
     try {
       const response = await fetch("http://localhost/capstone-react/api/login.php", {
         method: "POST",
@@ -30,38 +29,35 @@ const Login = () => {
     });
     
     const text = await response.text(); // ✅ Read raw response
-    console.log("Raw Response:", text); // ✅ Debug response
     
     try {
         const data = JSON.parse(text); // ✅ Parse JSON
-        console.log("Parsed Response:", data);
+        
     
-        if (data.success && data.user) {
-            sessionStorage.setItem("user_id", data.user.id); 
-            sessionStorage.setItem("user_name", data.user.username);
-            sessionStorage.setItem("f_name", data.user.f_name);
-            sessionStorage.setItem("l_name", data.user.l_name);
-    
-            alert(`Welcome back, ${data.user.f_name} ${data.user.l_name}!`);
-            navigate("/user/home");
-        } else {
-            setError(data.error || "Login failed");
-        }
-    } catch (error) {
-        console.error("JSON Parse Error:", error);
-        setError("Server response was not valid JSON");
-    }    
-      console.log("Login Response:", data); // ✅ Debug backend response
-  
-      if (data.success) {
-        sessionStorage.setItem("user_id", data.user.id); // ✅ Store user_id in sessionStorage
-        sessionStorage.setItem("user_name", data.user.username); // ✅ Store username (optional)
-        alert(`Welcome back, ${data.user.f_name} ${data.user.l_name}!`);
-        navigate("/user/home");
-        window.location.reload();
-      } else {
-        setError(data.error || "Login failed");
-      }
+          if (data.success && data.user) {
+              sessionStorage.setItem("user_id", data.user.id); 
+              sessionStorage.setItem("user_name", data.user.username);
+              sessionStorage.setItem("f_name", data.user.f_name);
+              sessionStorage.setItem("l_name", data.user.l_name);
+      
+              Swal.fire({
+                title: 'Success!',
+                text: 'Login Successful!',
+                icon: 'success',
+                timer: 2000,
+              }).then(() => {
+                setTimeout(() => {
+                  navigate("/user/home")
+                }, 500);
+              })
+          } else {
+              setError(data.error || "Login failed");
+          }
+        } catch (error) {
+            console.error("JSON Parse Error:", error);
+            setError("Server response was not valid JSON");
+        }    
+
     } catch (error) {
       console.error("Error:", error);
       setError("Failed to connect to server");
