@@ -42,7 +42,7 @@ const Login = () => {
       
               Swal.fire({
                 title: 'Success!',
-                text: 'Login Successful!',
+                text: `Welcome back, ${data.user.f_name} ${data.user.l_name}!`,
                 icon: 'success',
                 timer: 2000,
               }).then(() => {

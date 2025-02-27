@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserNavbar from '../components/UserNavbar';
 import Footer from '../components/Footer';
+import Swal from 'sweetalert2';
 
 const UserAccount = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -98,7 +99,12 @@ const UserAccount = () => {
     console.log("Sending user data:", userData); // ✅ Debugging
 
     if (!userData.user_id) {
-      alert("User ID is missing in React.");
+      Swal.fire({
+        title: 'Error!',
+        text: 'User ID is missing in React.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      })
       return;
     }
 
@@ -112,10 +118,20 @@ const UserAccount = () => {
       .then(data => {
         console.log("Server response:", data); // ✅ Debugging
         if (data.success) {
-          alert("Profile updated successfully!");
+          Swal.fire({
+            title: 'Success!',
+            text: 'Profile updated successfully!',
+            icon: 'success',
+            timer: 2000,
+          })
           setIsEditing(false);
         } else {
-          alert("Error updating profile: " + data.error);
+          Swal.fire({
+            title: 'Success!',
+            text: `Error updating profile: ${data.error}`,
+            icon: 'error',
+            confirmButtonText: 'OK',
+          })
         }
       })
       .catch(error => console.error("Error updating user data:", error));
@@ -131,7 +147,12 @@ const UserAccount = () => {
   // ✅ Upload profile picture
   const handleUpload = () => {
     if (!selectedFile) {
-      alert("Please select a file to upload.");
+      Swal.fire({
+        title: 'Warning!',
+        text: 'Please select a file to upload.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      })
       return;
     }
 
