@@ -21,81 +21,51 @@ const UserHome = () => {
     }, [navigate]);
 
   return (
-    <div className='md-overflow-y-hidden bg-[#484952]'>
-      <UserNavbar />
-
-      <main className="mt-32"> 
+    <div className="md-overflow-y-hidden bg-[#223081]">
+        <img src="/img/coffee spill.png" className="absolute top-[70%] left-1/2 
+        transform -translate-x-1/2 -translate-y-1/2 w-[180vh] h-[110vh] rotate-3 object-cover" alt="coffee" />
+        <UserNavbar></UserNavbar>
+       
+       
+        <main className="mt-32 bg-[#ffcfdb]"> 
           <section className="">
             <img src="" alt="" />
 
             <div className="header flex flex-col items-center text-center py-8 relative">
               
-              <div className="text-[#04091b] text-sm flex justify-center w-full space-x-[290px]">
+              <div className="text-[#000000] text-sm flex justify-center w-full space-x-[290px]">
                 <div>No Lines, Just Good Coffee</div>
                 <div>Monday - Sunday 10:00 AM - 2:00 AM</div>
               </div>
 
               <div className="title">
-                <div className="text-4xl sm:text-5xl font-black text-[#9da4db] mb-2">Brewed Fresh, Ready to Go</div>
-                <div className="text-3xl sm:text-4xl font-black text-black">Anytime, Anywhere!</div>
+                <div className="text-4xl sm:text-5xl font-black text-[#3a404d] mb-2">Brewed Fresh, Ready to Go</div>
+                <div className="text-3xl sm:text-4xl font-black text-[#3a404d]">Anytime, Anywhere!</div>
               </div>
 
              
               <button
-                className="mt-6 mb-6 bg-[#1C359A] text-sm font-semibold text-white py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
+                className="mt-6 mb-6 bg-[#ffffff] text-sm font-semibold text-black py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
                 ORDER NOW
               </button>
 
-              <div className="relative">
-               
-                <div className="absolute inset-0">
-                  <img src="/img/FLAVORED LATTES/SPANISH LATTE.jpg" alt="Coffee Splash" className="w-full h-auto" />
-                </div>
-
-               
-                <div className="relative flex flex-col items-center">
-                  
-                  <div id='gradient-container'
-                    className="w-full bg-gradient-to-b from-brown-700 to-brown-500 rounded-t-full relative mt-48 overflow-hidden shadow-xl">
-
-
-                    <div className="relative flex justify-around items-center mt-20 px-10">
-                      
-                      <div className="w-36 h-36 rounded-full shadow-md flex items-center justify-center">
-                        <img src="/img/CLASSIC COFFEES/Cafe Vienna.jpg" alt="Food Item 1"
-                          className="w-32 h-32 rounded-full object-cover" />
-                      </div>
-
-                      
-                      <div className="w-48 h-48  rounded-full shadow-lg flex items-center justify-center">
-                        <img src="/img/FLAVORED LATTES/CARAMEL LATTE ICON.jpg" alt="Drink"
-                          className="w-44 h-44 rounded-full object-cover" />
-                      </div>
-
-                    
-                      <div className="w-36 h-36 rounded-full shadow-md flex items-center justify-center">
-                        <img src="/img/SMOOTHIES AND FRAPPES/Mango Tango.jpg" alt="Food Item 2"
-                          className="w-32 h-32 rounded-full object-cover"/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                
-                <div className="absolute top-10 left-10">
-                  <img src="coffee-beans.png" alt="Coffee Beans" className="w-16 h-auto"/>
-                </div>
-                <div className="absolute top-10 right-10">
-                  <img src="coffee-beans-2.png" alt="Coffee Beans" className="w-16 h-auto"/>
-                </div>
-              </div>
-            </div>
+              <div className="relative w-full h-[600px] flex justify-center items-center">
+  
+  {/* Plate Image - Back Layer */}
+  <img src="/img/plate.png" className="relative bottom-[-65%] w-[110vh] z-[10] opacity-100" style={{ animation: "spin 10s linear infinite" }}  alt="plate" />
+  
+  {/* Drink Image - Front Layer */}
+  <img 
+    src="/img/frontdrink.png" 
+    className="absolute top-[17%] left-1/2 transform -translate-x-1/2 w-[35vw] max-w-[350px] h-auto z-20 animate-tilt-float" 
+    alt="Floating Drink" 
+  />
+</div>
+</div>
           </section>
 
-
-          
-          <section className=" bg-white w-full h-auto flex flex-col justify-center items-center text-center py-6">
-            <div className="text-4xl sm:text-5xl font-black text-[#1C359A]"> Welcome to Yappari!</div>
+          <section className="relative bg-white w-full h-auto flex flex-col justify-center items-center text-center py-6 z-10">
+            <div className="text-4xl sm:text-5xl font-black text-[#09090a]"> Welcome to Yappari!</div>
             <div className="lines mt-4">
               <div className="line"></div>
               <div className="line"></div>
@@ -175,7 +145,7 @@ const UserHome = () => {
                 </div>
               </div>
 
-              <div id="card4" className="w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
+              <div id="card4" className="relative w-72 bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
                 <div className="justify-center flex items-center">
                   <img src="/img/2022-11-21 (2).jpg" alt="" className="w-[213px] h-48 rounded-md object-cover"/>
                 </div>
@@ -206,7 +176,7 @@ const UserHome = () => {
 
 
           
-          <section className="bg-white w-full h-auto text-center py-6 mt-6">
+          <section className="relative bg-white w-full h-auto text-center py-6 mt-6">
             <div className="text-4xl sm:text-5xl font-black text-[#1C359A]">Why Yappari Coffee Bar ?</div>
             <div className="flex flex-row justify-center mt-6">
               <div className="float-left">
@@ -259,7 +229,7 @@ const UserHome = () => {
 
 
           
-          <section className="bg-white w-full h-auto text-center py-6 mt-6">
+          <section className=" bg-white w-full h-auto text-center py-6 mt-6">
             <div className="text-4xl sm:text-5xl font-black text-[#1C359A] h-auto">Find Us & Our Hours</div>
 
             <div className="flex flex-row justify-center">
@@ -287,8 +257,8 @@ const UserHome = () => {
 
           </section>
         </main>
-      <Footer/>
-    </div>
+        <Footer></Footer>
+      </div>
   )
 }
 
