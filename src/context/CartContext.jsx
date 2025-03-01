@@ -74,10 +74,6 @@ export const CartProvider = ({children}) => {
 
   // ✅ Add item to cart (Ensures correct merging of items)
   const addToCart = (food) => {
-    if (!userId) {
-      alert("Please log in to add items to your cart.");
-      return;
-    }
   
     setCartItems((prevCart) => {
       const existingItem = prevCart.find(item => item.food_id === food.food_id && item.size === food.size);
