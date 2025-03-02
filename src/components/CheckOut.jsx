@@ -12,7 +12,7 @@ const CheckOut = () => {
   const [user, setUser] = useState({ name: "", address: "" });
 
   useEffect(() => {
-    fetch("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/check_user_session.php", {
+    fetch("http://localhost/yappari-coffee-bar-api/api/check_user_session.php", {
         credentials: "include", // ✅ Sends session cookie
     })
     .then((res) => res.json())
@@ -33,7 +33,7 @@ const CheckOut = () => {
     setTotalAmount(storedTotal);
 
     // Fetch user details from API
-    axios.get("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/getUserOrderDetails.php", { withCredentials: true })
+    axios.get("http://localhost/yappari-coffee-bar-api/api/getUserOrderDetails.php", { withCredentials: true })
       .then(response => {
         if (response.data.success) {
           setUser({ name: response.data.name, address: response.data.address, phone: response.data.phone });
@@ -65,7 +65,7 @@ const CheckOut = () => {
 
     try {
       const response = await axios.post(
-        "https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/submitOrders.php", // ✅ Use correct API
+        "http://localhost/yappari-coffee-bar-api/api/submitOrders.php", // ✅ Use correct API
         requestData,
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );

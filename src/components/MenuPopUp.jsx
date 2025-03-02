@@ -6,7 +6,7 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/check_user_session.php", {
+    fetch("http://localhost/yappari-coffee-bar-api/api/check_user_session.php", {
         credentials: "include", // ✅ Sends session cookie
     })
     .then((res) => res.json())

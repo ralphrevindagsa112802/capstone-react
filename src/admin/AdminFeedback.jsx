@@ -9,7 +9,7 @@ const AdminFeedback = () => {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const response = await axios.get("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/get_feedback.php"); // Adjust API URL
+        const response = await axios.get("http://localhost/yappari-coffee-bar-api/api/get_feedback.php"); // Adjust API URL
         setFeedbackData(response.data);
       } catch (error) {
         console.error("Error fetching feedback:", error);
@@ -20,7 +20,7 @@ const AdminFeedback = () => {
 
   const handleLogout = async () => {
     try {
-        await fetch("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/admin_logout.php", {
+        await fetch("http://localhost/yappari-coffee-bar-api/api/admin_logout.php", {
             method: "POST",
             credentials: "include",
         });

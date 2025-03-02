@@ -20,7 +20,7 @@ const UserAccount = () => {
   });
 
   useEffect(() => {
-    fetch("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/check_user_session.php", {
+    fetch("http://localhost/yappari-coffee-bar-api/api/check_user_session.php", {
         credentials: "include", // ✅ Sends session cookie
     })
     .then((res) => res.json())
@@ -67,7 +67,7 @@ const UserAccount = () => {
 
   
   useEffect(() => {
-    fetch('https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/getUser.php', {
+    fetch('http://localhost/yappari-coffee-bar-api/api/getUser.php', {
       credentials: 'include',
     })
       .then(response => response.json())
@@ -108,7 +108,7 @@ const UserAccount = () => {
       return;
     }
 
-    fetch("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/update_user.php", {
+    fetch("http://localhost/yappari-coffee-bar-api/api/update_user.php", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -159,7 +159,7 @@ const UserAccount = () => {
     const formData = new FormData();
     formData.append("profile_pic", selectedFile);
 
-    fetch("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/upload_profile.php", {
+    fetch("http://localhost/yappari-coffee-bar-api/api/upload_profile.php", {
       method: "POST",
       credentials: "include",
       body: formData,
@@ -193,7 +193,7 @@ const UserAccount = () => {
     }
 
     try{
-      fetch('https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/change_password.php', {
+      fetch('http://localhost/yappari-coffee-bar-api/api/change_password.php', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -242,7 +242,7 @@ const UserAccount = () => {
             ) : userData.profile_pic ? (
               // ✅ Show profile picture (Blur if editing)
               <img
-                src={`https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/${userData.profile_pic}`}
+                src={`http://localhost/yappari-coffee-bar-api/api/${userData.profile_pic}`}
                 alt="Profile"
                 className={`w-full h-full rounded-full object-cover transition ${isEditing ? "blur-md" : ""
                   }`}

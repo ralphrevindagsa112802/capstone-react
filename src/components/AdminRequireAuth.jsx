@@ -6,7 +6,7 @@ const AdminRequireAuth = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/check_admin_session.php", {
+    fetch("http://localhost/yappari-coffee-bar-api/api/check_admin_session.php", {
       credentials: "include",
     })
       .then((res) => res.json())
