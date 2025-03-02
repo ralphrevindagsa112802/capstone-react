@@ -1,6 +1,6 @@
 <?php
 session_start();
-header("Access-Control-Allow-Origin: https://yappari-coffee-bar.vercel.app");
+header("Access-Control-Allow-Origin: https://capstone-react-nine.vercel.app");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
 

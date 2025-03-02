@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "/yappari-coffee-bar/",
+  "homepage": "http://127.0.0.1/yappari-coffee-bar/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

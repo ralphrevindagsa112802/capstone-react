@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: https://yappari-coffee-bar.vercel.app");
+header("Access-Control-Allow-Origin: https://capstone-react-nine.vercel.app");
 header("Content-Type: application/json");
 
 include 'db.php'; // Ensure this connects to your database

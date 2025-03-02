@@ -3,7 +3,7 @@ session_start(); // ✅ Start the session
 
 include 'db.php';
 
-header("Access-Control-Allow-Origin: https://yappari-coffee-bar.vercel.app");
+header("Access-Control-Allow-Origin: https://capstone-react-nine.vercel.app");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
