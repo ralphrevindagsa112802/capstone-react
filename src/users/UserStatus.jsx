@@ -14,7 +14,7 @@ const UserStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Track modal state
 
   useEffect(() => {
-    fetch("http://localhost/yappari-coffee-bar-api/api/check_user_session.php", {
+    fetch("http://localhost/capstone-react/api/check_user_session.php", {
         credentials: "include", // ✅ Sends session cookie
     })
     .then((res) => res.json())
@@ -27,7 +27,7 @@ const UserStatus = () => {
   }, [navigate]);
 
   useEffect(() => {
-    axios.get(`http://localhost/yappari-coffee-bar-api/api/getOrder.php?orderId=${orderId}`)
+    axios.get(`http://localhost/capstone-react/api/getOrder.php?orderId=${orderId}`)
       .then(response => {
         if (response.data.error) {
           setError(response.data.error);
@@ -41,7 +41,7 @@ const UserStatus = () => {
 
   // Function to cancel order
   const handleCancelOrder = () => {
-    axios.post(`http://localhost/yappari-coffee-bar-api/api/cancelOrder.php`, { orderId })
+    axios.post(`http://localhost/capstone-react/  api/cancelOrder.php`, { orderId })
       .then(response => {
         if (response.data.success) {
           setOrder(prevOrder => ({ ...prevOrder, order_status: "Cancelled" }));
@@ -55,7 +55,7 @@ const UserStatus = () => {
 
   // Function to mark order as received
   const handleOrderReceived = () => {
-    axios.post(`http://localhost/yappari-coffee-bar-api/api/orderReceived.php`, { orderId })
+    axios.post(`http://localhost/capstone-react/api/orderReceived.php`, { orderId })
       .then(response => {
         if (response.data.success) {
           setOrder(prevOrder => ({ ...prevOrder, order_status: "Received" }));

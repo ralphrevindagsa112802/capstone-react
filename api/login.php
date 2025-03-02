@@ -37,7 +37,7 @@ if ($user && password_verify($password, $user["password"])) {
         "expires" => 0,
         "path" => "/",
         "domain" => "localhost", // Change this to your domain when deploying
-        "secure" => false,        // Ensures it's only sent over HTTPS
+        "secure" => true,        // Ensures it's only sent over HTTPS
         "httponly" => true,      // Prevents JavaScript access
         "samesite" => "Lax"      // Prevents CSRF attacks
     ]);

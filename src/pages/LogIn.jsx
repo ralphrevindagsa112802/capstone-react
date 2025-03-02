@@ -18,7 +18,7 @@ const Login = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch("http://localhost/yappari-coffee-bar-api/api/login.php", {
+      const response = await fetch("http://localhost/capstone-react/api/login.php", {
         method: "POST",
         credentials: "include", // ✅ Ensures session cookie is sent
         headers: {

@@ -17,7 +17,7 @@ const UserHistory = () => {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost/yappari-coffee-bar-api/api/check_user_session.php", {
+    fetch("http://localhost/capstone-react/api/check_user_session.php", {
         credentials: "include", // ✅ Sends session cookie
     })
     .then((res) => res.json())
@@ -31,7 +31,7 @@ const UserHistory = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost/yappari-coffee-bar-api/api/getOrder.php?orderId=${orderId}`)
+      .get(`http://localhost/capstone-react/api/getOrder.php?orderId=${orderId}`)
       .then((response) => {
         if (response.data.error) {
           setError(response.data.error);

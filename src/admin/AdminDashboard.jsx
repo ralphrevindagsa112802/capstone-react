@@ -27,7 +27,7 @@ const AdminDashboard = () => {
     const [dropdownOpen, setDropdownOpen] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost/yappari-coffee-bar-api/api/check_admin_session.php", {
+        fetch("http://localhost/capstone-react/api/check_admin_session.php", {
             credentials: "include", // ✅ Sends session cookie
         })
         .then((res) => res.json())
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
 
     const handleLogout = async () => {
         try {
-            await fetch("http://localhost/yappari-coffee-bar-api/api/admin_logout.php", {
+            await fetch("http://localhost/capstone-react/api/admin_logout.php", {
                 method: "POST",
                 credentials: "include",
             });

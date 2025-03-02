@@ -1,8 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider} from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom'
 import './index.css'
 import { CartProvider } from "./context/CartContext";
+import { useState, useEffect } from "react";
 
 
 import Home from './pages/Home';
@@ -28,8 +29,40 @@ import AdminDashboard from './admin/AdminDashboard'
 import AdminMenu from './admin/AdminMenu'
 import AdminFeedback from './admin/AdminFeedback'
 
-import UserRequireAuth from './components/UserRequireAuth'
-import AdminRequireAuth from './components/AdminRequireAuth'
+const RequireAuth = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost/capstone-react/api/check_admin_session.php", {
+      credentials: "include", // ✅ Sends session cookie
+    })
+      .then((res) => res.json())
+      .then((data) => setIsAuthenticated(data.success))
+      .catch(() => setIsAuthenticated(false));
+  }, []);
+
+  if (isAuthenticated === null) return <p>Loading...</p>; // ✅ Avoids flickering
+
+  return isAuthenticated ? children : navigate("/admin/login");
+};
+
+const UserRequireAuth = ({ children }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+      credentials: "include", // ✅ Sends session cookie
+    })
+      .then((res) => res.json())
+      .then((data) => setIsAuthenticated(data.success))
+      .catch(() => setIsAuthenticated(false));
+  }, []);
+
+  if (isAuthenticated === null) return <p>Loading...</p>; // ✅ Avoids flickering
+
+  return isAuthenticated ? children : navigate("/login");
+};
 
 
 const router = createBrowserRouter([{
@@ -106,15 +139,15 @@ const router = createBrowserRouter([{
   errorElement: <NotFound/>,
 }, { 
   path: '/admin/dashboard', 
-  element: <AdminRequireAuth><AdminDashboard /></AdminRequireAuth>, 
+  element: <RequireAuth><AdminDashboard /></RequireAuth>, 
   errorElement: <NotFound/> 
 },{ 
   path: '/admin/menu', 
-  element: <AdminRequireAuth><AdminMenu /></AdminRequireAuth>, 
+  element: <RequireAuth><AdminMenu /></RequireAuth>, 
   errorElement: <NotFound/> 
 }, {
   path: '/admin/feedback',
-  element: <AdminRequireAuth><AdminFeedback/></AdminRequireAuth>,
+  element: <RequireAuth><AdminFeedback/></RequireAuth>,
   errorElement: <NotFound/>
 }, { 
   path: '/admin/logout', 

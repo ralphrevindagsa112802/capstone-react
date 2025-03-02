@@ -20,7 +20,7 @@ export const CartProvider = ({children}) => {
 
   const logoutUser = async () => {
       try {
-        await fetch("http://localhost/yappari-coffee-bar-api/api/logout.php", {
+        await fetch("http://localhost/capstone-react/api/logout.php", {
             method: "POST",
             credentials: "include",
         });
