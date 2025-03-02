@@ -1,6 +1,6 @@
 <?php
 session_start();
-header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Origin: https://capstone-react-nine.vercel.app");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -46,8 +46,8 @@ if ($admin && password_verify($admin_password, $admin["admin_password"])) {
     setcookie("PHPSESSID", session_id(), [
         "expires" => 0,
         "path" => "/",
-        "domain" => "localhost",
-        "secure" => false, // Change to `true` if using HTTPS
+        "domain" => "https://capstone-react-nine.vercel.app",
+        "secure" => true, // Change to `true` if using HTTPS
         "httponly" => true,
         "samesite" => "Lax"
     ]);
