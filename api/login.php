@@ -2,7 +2,7 @@
 session_start();
 include 'db.php';
 
-header("Access-Control-Allow-Origin: https://capstone-react-nine.vercel.app");
+header("Access-Control-Allow-Origin: https://yappari-coffee-bar.vercel.app");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -36,7 +36,7 @@ if ($user && password_verify($password, $user["password"])) {
     setcookie("PHPSESSID", session_id(), [
         "expires" => 0,
         "path" => "/",
-        "domain" => "https://capstone-react-nine.vercel.app", // Change this to your domain when deploying
+        "domain" => "https://yappari-coffee-bar.vercel.app", // Change this to your domain when deploying
         "secure" => true,        // Ensures it's only sent over HTTPS
         "httponly" => true,      // Prevents JavaScript access
         "samesite" => "Lax"      // Prevents CSRF attacks
