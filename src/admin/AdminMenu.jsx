@@ -43,7 +43,7 @@ const AdminMenu = () => {
 
     try {
         const response = await axios.post(
-            "http://localhost/capstone-react/api/updateAvailability.php",
+            "http://localhost/yappari-coffee-bar-api/api/updateAvailability.php",
             {
                 food_id: id,
                 size: size.toLowerCase(), // ✅ Ensure lowercase match
@@ -79,7 +79,7 @@ const AdminMenu = () => {
 
   //get menu
   useEffect(() => {
-    axios.get("http://localhost/capstone-react/api/getMenuItems.php")
+    axios.get("http://localhost/yappari-coffee-bar-api/api/getMenuItems.php")
       .then((response) => {
         if (response.data.success) { // ✅ Ensure `success` is checked
           setMenuItems(response.data.data); // ✅ Access `data`
@@ -111,7 +111,7 @@ const AdminMenu = () => {
 
   const handleLogout = async () => {
     try {
-        await fetch("http://localhost/capstone-react/api/admin_logout.php", {
+        await fetch("http://localhost/yappari-coffee-bar-api/api/admin_logout.php", {
             method: "POST",
             credentials: "include",
         });
@@ -186,7 +186,7 @@ const AdminMenu = () => {
         if (editingFoodId) {
             data.append("food_id", editingFoodId);
             response = await axios.post(
-                "http://localhost/capstone-react/api/updateProduct.php",
+                "http://localhost/yappari-coffee-bar-api/api/updateProduct.php",
                 data,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -195,7 +195,7 @@ const AdminMenu = () => {
             );
         } else {
             response = await axios.post(
-                "http://localhost/capstone-react/api/add_product.php",
+                "http://localhost/yappari-coffee-bar-api/api/add_product.php",
                 data,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -236,7 +236,7 @@ const AdminMenu = () => {
     if (confirmDelete) {
       try {
         const response = await fetch(
-          "http://localhost/capstone-react/api/delete_food.php",
+          "http://localhost/yappari-coffee-bar-api/api/delete_food.php",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

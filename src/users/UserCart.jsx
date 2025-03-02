@@ -11,7 +11,7 @@ const UserCart = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("http://localhost/capstone-react/api/check_user_session.php", {
+        fetch("http://localhost/yappari-coffee-bar-api/api/check_user_session.php", {
             credentials: "include", // ✅ Sends session cookie
         })
         .then((res) => res.json())
