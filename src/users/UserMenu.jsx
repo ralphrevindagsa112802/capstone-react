@@ -14,7 +14,7 @@ const UserMenu = () => {
     const [selectedCategory, setSelectedCategory] = useState("All"); // Track selected food item
 
     useEffect(() => {
-        fetch("http://localhost/yappari-coffee-bar-api/api/check_user_session.php", {
+        fetch("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/check_user_session.php", {
             credentials: "include", // ✅ Sends session cookie
         })
         .then((res) => res.json())
@@ -27,7 +27,7 @@ const UserMenu = () => {
       }, [navigate]);
 
     useEffect(() => {
-        axios.get(`http://localhost/yappari-coffee-bar-api/api/getMenuItems.php?category=${selectedCategory}`)
+        axios.get(`https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/getMenuItems.php?category=${selectedCategory}`)
             .then(response => {
                 if (response.data.success) {
                     setFoodItems(response.data.data);

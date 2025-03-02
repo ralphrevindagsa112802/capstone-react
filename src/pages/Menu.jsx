@@ -11,7 +11,7 @@ const PublicMenu = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost/yappari-coffee-bar-api/api/getMenuItems.php?category=${selectedCategory}`)
+    axios.get(`https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/getMenuItems.php?category=${selectedCategory}`)
       .then(response => {
         if (response.data.success) {
           setFoodItems(response.data.data);

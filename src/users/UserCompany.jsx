@@ -42,7 +42,7 @@ const UserCompany = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      fetch("http://localhost/yappari-coffee-bar-api/api/check_user_session.php", {
+      fetch("https://yappari-coffee-bar-system.free.nf/yappari-coffee-bar-api/api/check_user_session.php", {
           credentials: "include", // ✅ Sends session cookie
       })
       .then((res) => res.json())
