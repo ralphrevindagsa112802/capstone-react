@@ -31,26 +31,17 @@ const Login = () => {
     try {
         const data = JSON.parse(text); // ✅ Parse JSON
         
+        Swal.fire({
+          title: 'Success!',
+          text: `Welcome back, ${data.user.f_name} ${data.user.l_name}!`,
+          icon: 'success',
+          timer: 2000,
+        }).then(() => {
+          setTimeout(() => {
+            navigate("/user/home")
+          }, 500);
+        })
     
-          if (data.success && data.user) {
-              sessionStorage.setItem("id", data.user.id); 
-              sessionStorage.setItem("user_name", data.user.username);
-              sessionStorage.setItem("f_name", data.user.f_name);
-              sessionStorage.setItem("l_name", data.user.l_name);
-      
-              Swal.fire({
-                title: 'Success!',
-                text: `Welcome back, ${data.user.f_name} ${data.user.l_name}!`,
-                icon: 'success',
-                timer: 2000,
-              }).then(() => {
-                setTimeout(() => {
-                  navigate("/user/home")
-                }, 500);
-              })
-          } else {
-              setError(data.error || "Login failed");
-          }
         } catch (error) {
             console.error("JSON Parse Error:", error);
             setError("Server response was not valid JSON");
