@@ -17,51 +17,23 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
   
-    try {
       const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/login", {
-        method: "POST",
-        credentials: "include", // ✅ Ensures session cookie is sent
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(formData),
-    });
-    
-    const text = await response.text(); // ✅ Read raw response
-    
-    try {
-        const data = JSON.parse(text); // ✅ Parse JSON
-        
-    
-          if (data.success && data.user) {
-              sessionStorage.setItem("user_id", data.user.id); 
-              sessionStorage.setItem("user_name", data.user.username);
-              sessionStorage.setItem("f_name", data.user.f_name);
-              sessionStorage.setItem("l_name", data.user.l_name);
-      
-              Swal.fire({
-                title: 'Success!',
-                text: `Welcome back, ${data.user.f_name} ${data.user.l_name}!`,
-                icon: 'success',
-                timer: 2000,
-              }).then(() => {
-                setTimeout(() => {
-                  navigate("/user/home")
-                }, 500);
-              })
-          } else {
-              setError(data.error || "Login failed");
-          }
-        } catch (error) {
-            console.error("JSON Parse Error:", error);
-            setError("Server response was not valid JSON");
-        }    
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+      });
 
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Failed to connect to server");
-    }
+      const data = await response.json();
+
+      if (data.success) {
+          sessionStorage.setItem("user_id", JSON.stringify(data.id));
+          sessionStorage.setItem("username", JSON.stringify(data.username));
+          sessionStorage.setItem("f_name", JSON.stringify(data.f_name));
+          sessionStorage.setItem("l_name", JSON.stringify(data.l_name));
+          navigate("/home"); // Redirect after login
+      } else {
+          alert(data.error);
+      }  
   };  
   
 
