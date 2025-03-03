@@ -28,7 +28,7 @@ const Home = () => {
             {/**3a404d ffcfdb 09090a*/}
 
             <button
-              className="mt-6 mb-6 bg-[#1C359A] text-sm font-semibold text-[#1C359A] py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
+              className="mt-6 mb-6 bg-[#ffffff] text-sm font-semibold text-[#1C359A] py-3 px-10 rounded-full shadow-lg hover:bg-[#1C359A] hover:text-[#ffffff] cursor-pointer">
               ORDER NOW
             </button>
 
@@ -48,7 +48,7 @@ const Home = () => {
         </section>
 
         <section className="relative bg-white w-full h-auto flex flex-col justify-center items-center text-center py-6 z-10">
-          <div className="text-4xl sm:text-5xl font-black text-[#1C359A]"> Welcome to Yappari!</div>
+          <div className="text-4xl sm:text-5xl font-black text-[#1C359A]"> Welcome to Yappari !</div>
           <div className="lines mt-4">
             <div className="line"></div>
             <div className="line"></div>

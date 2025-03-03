@@ -46,7 +46,7 @@ const UserHome = () => {
 
              
               <button
-                className="mt-6 mb-6 bg-[#ffffff] text-sm font-semibold text-[#1C359A] py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
+                className="mt-6 mb-6 bg-[#ffffff] text-sm font-semibold text-[#1C359A] py-3 px-10 rounded-full shadow-lg  hover:bg-[#1C359A] hover:text-[#ffffff] cursor-pointer">
                 ORDER NOW
               </button>
 
