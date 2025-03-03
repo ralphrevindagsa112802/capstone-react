@@ -17,6 +17,25 @@ export const CartProvider = ({children}) => {
       window.removeEventListener("storage", handleSessionChange); // ✅ Cleanup event listener
     };
   }, []);
+
+  const logoutUser = async () => {
+      try {
+        await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/logout ", {
+            method: "POST",
+            credentials: "include",
+        });
+        
+        sessionStorage.removeItem("user_id"); // ✅ Remove user session
+        sessionStorage.removeItem("user_name");
+        sessionStorage.removeItem("f_name");
+        sessionStorage.removeItem("l_name");
+        localStorage.removeItem("cartItems_guest"); // ✅ Remove guest cart
+        setUserId(null);
+        setCartItems([]); // ✅ Clear cart
+    } catch (error) {
+        console.error("Logout failed:", error);
+    }
+  };
   
   
 
@@ -92,7 +111,7 @@ export const CartProvider = ({children}) => {
   
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, setCartItems }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, setCartItems, logoutUser }}>
       {children}
     </CartContext.Provider>
   );
