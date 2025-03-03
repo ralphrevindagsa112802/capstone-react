@@ -38,34 +38,42 @@ const UserNavbar = () => {
   // Fetch user data from the backend
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = sessionStorage.getItem("user_id");
-      if (!user) {
-        console.log("User not logged in");
-        return;
-      }
-
-      try {
-        const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/getUser", {
-          method: "GET",
-          headers: {
-            "Authorization": user.user_id, // ✅ Send user ID as Authorization header
-          },
-        });
-
-        const data = await response.json();
-        if (data.success) {
-          console.log(`Welcome, ${data.user.f_name} ${data.user.l_name}`);
-          setUser(data.user); // Store user data in state
-        } else {
-          console.log("User not logged in");
+        const storedUser = sessionStorage.getItem("user");
+        if (!storedUser) {
+            console.log("User not logged in");
+            return;
         }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
+
+        const user = JSON.parse(storedUser); // ✅ Get user object
+        if (!user.id) {
+            console.log("No user ID found in session storage");
+            return;
+        }
+
+        try {
+            const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/getUser", {
+                method: "GET",
+                headers: {
+                    "Authorization": user.id, // ✅ Send user ID in the request
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                console.log(`Welcome, ${data.user.f_name} ${data.user.l_name}`);
+                setUser(data.user); // ✅ Store user data in state
+            } else {
+                console.log("User not logged in");
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
     };
 
     fetchUserData();
   }, []);
+
 
   //notification
   // Fetch order notifications from API
