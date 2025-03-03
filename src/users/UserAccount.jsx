@@ -19,19 +19,6 @@ const UserAccount = () => {
     profile_pic: '',
   });
 
-  useEffect(() => {
-    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
-        credentials: "include", // ✅ Sends session cookie
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        if (!data.success) {
-            navigate("/login");
-        }
-    })
-    .catch(() => navigate("/login"));
-  }, [navigate]);
-
   //edit password
 
   // State for password change

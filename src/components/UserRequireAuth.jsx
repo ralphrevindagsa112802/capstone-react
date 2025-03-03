@@ -2,29 +2,37 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserRequireAuth = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(null);
-    const navigate = useNavigate();
-  
-    useEffect(() => {
-      fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session", {
-        credentials: "include", // ✅ Sends session cookie
-      })
-        .then((res) => res.json())
-        .then((data) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let isMounted = true; // ✅ Prevent state updates on unmounted components
+
+    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session", {
+      credentials: "include", // ✅ Sends session cookie
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted) {
           setIsAuthenticated(data.success);
           if (!data.success) {
-            navigate("/login"); // ✅ Move navigation inside useEffect
+            setTimeout(() => navigate("/login"), 100); // ✅ Slight delay to avoid flicker
           }
-        })
-        .catch(() => {
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
           setIsAuthenticated(false);
-          navigate("/login");
-        });
-    }, [navigate]); // ✅ Add navigate as a dependency
-  
-    if (isAuthenticated === null) return <p>Loading...</p>; // ✅ Prevent flickering
-  
-    return isAuthenticated ? children : null; // ✅ Don't navigate in render
-  };
-  
-  export default UserRequireAuth;
+          setTimeout(() => navigate("/login"), 100);
+        }
+      });
+
+    return () => { isMounted = false; }; // ✅ Cleanup function
+  }, [navigate]); 
+
+  if (isAuthenticated === null) return <p>Loading...</p>; // ✅ Prevent flickering
+
+  return isAuthenticated ? children : null;
+};
+
+export default UserRequireAuth;

@@ -14,19 +14,6 @@ const UserStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Track modal state
 
   useEffect(() => {
-    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
-        credentials: "include", // ✅ Sends session cookie
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        if (!data.success) {
-            navigate("/login");
-        }
-    })
-    .catch(() => navigate("/login"));
-  }, [navigate]);
-
-  useEffect(() => {
     axios.get(`https://blueviolet-vulture-695342.hostingersite.com/api/getOrder ?orderId=${orderId}`)
       .then(response => {
         if (response.data.error) {

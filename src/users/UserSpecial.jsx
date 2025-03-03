@@ -5,19 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 const UserSpecial = () => {
   const navigate = useNavigate();
-  
-  useEffect(() => {
-      fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
-          credentials: "include", // ✅ Sends session cookie
-      })
-      .then((res) => res.json())
-      .then((data) => {
-          if (!data.success) {
-              navigate("/login");
-          }
-      })
-      .catch(() => navigate("/login"));
-    }, [navigate]);
 
   return (
     <div className="md-overflow-y-hidden bg-[#DCDEEA]">

@@ -7,7 +7,6 @@ import { FaUser, FaSignOutAlt } from "react-icons/fa";
 const UserNavbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const navigate = useNavigate();
   const { logoutUser } = useContext(CartContext);
   const dropdownRef = useRef(null);
   const [user, setUser] = useState(null);
@@ -22,19 +21,6 @@ const UserNavbar = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);
   };
-
-  useEffect(() => {
-    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
-      credentials: "include", // ✅ Sends session cookie
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.success) {
-          navigate("/login");
-        }
-      })
-      .catch(() => navigate("/login"));
-  }, [navigate]);
 
   // Close dropdown if clicking outside
   useEffect(() => {

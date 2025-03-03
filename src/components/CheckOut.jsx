@@ -4,25 +4,13 @@ import axios from "axios";
 import { CartContext } from "../context/CartContext"; // Import Cart Context
 
 const CheckOut = () => {
-  const navigate = useNavigate();
   const { setCartItems } = useContext(CartContext); // Clear cart after checkout
   const [cartItems, setCartItemsState] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [shippingMethod, setShippingMethod] = useState("delivery");
   const [user, setUser] = useState({ name: "", address: "" });
 
-  useEffect(() => {
-    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
-        credentials: "include", // ✅ Sends session cookie
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        if (!data.success) {
-            navigate("/login");
-        }
-    })
-    .catch(() => navigate("/login"));
-  }, [navigate]);
+
 
   useEffect(() => {
     // Load cart from local storage

@@ -7,24 +7,11 @@ import { CartContext } from "../context/CartContext"; // Import context
 import MenuPopup from "../components/MenuPopUp"; // Import the new popup component
 
 const UserMenu = () => {
-    const navigate = useNavigate();
     const { cartItems, addToCart } = useContext(CartContext); // Use context
     const [foodItems, setFoodItems] = useState([]);
     const [selectedFood, setSelectedFood] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("All"); // Track selected food item
 
-    useEffect(() => {
-        fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
-            credentials: "include", // ✅ Sends session cookie
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            if (!data.success) {
-                navigate("/login");
-            }
-        })
-        .catch(() => navigate("/login"));
-      }, [navigate]);
 
     useEffect(() => {
         axios.get(`https://blueviolet-vulture-695342.hostingersite.com/api/getMenuItems ?category=${selectedCategory}`)

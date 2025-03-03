@@ -45,7 +45,7 @@ try {
             "domain" => "https://yappari-coffee-bar.vercel.app", // Change for production
             "secure" => true,        // Ensure it's only sent over HTTPS
             "httponly" => true,      // Prevent JavaScript access
-            "samesite" => "Lax"      // Prevent CSRF attacks
+            "samesite" => "None"     // Prevent CSRF attacks
         ]);
 
         echo json_encode([
