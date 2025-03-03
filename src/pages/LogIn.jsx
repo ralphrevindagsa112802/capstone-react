@@ -20,8 +20,10 @@ const Login = () => {
     try {
       const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/login", {
         method: "POST",
+        credentials: "include", // ✅ Ensures session cookie is sent
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Accept": "application/json"
         },
         body: JSON.stringify(formData),
     });

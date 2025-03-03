@@ -38,18 +38,10 @@ const UserNavbar = () => {
   // Fetch user data from the backend
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = JSON.parse(sessionStorage.getItem("user"));
-      if (!user) {
-        console.log("User not logged in");
-        return;
-      }
-
       try {
-        const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/getUser", {
+        const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/getUser ", {
           method: "GET",
-          headers: {
-            "Authorization": user.id, // ✅ Send user ID as Authorization header
-          },
+          credentials: "include", // Ensures session cookies are sent
         });
 
         const data = await response.json();
