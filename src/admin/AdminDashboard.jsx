@@ -27,7 +27,7 @@ const AdminDashboard = () => {
     const [dropdownOpen, setDropdownOpen] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost/capstone-react/api/check_admin_session.php", {
+        fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_admin_session ", {
             credentials: "include", // ✅ Sends session cookie
         })
         .then((res) => res.json())
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
 
     const handleLogout = async () => {
         try {
-            await fetch("http://localhost/capstone-react/api/admin_logout.php", {
+            await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/admin_logout ", {
                 method: "POST",
                 credentials: "include",
             });

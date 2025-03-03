@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 
 
 const UserHistory = () => {
-  const navigate = useNavigate();
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,22 +15,10 @@ const UserHistory = () => {
   const [feedback, setFeedback] = useState("");
   const [comment, setComment] = useState("");
 
-  useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_user_session.php", {
-        credentials: "include", // ✅ Sends session cookie
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        if (!data.success) {
-            navigate("/login");
-        }
-    })
-    .catch(() => navigate("/login"));
-  }, [navigate]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost/capstone-react/api/getOrder.php?orderId=${orderId}`)
+      .get(`https://blueviolet-vulture-695342.hostingersite.com/api/getOrder ?orderId=${orderId}`)
       .then((response) => {
         if (response.data.error) {
           setError(response.data.error);

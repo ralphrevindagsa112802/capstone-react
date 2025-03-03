@@ -11,7 +11,7 @@ const AdminLogin = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch("http://localhost/capstone-react/api/admin_login.php", {
+      const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/admin_login ", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

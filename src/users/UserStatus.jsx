@@ -14,20 +14,7 @@ const UserStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Track modal state
 
   useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_user_session.php", {
-        credentials: "include", // ✅ Sends session cookie
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        if (!data.success) {
-            navigate("/login");
-        }
-    })
-    .catch(() => navigate("/login"));
-  }, [navigate]);
-
-  useEffect(() => {
-    axios.get(`http://localhost/capstone-react/api/getOrder.php?orderId=${orderId}`)
+    axios.get(`https://blueviolet-vulture-695342.hostingersite.com/api/getOrder ?orderId=${orderId}`)
       .then(response => {
         if (response.data.error) {
           setError(response.data.error);
@@ -41,7 +28,7 @@ const UserStatus = () => {
 
   // Function to cancel order
   const handleCancelOrder = () => {
-    axios.post(`http://localhost/capstone-react/  api/cancelOrder.php`, { orderId })
+    axios.post(`https://blueviolet-vulture-695342.hostingersite.com/  api/cancelOrder `, { orderId })
       .then(response => {
         if (response.data.success) {
           setOrder(prevOrder => ({ ...prevOrder, order_status: "Cancelled" }));
@@ -55,7 +42,7 @@ const UserStatus = () => {
 
   // Function to mark order as received
   const handleOrderReceived = () => {
-    axios.post(`http://localhost/capstone-react/api/orderReceived.php`, { orderId })
+    axios.post(`https://blueviolet-vulture-695342.hostingersite.com/api/orderReceived `, { orderId })
       .then(response => {
         if (response.data.success) {
           setOrder(prevOrder => ({ ...prevOrder, order_status: "Received" }));

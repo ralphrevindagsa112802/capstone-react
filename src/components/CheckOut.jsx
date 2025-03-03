@@ -4,25 +4,13 @@ import axios from "axios";
 import { CartContext } from "../context/CartContext"; // Import Cart Context
 
 const CheckOut = () => {
-  const navigate = useNavigate();
   const { setCartItems } = useContext(CartContext); // Clear cart after checkout
   const [cartItems, setCartItemsState] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [shippingMethod, setShippingMethod] = useState("delivery");
   const [user, setUser] = useState({ name: "", address: "" });
 
-  useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_user_session.php", {
-        credentials: "include", // ✅ Sends session cookie
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        if (!data.success) {
-            navigate("/login");
-        }
-    })
-    .catch(() => navigate("/login"));
-  }, [navigate]);
+
 
   useEffect(() => {
     // Load cart from local storage
@@ -33,7 +21,7 @@ const CheckOut = () => {
     setTotalAmount(storedTotal);
 
     // Fetch user details from API
-    axios.get("http://localhost/capstone-react/api/getUserOrderDetails.php", { withCredentials: true })
+    axios.get("https://blueviolet-vulture-695342.hostingersite.com/api/getUserOrderDetails ", { withCredentials: true })
       .then(response => {
         if (response.data.success) {
           setUser({ name: response.data.name, address: response.data.address, phone: response.data.phone });
@@ -65,7 +53,7 @@ const CheckOut = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost/capstone-react/api/submitOrders.php", // ✅ Use correct API
+        "https://blueviolet-vulture-695342.hostingersite.com/api/submitOrders ", // ✅ Use correct API
         requestData,
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );

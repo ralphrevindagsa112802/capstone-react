@@ -6,21 +6,6 @@ import { Mail, MapPin, Phone, Facebook, Instagram } from "lucide-react";
 import Swal from 'sweetalert2';
 
 const UserContact = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-      fetch("http://localhost/capstone-react/api/check_user_session.php", {
-          credentials: "include", // ✅ Sends session cookie
-      })
-      .then((res) => res.json())
-      .then((data) => {
-          if (!data.success) {
-              navigate("/login");
-          }
-      })
-
-      .catch(() => navigate("/login"));
-    }, [navigate]);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",

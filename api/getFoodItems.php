@@ -2,7 +2,7 @@
 header('Content-Type: application/json'); // Set response header to JSON
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 include 'db.php'; // Include the database connection
 

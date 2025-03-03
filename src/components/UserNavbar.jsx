@@ -7,7 +7,6 @@ import { FaUser, FaSignOutAlt } from "react-icons/fa";
 const UserNavbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const navigate = useNavigate();
   const { logoutUser } = useContext(CartContext);
   const dropdownRef = useRef(null);
   const [user, setUser] = useState(null);
@@ -22,19 +21,6 @@ const UserNavbar = () => {
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);
   };
-
-  useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_user_session.php", {
-      credentials: "include", // ✅ Sends session cookie
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.success) {
-          navigate("/login");
-        }
-      })
-      .catch(() => navigate("/login"));
-  }, [navigate]);
 
   // Close dropdown if clicking outside
   useEffect(() => {
@@ -54,7 +40,7 @@ const UserNavbar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost/capstone-react/api/getUser.php", {
+        const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/getUser ", {
           method: "GET",
           credentials: "include", // Ensures session cookies are sent
         });
@@ -78,7 +64,7 @@ const UserNavbar = () => {
   // Fetch order notifications from API
   const fetchNotifications = async () => {
     try {
-      const response = await fetch("http://localhost/your_project/get_order_notifications.php", {
+      const response = await fetch("http://localhost/your_project/get_order_notifications ", {
         credentials: "include", // Ensures session data is sent
       });
       const data = await response.json();

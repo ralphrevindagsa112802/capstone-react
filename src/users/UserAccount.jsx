@@ -19,19 +19,6 @@ const UserAccount = () => {
     profile_pic: '',
   });
 
-  useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_user_session.php", {
-        credentials: "include", // ✅ Sends session cookie
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        if (!data.success) {
-            navigate("/login");
-        }
-    })
-    .catch(() => navigate("/login"));
-  }, [navigate]);
-
   //edit password
 
   // State for password change
@@ -49,7 +36,7 @@ const UserAccount = () => {
 
   /*fetch user 
   useEffect(() => {
-    fetch('http://localhost/capstone-react/api/fetch_user.php', { // Adjust API URL if needed
+    fetch('https://blueviolet-vulture-695342.hostingersite.com/api/fetch_user ', { // Adjust API URL if needed
       credentials: 'include',
     })
       .then(response => response.json())
@@ -67,7 +54,7 @@ const UserAccount = () => {
 
   
   useEffect(() => {
-    fetch('http://localhost/capstone-react/api/getUser.php', {
+    fetch('https://blueviolet-vulture-695342.hostingersite.com/api/getUser ', {
       credentials: 'include',
     })
       .then(response => response.json())
@@ -108,7 +95,7 @@ const UserAccount = () => {
       return;
     }
 
-    fetch("http://localhost/capstone-react/api/update_user.php", {
+    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/update_user ", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -159,7 +146,7 @@ const UserAccount = () => {
     const formData = new FormData();
     formData.append("profile_pic", selectedFile);
 
-    fetch("http://localhost/capstone-react/api/upload_profile.php", {
+    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/upload_profile ", {
       method: "POST",
       credentials: "include",
       body: formData,
@@ -193,7 +180,7 @@ const UserAccount = () => {
     }
 
     try{
-      fetch('http://localhost/capstone-react/api/change_password.php', {
+      fetch('https://blueviolet-vulture-695342.hostingersite.com/api/change_password ', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -242,7 +229,7 @@ const UserAccount = () => {
             ) : userData.profile_pic ? (
               // ✅ Show profile picture (Blur if editing)
               <img
-                src={`http://localhost/capstone-react/api/${userData.profile_pic}`}
+                src={`https://blueviolet-vulture-695342.hostingersite.com/api/${userData.profile_pic}`}
                 alt="Profile"
                 className={`w-full h-full rounded-full object-cover transition ${isEditing ? "blur-md" : ""
                   }`}
