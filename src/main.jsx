@@ -24,6 +24,7 @@ import UserStatus from './users/UserStatus'
 import UserCart from './users/UserCart'
 import UserHistory from './users/UserHistory'
 import CheckOut from './components/CheckOut'
+import Payment from './components/Payment'
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
 import AdminMenu from './admin/AdminMenu'
@@ -133,6 +134,10 @@ const router = createBrowserRouter([{
   path: '/user/checkout',
   element: <UserRequireAuth><CheckOut /></UserRequireAuth>,
   errorElement: <NotFound/>,
+},  {
+  path: '/user/payment',
+  element: <UserRequireAuth><Payment /></UserRequireAuth>,
+  errorElement: <NotFound/>,  
 }, {
   path: '/admin/login',
   element: <AdminLogin />,
