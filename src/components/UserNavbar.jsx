@@ -38,13 +38,7 @@ const UserNavbar = () => {
   // Fetch user data from the backend
   useEffect(() => {
     const fetchUserData = async () => {
-        const storedUser = sessionStorage.getItem("user");
-        if (!storedUser) {
-            console.log("User not logged in");
-            return;
-        }
-
-        const user = JSON.parse(storedUser); // ✅ Get user object
+        const user = sessionStorage.getItem("id"); // ✅ Get user object
         if (!user.id) {
             console.log("No user ID found in session storage");
             return;
