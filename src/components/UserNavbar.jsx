@@ -38,7 +38,7 @@ const UserNavbar = () => {
   // Fetch user data from the backend
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = JSON.parse(sessionStorage.getItem("user"));
+      const user = JSON.parse(sessionStorage.getItem("user_id"));
       if (!user) {
         console.log("User not logged in");
         return;
