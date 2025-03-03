@@ -5,7 +5,7 @@ const UserRequireAuth = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const user = sessionStorage.getItem("user_id");
+        const user = sessionStorage.getItem("user");
 
         if (!user) {
             navigate("/login");
