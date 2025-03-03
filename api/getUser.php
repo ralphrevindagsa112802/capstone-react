@@ -1,31 +1,37 @@
 <?php
-session_start();
-include 'db.php';
+include __DIR__ . "/db.php";
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-if (!isset($_SESSION["user_id"])) {
-    echo json_encode(["success" => false, "message" => "Unauthorized: Login required"]);
+// ✅ Get the Authorization header from the request
+$headers = getallheaders();
+if (!isset($headers["Authorization"])) {
+    echo json_encode(["success" => false, "message" => "Unauthorized: No token provided"]);
     exit();
 }
 
-$user_id = $_SESSION["user_id"];
+// ✅ Extract user ID from the Authorization header (frontend must send it)
+$user_id = intval($headers["Authorization"]);
 
-$stmt = $conn->prepare("SELECT id, username, f_name, l_name, email, phone, address, profile_pic FROM users WHERE id=?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-
-if ($user) {
-    echo json_encode(["success" => true, "user" => $user]);
-} else {
-    echo json_encode(["success" => false, "message" => "User not found"]);
+if (!$user_id) {
+    echo json_encode(["success" => false, "message" => "Invalid user ID"]);
+    exit();
 }
 
-$stmt->close();
-$conn->close();
+try {
+    // ✅ Fetch user details
+    $stmt = $pdo->prepare("SELECT id, username, f_name, l_name, email, phone, address, profile_pic FROM users WHERE id = :user_id");
+    $stmt->execute([":user_id" => $user_id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+        echo json_encode(["success" => true, "user" => $user]);
+    } else {
+        echo json_encode(["success" => false, "message" => "User not found"]);
+    }
+} catch (PDOException $e) {
+    echo json_encode(["success" => false, "error" => "Database error: " . $e->getMessage()]);
+}
 ?>
