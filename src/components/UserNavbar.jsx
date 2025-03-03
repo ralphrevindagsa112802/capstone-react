@@ -7,7 +7,6 @@ import { FaUser, FaSignOutAlt } from "react-icons/fa";
 const UserNavbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const { logoutUser } = useContext(CartContext);
   const dropdownRef = useRef(null);
   const [user, setUser] = useState(null);
   const location = useLocation();
@@ -100,6 +99,16 @@ const UserNavbar = () => {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
+
+  const handleLogout = () => {
+      sessionStorage.removeItem("user_id"); // ✅ Remove user session
+        sessionStorage.removeItem("user_name");
+        sessionStorage.removeItem("f_name");
+        sessionStorage.removeItem("l_name");
+        localStorage.removeItem("cartItems_guest"); // ✅ Remove guest cart
+        setUserId(null);
+        setCartItems([]); // ✅ Clear cart
+  }
 
 
   return (
@@ -204,7 +213,7 @@ const UserNavbar = () => {
                 </div>
                 <Link to="/user/account" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Account</Link>
                 <Link to={{ pathname: '/user/cart', state: { cartItems } }} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">My Cart</Link>
-                <Link to="/" onClick={logoutUser} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</Link>
+                <Link to="/" onClick={handleLogout} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log Out</Link>
               </div>
             )}
           </div>
