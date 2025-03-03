@@ -27,6 +27,8 @@ export const CartProvider = ({children}) => {
         
         sessionStorage.removeItem("user_id"); // ✅ Remove user session
         sessionStorage.removeItem("user_name");
+        sessionStorage.removeItem("f_name");
+        sessionStorage.removeItem("l_name");
         localStorage.removeItem("cartItems_guest"); // ✅ Remove guest cart
         setUserId(null);
         setCartItems([]); // ✅ Clear cart
