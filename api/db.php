@@ -1,5 +1,5 @@
 <?php
-$host = "blueviolet-vulture-695342.hostingersite.com";
+$host = "localhost";
 $dbname = "u580700656_yappari";
 $username = "u580700656_yapadmin";
 $password = "]hVQ3n8Kc18";

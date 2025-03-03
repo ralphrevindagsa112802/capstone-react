@@ -28,7 +28,7 @@ const SignIn = () => {
 
     try {
       const response = await fetch(
-        "https://blueviolet-vulture-695342.hostingersite.com/api/signup ",
+        "https://blueviolet-vulture-695342.hostingersite.com/api/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

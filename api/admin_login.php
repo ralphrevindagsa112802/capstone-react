@@ -41,8 +41,8 @@ try {
         setcookie("PHPSESSID", session_id(), [
             "expires" => 0,
             "path" => "/",
-            "domain" => "localhost", // Change for production
-            "secure" => false, // Change to `true` if using HTTPS
+            "domain" => "https://yappari-coffee-bar.vercel.app", // Change for production
+            "secure" => true, // Change to `true` if using HTTPS
             "httponly" => true,
             "samesite" => "Lax"
         ]);
