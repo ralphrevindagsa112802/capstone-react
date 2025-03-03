@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import UserNavbar from '../components/UserNavbar'
 import Footer from '../components/Footer'
+import '../css/Home.css'
 
 
 const UserHome = () => {
@@ -27,25 +28,25 @@ const UserHome = () => {
         <UserNavbar></UserNavbar>
        
        
-        <main className="mt-32 bg-[#ffcfdb]"> 
+        <main className="mt-32 bg-[#DCDEEA]"> 
           <section className="">
             <img src="" alt="" />
 
             <div className="header flex flex-col items-center text-center py-8 relative">
               
-              <div className="text-[#000000] text-sm flex justify-center w-full space-x-[290px]">
+              <div className="text-[#1C359A] text-sm flex justify-center w-full space-x-[290px]">
                 <div>No Lines, Just Good Coffee</div>
                 <div>Monday - Sunday 10:00 AM - 2:00 AM</div>
               </div>
 
               <div className="title">
-                <div className="text-4xl sm:text-5xl font-black text-[#3a404d] mb-2">Brewed Fresh, Ready to Go</div>
-                <div className="text-3xl sm:text-4xl font-black text-[#3a404d]">Anytime, Anywhere!</div>
+                <div className="text-4xl sm:text-5xl font-black text-[#1C359A] mb-2">Brewed Fresh, Ready to Go</div>
+                <div className="text-3xl sm:text-4xl font-black text-[#000000]">Anytime, Anywhere!</div>
               </div>
 
              
               <button
-                className="mt-6 mb-6 bg-[#ffffff] text-sm font-semibold text-black py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
+                className="mt-6 mb-6 bg-[#ffffff] text-sm font-semibold text-[#1C359A] py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
                 ORDER NOW
               </button>
 
@@ -65,7 +66,7 @@ const UserHome = () => {
           </section>
 
           <section className="relative bg-white w-full h-auto flex flex-col justify-center items-center text-center py-6 z-10">
-            <div className="text-4xl sm:text-5xl font-black text-[#09090a]"> Welcome to Yappari!</div>
+            <div className="text-4xl sm:text-5xl font-black text-[#1C359A]"> Welcome to Yappari!</div>
             <div className="lines mt-4">
               <div className="line"></div>
               <div className="line"></div>

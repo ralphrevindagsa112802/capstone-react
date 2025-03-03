@@ -13,6 +13,10 @@ const UserNavbar = () => {
   const [user, setUser] = useState(null);
   const location = useLocation();
   const cartItems = location.state?.cartItems || [];
+  const [isNotificationOpen, setNotificationOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const notificationRef = useRef(null);
+
 
   // Function to toggle dropdown
   const toggleDropdown = () => {
@@ -21,15 +25,15 @@ const UserNavbar = () => {
 
   useEffect(() => {
     fetch("http://localhost/capstone-react/api/check_user_session.php", {
-        credentials: "include", // ✅ Sends session cookie
+      credentials: "include", // ✅ Sends session cookie
     })
-    .then((res) => res.json())
-    .then((data) => {
+      .then((res) => res.json())
+      .then((data) => {
         if (!data.success) {
-            navigate("/login");
+          navigate("/login");
         }
-    })
-    .catch(() => navigate("/login"));
+      })
+      .catch(() => navigate("/login"));
   }, [navigate]);
 
   // Close dropdown if clicking outside
@@ -69,6 +73,48 @@ const UserNavbar = () => {
 
     fetchUserData();
   }, []);
+
+  //notification
+  // Fetch order notifications from API
+  const fetchNotifications = async () => {
+    try {
+      const response = await fetch("http://localhost/your_project/get_order_notifications.php", {
+        credentials: "include", // Ensures session data is sent
+      });
+      const data = await response.json();
+      if (!data.error) {
+        setNotifications(data);
+      }
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
+
+  // Fetch notifications when component mounts & auto-refresh every 10 seconds
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 10000); // Refresh every 10s
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
+  // Toggle notification dropdown
+  const toggleNotification = (event) => {
+    event.stopPropagation();
+    setNotificationOpen((prev) => !prev);
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setNotificationOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
 
   return (
     <nav className="bg-white shadow-md fixed top-0 z-50 w-full">
@@ -116,7 +162,7 @@ const UserNavbar = () => {
               <Link to="/user/company" className="border-l-3 border-black pl-3 uppercase font-light text-sm">Company</Link>
               <Link to="/user/special" className="border-l-3 border-black pl-3 uppercase font-light text-sm">Special</Link>
               <Link to="/user/contact" className="border-l-3 border-black pl-3 uppercase font-light text-sm">Contact</Link>
-              <hr className="border border-black w-full"/>
+              <hr className="border border-black w-full" />
               <div className="flex flex-col gap-6 w-full h-full items-center justify-center">
                 <div className="flex flex-row justify-center items-center gap-4">
                   <img src="../img/user.png" className="w-6 h-6" alt="" />
@@ -136,7 +182,8 @@ const UserNavbar = () => {
         <div className=" gap-5 items-center hidden md:flex">
           {/* Notification Button */}
           <div className="relative">
-            <button className="w-8 h-8 bg-[#1C359A] rounded-full flex items-center justify-center shadow-md hover:bg-blue-700 transition">
+            <button onClick={toggleNotification}
+              className="w-8 h-8 bg-[#1C359A] rounded-full flex items-center justify-center shadow-md hover:bg-blue-700 transition cursor-pointer">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                   d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 7.165 7 8.388 7 10v4c0 .217-.072.42-.196.58L5 17h5m5 0a3.001 3.001 0 01-6 0m6 0H9" />
@@ -177,7 +224,27 @@ const UserNavbar = () => {
           </div>
         </div>
 
-
+        {/* Notification Panel */}
+        {isNotificationOpen && (
+          <div ref={notificationRef} className="absolute top-24 right-36 w-80 bg-white shadow-lg rounded-lg border border-gray-200 z-50">
+            <div className="p-4 border-b border-gray-400 flex justify-between items-center">
+              <span className="font-semibold">Order Notifications</span>
+              <Link to="/user/status" className="text-[#1C359A] text-sm">See more...</Link>
+            </div>
+            <div className="max-h-60 overflow-y-auto">
+              {notifications.length > 0 ? (
+                notifications.map((notification) => (
+                  <div key={notification.order_id} className="p-4 border-b">
+                    <span className="font-semibold">{notification.status}</span>
+                    <p className="text-sm text-gray-600">{notification.message}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="p-4 text-gray-500 text-center">No new notifications</p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
 
