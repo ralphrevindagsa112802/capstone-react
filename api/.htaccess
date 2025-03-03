@@ -1,0 +1,13 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Allow requests to existing files and directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirect all requests to index.php (or the main API handler)
+RewriteRule ^(.*)$ index.php?route=$1 [QSA,L]
+
+# Remove .php extension from URLs
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9} /(.*)\.php HTTP/
+RewriteRule ^(.*)\.php$ /$1 [R=301,L]

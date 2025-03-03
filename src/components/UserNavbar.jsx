@@ -24,7 +24,7 @@ const UserNavbar = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
       credentials: "include", // ✅ Sends session cookie
     })
       .then((res) => res.json())
@@ -54,7 +54,7 @@ const UserNavbar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost/capstone-react/api/getUser.php", {
+        const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/getUser ", {
           method: "GET",
           credentials: "include", // Ensures session cookies are sent
         });
@@ -78,7 +78,7 @@ const UserNavbar = () => {
   // Fetch order notifications from API
   const fetchNotifications = async () => {
     try {
-      const response = await fetch("http://localhost/your_project/get_order_notifications.php", {
+      const response = await fetch("http://localhost/your_project/get_order_notifications ", {
         credentials: "include", // Ensures session data is sent
       });
       const data = await response.json();

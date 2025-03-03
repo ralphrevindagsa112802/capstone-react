@@ -17,7 +17,7 @@ const UserHistory = () => {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
         credentials: "include", // ✅ Sends session cookie
     })
     .then((res) => res.json())
@@ -31,7 +31,7 @@ const UserHistory = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost/capstone-react/api/getOrder.php?orderId=${orderId}`)
+      .get(`https://blueviolet-vulture-695342.hostingersite.com/api/getOrder ?orderId=${orderId}`)
       .then((response) => {
         if (response.data.error) {
           setError(response.data.error);

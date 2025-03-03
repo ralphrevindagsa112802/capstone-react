@@ -28,7 +28,7 @@ const SignIn = () => {
 
     try {
       const response = await fetch(
-        "http://localhost/capstone-react/api/signup.php",
+        "https://blueviolet-vulture-695342.hostingersite.com/api/signup ",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

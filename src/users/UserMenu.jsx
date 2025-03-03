@@ -14,7 +14,7 @@ const UserMenu = () => {
     const [selectedCategory, setSelectedCategory] = useState("All"); // Track selected food item
 
     useEffect(() => {
-        fetch("http://localhost/capstone-react/api/check_user_session.php", {
+        fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
             credentials: "include", // ✅ Sends session cookie
         })
         .then((res) => res.json())
@@ -27,7 +27,7 @@ const UserMenu = () => {
       }, [navigate]);
 
     useEffect(() => {
-        axios.get(`http://localhost/capstone-react/api/getMenuItems.php?category=${selectedCategory}`)
+        axios.get(`https://blueviolet-vulture-695342.hostingersite.com/api/getMenuItems ?category=${selectedCategory}`)
             .then(response => {
                 if (response.data.success) {
                     setFoodItems(response.data.data);

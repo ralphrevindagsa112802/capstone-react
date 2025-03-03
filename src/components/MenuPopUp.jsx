@@ -6,7 +6,7 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
         credentials: "include", // ✅ Sends session cookie
     })
     .then((res) => res.json())

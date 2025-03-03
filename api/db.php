@@ -1,17 +1,13 @@
 <?php
-$host = "localhost"; // Change this if your database is hosted elsewhere
-$username = "root"; // Your MySQL username (default is 'root' for XAMPP)
-$password = ""; // Your MySQL password (default is empty for XAMPP)
-$database = "yappari"; // Change this to your actual database name
+$host = "blueviolet-vulture-695342.hostingersite.com";
+$dbname = "u580700656_yappari";
+$username = "u580700656_yapadmin";
+$password = "]hVQ3n8Kc18";
 
-// Create connection
-$conn = new mysqli($host, $username, $password, $database);
-
-// Check connection
-if ($conn->connect_error) {
-    die(json_encode(["success" => false, "message" => "Database connection failed: " . $conn->connect_error]));
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die(json_encode(["error" => "Database connection failed: " . $e->getMessage()]));
 }
-
-// Set charset to UTF-8
-$conn->set_charset("utf8mb4");
 ?>

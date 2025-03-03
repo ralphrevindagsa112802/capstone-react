@@ -34,7 +34,7 @@ const RequireAuth = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_admin_session.php", {
+    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_admin_session ", {
       credentials: "include", // ✅ Sends session cookie
     })
       .then((res) => res.json())
@@ -51,7 +51,7 @@ const UserRequireAuth = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost/capstone-react/api/check_user_session.php", {
+    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session ", {
       credentials: "include", // ✅ Sends session cookie
     })
       .then((res) => res.json())

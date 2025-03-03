@@ -18,7 +18,7 @@ const Login = () => {
     e.preventDefault();
   
     try {
-      const response = await fetch("http://localhost/capstone-react/api/login.php", {
+      const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/login ", {
         method: "POST",
         credentials: "include", // ✅ Ensures session cookie is sent
         headers: {

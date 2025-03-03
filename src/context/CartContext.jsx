@@ -20,7 +20,7 @@ export const CartProvider = ({children}) => {
 
   const logoutUser = async () => {
       try {
-        await fetch("http://localhost/capstone-react/api/logout.php", {
+        await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/logout ", {
             method: "POST",
             credentials: "include",
         });

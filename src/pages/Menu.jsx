@@ -11,7 +11,7 @@ const PublicMenu = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost/capstone-react/api/getMenuItems.php?category=${selectedCategory}`)
+    axios.get(`https://blueviolet-vulture-695342.hostingersite.com/api/getMenuItems ?category=${selectedCategory}`)
       .then(response => {
         if (response.data.success) {
           setFoodItems(response.data.data);
