@@ -1,40 +1,45 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
-  const handleConfirmPayment = () => {
-    // Simulating saving order details (Replace with API call)
-    fetch("https://yappari-coffee-bar.shop/api/save-order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: 1, // Replace with actual logged-in user ID
-        status: "Paid",
-        paymentMethod: "GCash",
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          alert("Payment confirmed! Your order is now being processed.");
-          // Redirect or update order status here
-        } else {
-          alert("Payment failed. Please try again.");
-        }
-      })
-      .catch((error) => console.error("Error:", error));
+  const navigate = useNavigate();
+
+  const handleConfirmPayment = async () => {
+    try {
+      const response = await fetch("https://yappari-coffee-bar.shop/api/save-order.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: "Paid",
+          paymentMethod: "GCash",
+        }),
+        credentials: "include", // ✅ Ensure session cookies are sent
+      });
+
+      const data = await response.json();
+      console.log("API Response:", data); // ✅ Log the response for debugging
+
+      if (data.success) {
+        alert("Payment confirmed! Your order is now being processed.");
+        navigate(`/user-status?order_id=${data.order_id}`);
+      } else {
+        alert("Payment failed: " + data.message); // ✅ Show API error message
+      }
+    } catch (error) {
+      console.error("Fetch Error:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
 
   return (
     <div className="relative flex flex-col items-center min-h-screen h-screen bg-gray-100">
       {/* Header */}
-      <div className="w-full bg-[#1C359A] text-white flex items-center justify-between h-42 p-6">
+      <div className="w-full bg-[#022DB8] text-white flex items-center justify-between h-42 p-6">
         <button className="text-sm">&lt; back</button>
         <div className="flex-1 text-center text-xl font-bold">GCash</div>
       </div>
 
-      {/* QR Code Section Overlapping Header */}
+      {/* QR Code Section */}
       <div className="relative bg-white shadow-lg rounded-lg p-8 text-center w-[60%] max-w-xl mt-[-50px] z-10">
         <p className="text-blue-600 font-medium">A safer way to pay!</p>
         <p className="text-gray-600 mb-4">

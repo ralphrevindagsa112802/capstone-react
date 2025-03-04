@@ -9,7 +9,8 @@ const CheckOut = () => {
   const [cartItems, setCartItemsState] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [shippingMethod, setShippingMethod] = useState("delivery");
-  const [user, setUser] = useState({ name: "", address: "" });
+  const [user, setUser] = useState({ name: "", address: "", phone: "" });
+  const [paymentMethod, setPaymentMethod] = useState("Gcash"); // ✅ Added state for payment method
 
 
 
@@ -33,11 +34,18 @@ const CheckOut = () => {
       .catch(error => console.error("Error fetching user details:", error));
   }, []);
 
+  //handling payment gcash or paymaya
   const handlePayment = async () => {
     if (cartItems.length === 0) {
       alert("Your cart is empty!");
       return;
     }
+
+    if (paymentMethod === "Gcash") {
+      navigate("/user/payment");
+      return;
+    }
+
 
     const requestData = {
       items: cartItems?.map((item) => ({
@@ -47,7 +55,7 @@ const CheckOut = () => {
         quantity: item.quantity,
       })),
       shipping_method: shippingMethod,
-      payment_method: "Gcash",
+      payment_method: paymentMethod, // ✅ Sends selected payment method
     };
 
     console.log("Sending Order Data:", requestData); // ✅ Debug the request being sent
@@ -113,6 +121,44 @@ const CheckOut = () => {
                   </label>
                 </div>
               </div>
+
+
+              {/* Payment Method Section */}
+              <div className="bg-gray-100 p-6 rounded-lg shadow-md w-full mt-6">
+                <h2 className="text-xl font-bold text-blue-900">Payment details</h2>
+                <p className="text-black mt-1 font-bold">Payment method</p>
+
+                {/* ✅ Payment Options */}
+                <div className="mt-4 border-2 border-[#1C359A] rounded-lg p-4 flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    name="payment-method"
+                    value="Gcash"
+                    checked={paymentMethod === "Gcash"}
+                    onChange={() => setPaymentMethod("Gcash")}
+                  />
+                  <span className="text-lg font-semibold">Gcash</span>
+                  <img src="../img/gcash-icon.png" alt="Gcash" className="w-6 h-6" />
+                </div>
+
+                <div className="mt-4 border-2 border-[#1C359A] rounded-lg p-4 flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    name="payment-method"
+                    value="PayMaya"
+                    checked={paymentMethod === "PayMaya"}
+                    onChange={() => setPaymentMethod("PayMaya")}
+                  />
+                  <span className="text-lg font-semibold">PayMaya</span>
+                  <img src="../img/paymaya-icon.png" alt="PayMaya" className="w-6 h-6" />
+                </div>
+
+                <button className="mt-3 bg-blue-800 text-white w-full py-2 rounded-lg text-lg font-bold">
+                  Edit
+                </button>
+              </div>
+
+
             </div>
 
             <div>
