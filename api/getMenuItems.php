@@ -1,11 +1,10 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://admin.yappari-coffee-bar.shop");
+header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
 
-include 'db.php'; // Ensure this connects using PDO
+include __DIR__ . "/db.php"; // Ensure db.php uses PDO
 
 $category = isset($_GET['category']) ? $_GET['category'] : "All";
 
@@ -22,7 +21,6 @@ try {
 
     $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Convert availability (1 = Available, 0 = Not Available)
     foreach ($menuItems as &$item) {
         $item["availability_small"] = ($item["availability_small"] === "Available") ? "Available" : "Not Available";
         $item["availability_medium"] = ($item["availability_medium"] === "Available") ? "Available" : "Not Available";

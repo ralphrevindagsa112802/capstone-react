@@ -33,7 +33,7 @@ if (!$data || !isset($data["food_id"]) || !isset($data["size"]) || !isset($data[
 
 $food_id = intval($data["food_id"]);
 $size = strtolower(trim($data["size"]));
-$availability = ($data["availability"] == "Available") ? "Available" : "Not Available"; // ✅ Ensure correct format
+$availability = ($data["availability"] === "Available") ? "Available" : "Not Available"; // ✅ Ensure correct format
 
 // ✅ Get Category of the Food Item
 try {
