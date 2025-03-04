@@ -24,10 +24,10 @@ try {
 
     // Convert availability (1 = Available, 0 = Not Available)
     foreach ($menuItems as &$item) {
-        $item["availability_small"] = $item["availability_small"] == 1 ? "Available" : "Not Available";
-        $item["availability_medium"] = $item["availability_medium"] == 1 ? "Available" : "Not Available";
-        $item["availability_large"] = $item["availability_large"] == 1 ? "Available" : "Not Available";
-    }
+        $item["availability_small"] = ($item["availability_small"] === "Available") ? "Available" : "Not Available";
+        $item["availability_medium"] = ($item["availability_medium"] === "Available") ? "Available" : "Not Available";
+        $item["availability_large"] = ($item["availability_large"] === "Available") ? "Available" : "Not Available";
+    }    
 
     echo json_encode(["success" => true, "data" => $menuItems]);
 
