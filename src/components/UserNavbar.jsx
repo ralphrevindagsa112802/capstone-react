@@ -40,7 +40,7 @@ const UserNavbar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/getUser ", {
+        const response = await fetch("https://yappari-coffee-bar.shop/api/getUser", {
           method: "GET",
           credentials: "include", // Ensures session cookies are sent
         });
@@ -64,7 +64,7 @@ const UserNavbar = () => {
   // Fetch order notifications from API
   const fetchNotifications = async () => {
     try {
-      const response = await fetch("http://localhost/your_project/get_order_notifications ", {
+      const response = await fetch("https://yappari-coffee-bar.shop/api/get_order_notifications", {
         credentials: "include", // Ensures session data is sent
       });
       const data = await response.json();

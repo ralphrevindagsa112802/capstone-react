@@ -43,7 +43,7 @@ const AdminMenu = () => {
 
     try {
         const response = await axios.post(
-            "https://blueviolet-vulture-695342.hostingersite.com/api/updateAvailability ",
+            "https://yappari-coffee-bar.shop/api/updateAvailability",
             {
                 food_id: id,
                 size: size.toLowerCase(), // ✅ Ensure lowercase match
@@ -79,7 +79,7 @@ const AdminMenu = () => {
 
   //get menu
   useEffect(() => {
-    axios.get("https://blueviolet-vulture-695342.hostingersite.com/api/getMenuItems ")
+    axios.get("https://yappari-coffee-bar.shop/api/getMenuItems ")
       .then((response) => {
         if (response.data.success) { // ✅ Ensure `success` is checked
           setMenuItems(response.data.data); // ✅ Access `data`
@@ -111,7 +111,7 @@ const AdminMenu = () => {
 
   const handleLogout = async () => {
     try {
-        await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/admin_logout ", {
+        await fetch("https://yappari-coffee-bar.shop/api/admin_logout ", {
             method: "POST",
             credentials: "include",
         });
@@ -186,7 +186,7 @@ const AdminMenu = () => {
         if (editingFoodId) {
             data.append("food_id", editingFoodId);
             response = await axios.post(
-                "https://blueviolet-vulture-695342.hostingersite.com/api/updateProduct ",
+                "https://yappari-coffee-bar.shop/api/updateProduct ",
                 data,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -195,7 +195,7 @@ const AdminMenu = () => {
             );
         } else {
             response = await axios.post(
-                "https://blueviolet-vulture-695342.hostingersite.com/api/add_product ",
+                "https://yappari-coffee-bar.shop/api/add_product ",
                 data,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -236,7 +236,7 @@ const AdminMenu = () => {
     if (confirmDelete) {
       try {
         const response = await fetch(
-          "https://blueviolet-vulture-695342.hostingersite.com/api/delete_food ",
+          "https://yappari-coffee-bar.shop/api/delete_food ",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

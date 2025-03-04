@@ -21,7 +21,7 @@ const CheckOut = () => {
     setTotalAmount(storedTotal);
 
     // Fetch user details from API
-    axios.get("https://blueviolet-vulture-695342.hostingersite.com/api/getUserOrderDetails ", { withCredentials: true })
+    axios.get("https://yappari-coffee-bar.shop/api/getUserOrderDetails", { withCredentials: true })
       .then(response => {
         if (response.data.success) {
           setUser({ name: response.data.name, address: response.data.address, phone: response.data.phone });
@@ -53,7 +53,7 @@ const CheckOut = () => {
 
     try {
       const response = await axios.post(
-        "https://blueviolet-vulture-695342.hostingersite.com/api/submitOrders ", // ✅ Use correct API
+        "https://yappari-coffee-bar.shop/api/submitOrders", // ✅ Use correct API
         requestData,
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );

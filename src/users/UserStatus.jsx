@@ -14,7 +14,7 @@ const UserStatus = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Track modal state
 
   useEffect(() => {
-    axios.get(`https://blueviolet-vulture-695342.hostingersite.com/api/getOrder ?orderId=${orderId}`)
+    axios.get(`https://yappari-coffee-bar.shop/api/getOrder?orderId=${orderId}`)
       .then(response => {
         if (response.data.error) {
           setError(response.data.error);
@@ -28,7 +28,7 @@ const UserStatus = () => {
 
   // Function to cancel order
   const handleCancelOrder = () => {
-    axios.post(`https://blueviolet-vulture-695342.hostingersite.com/  api/cancelOrder `, { orderId })
+    axios.post(`https://yappari-coffee-bar.shop/api/cancelOrder`, { orderId })
       .then(response => {
         if (response.data.success) {
           setOrder(prevOrder => ({ ...prevOrder, order_status: "Cancelled" }));
@@ -42,7 +42,7 @@ const UserStatus = () => {
 
   // Function to mark order as received
   const handleOrderReceived = () => {
-    axios.post(`https://blueviolet-vulture-695342.hostingersite.com/api/orderReceived `, { orderId })
+    axios.post(`https://yappari-coffee-bar.shop/api/orderReceived`, { orderId })
       .then(response => {
         if (response.data.success) {
           setOrder(prevOrder => ({ ...prevOrder, order_status: "Received" }));

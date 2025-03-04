@@ -6,7 +6,7 @@ const AdminRequireAuth = ({ children }) => {
     const navigate = useNavigate();
   
     useEffect(() => {
-      fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_admin_session", {
+      fetch("https://yappari-coffee-bar.shop/api/check_admin_session", {
         credentials: "include", // ✅ Sends session cookie
       })
         .then((res) => res.json())

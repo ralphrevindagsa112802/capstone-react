@@ -1,42 +1,37 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
-include 'db.php'; // Ensure this connects to your database
+include 'db.php'; // Ensure this connects using PDO
 
-$category = isset($_GET['category']) ? $_GET['category'] : "All"; // Get category from URL
+$category = isset($_GET['category']) ? $_GET['category'] : "All";
 
-if ($category === "All") {
-    $query = "SELECT * FROM food";
-    $stmt = $conn->prepare($query);
-} else {
-    $query = "SELECT * FROM food WHERE category = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $category);
+try {
+    if ($category === "All") {
+        $query = "SELECT * FROM food";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+    } else {
+        $query = "SELECT * FROM food WHERE category = ?";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$category]);
+    }
+
+    $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Convert availability (1 = Available, 0 = Not Available)
+    foreach ($menuItems as &$item) {
+        $item["availability_small"] = $item["availability_small"] == 1 ? "Available" : "Not Available";
+        $item["availability_medium"] = $item["availability_medium"] == 1 ? "Available" : "Not Available";
+        $item["availability_large"] = $item["availability_large"] == 1 ? "Available" : "Not Available";
+    }
+
+    echo json_encode(["success" => true, "data" => $menuItems]);
+
+} catch (PDOException $e) {
+    echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
 }
-
-$stmt->execute();
-$result = $stmt->get_result();
-$menuItems = [];
-
-while ($row = $result->fetch_assoc()) {
-    $menuItems[] = [
-        "food_id" => $row["food_id"],
-        "food_name" => $row["food_name"],
-        "category" => $row["category"],
-        "description" => $row["description"],
-        "price_small" => $row["price_small"],
-        "price_medium" => $row["price_medium"],
-        "price_large" => $row["price_large"],
-        "availability_small" => $row["availability_small"] ?: "Not Available",
-        "availability_medium" => $row["availability_medium"] ?: "Not Available",
-        "availability_large" => $row["availability_large"] ?: "Not Available",
-        "image_path" => $row["image_path"]
-    ];
-}
-
-echo json_encode(["success" => true, "data" => $menuItems]);
-
-$stmt->close();
-$conn->close();
 ?>

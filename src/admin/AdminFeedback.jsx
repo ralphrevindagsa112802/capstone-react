@@ -9,7 +9,7 @@ const AdminFeedback = () => {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const response = await axios.get("https://blueviolet-vulture-695342.hostingersite.com/api/get_feedback "); // Adjust API URL
+        const response = await axios.get("https://yappari-coffee-bar.shop/api/get_feedback"); // Adjust API URL
         setFeedbackData(response.data);
       } catch (error) {
         console.error("Error fetching feedback:", error);
@@ -20,7 +20,7 @@ const AdminFeedback = () => {
 
   const handleLogout = async () => {
     try {
-        await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/admin_logout ", {
+        await fetch("https://yappari-coffee-bar.shop/api/admin_logout", {
             method: "POST",
             credentials: "include",
         });

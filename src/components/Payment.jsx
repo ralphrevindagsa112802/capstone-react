@@ -3,7 +3,7 @@ import React from "react";
 const Payment = () => {
   const handleConfirmPayment = () => {
     // Simulating saving order details (Replace with API call)
-    fetch("http://localhost/your-api/save-order.php", {
+    fetch("https://yappari-coffee-bar.shop/api/save-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

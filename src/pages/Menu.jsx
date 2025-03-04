@@ -11,16 +11,19 @@ const PublicMenu = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`https://blueviolet-vulture-695342.hostingersite.com/api/getMenuItems ?category=${selectedCategory}`)
+    axios
+      .get(`https://yappari-coffee-bar.shop/api/getMenuItems?category=${selectedCategory}`)
       .then(response => {
+        console.log("Raw API Response:", response); // Logs the full response
         if (response.data.success) {
+          console.log("Menu Data:", response.data.data); // Logs the menu items
           setFoodItems(response.data.data);
         } else {
-          console.error(response.data.message);
+          console.error("API Error:", response.data.message);
         }
       })
-      .catch(error => console.error(error));
-  }, [selectedCategory]);
+      .catch(error => console.error("Fetch Error:", error));
+  }, [selectedCategory]);  
 
   // Handler for Add to Cart
   const handleAddToCart = (food) => {

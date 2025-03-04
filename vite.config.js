@@ -5,12 +5,13 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(),],
-  build: {
-    outDir: 'dist'
-  },
   server: {
-    port: 3000,
-    open: true
-  },
-  base: "/",
+    proxy: {
+      '/api': {
+        target: 'https://yappari-coffee-bar.shop',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  }
 })

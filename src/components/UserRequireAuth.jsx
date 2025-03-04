@@ -8,7 +8,7 @@ const UserRequireAuth = ({ children }) => {
   useEffect(() => {
     let isMounted = true; // ✅ Prevent state updates on unmounted components
 
-    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/check_user_session", {
+    fetch("https://yappari-coffee-bar.shop/api/check_user_session", {
       credentials: "include", // ✅ Sends session cookie
     })
       .then((res) => res.json())

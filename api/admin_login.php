@@ -4,6 +4,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header('Content-Type: application/json');
 
 include 'db.php';
 
@@ -41,7 +42,7 @@ try {
         setcookie("PHPSESSID", session_id(), [
             "expires" => 0,
             "path" => "/",
-            "domain" => "https://yappari-coffee-bar.vercel.app", // Change for production
+            "domain" => "localhost", // Change for production
             "secure" => true, // Change to `true` if using HTTPS
             "httponly" => true,
             "samesite" => "Lax"

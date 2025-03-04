@@ -36,7 +36,7 @@ const UserAccount = () => {
 
   /*fetch user 
   useEffect(() => {
-    fetch('https://blueviolet-vulture-695342.hostingersite.com/api/fetch_user ', { // Adjust API URL if needed
+    fetch('https://yappari-coffee-bar.shop/api/fetch_user ', { // Adjust API URL if needed
       credentials: 'include',
     })
       .then(response => response.json())
@@ -54,7 +54,7 @@ const UserAccount = () => {
 
   
   useEffect(() => {
-    fetch('https://blueviolet-vulture-695342.hostingersite.com/api/getUser ', {
+    fetch('https://yappari-coffee-bar.shop/api/getUser', {
       credentials: 'include',
     })
       .then(response => response.json())
@@ -95,7 +95,7 @@ const UserAccount = () => {
       return;
     }
 
-    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/update_user ", {
+    fetch("https://yappari-coffee-bar.shop/api/update_user", {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -146,7 +146,7 @@ const UserAccount = () => {
     const formData = new FormData();
     formData.append("profile_pic", selectedFile);
 
-    fetch("https://blueviolet-vulture-695342.hostingersite.com/api/upload_profile ", {
+    fetch("https://yappari-coffee-bar.shop/api/upload_profile", {
       method: "POST",
       credentials: "include",
       body: formData,
@@ -180,7 +180,7 @@ const UserAccount = () => {
     }
 
     try{
-      fetch('https://blueviolet-vulture-695342.hostingersite.com/api/change_password ', {
+      fetch('https://yappari-coffee-bar.shop/api/change_password', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -229,7 +229,7 @@ const UserAccount = () => {
             ) : userData.profile_pic ? (
               // ✅ Show profile picture (Blur if editing)
               <img
-                src={`https://blueviolet-vulture-695342.hostingersite.com/api/${userData.profile_pic}`}
+                src={`https://yappari-coffee-bar.shop/api/${userData.profile_pic}`}
                 alt="Profile"
                 className={`w-full h-full rounded-full object-cover transition ${isEditing ? "blur-md" : ""
                   }`}

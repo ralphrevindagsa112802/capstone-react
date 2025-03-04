@@ -18,7 +18,7 @@ const UserHistory = () => {
 
   useEffect(() => {
     axios
-      .get(`https://blueviolet-vulture-695342.hostingersite.com/api/getOrder ?orderId=${orderId}`)
+      .get(`https://yappari-coffee-bar.shop/api/getOrder?orderId=${orderId}`)
       .then((response) => {
         if (response.data.error) {
           setError(response.data.error);

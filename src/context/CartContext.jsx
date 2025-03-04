@@ -20,13 +20,12 @@ export const CartProvider = ({children}) => {
 
   const logoutUser = async () => {
       try {
-        await fetch("https://blueviolet-vulture-695342.hostingersite.com/api/logout ", {
+        await fetch("https://yappari-coffee-bar.shop/api/logout", {
             method: "POST",
             credentials: "include",
         });
         
-        sessionStorage.removeItem("user_id"); // ✅ Remove user session
-        sessionStorage.removeItem("user_name");
+        sessionStorage.clear()
         localStorage.removeItem("cartItems_guest"); // ✅ Remove guest cart
         setUserId(null);
         setCartItems([]); // ✅ Clear cart

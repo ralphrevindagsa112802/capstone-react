@@ -14,7 +14,7 @@ const UserMenu = () => {
 
 
     useEffect(() => {
-        axios.get(`https://blueviolet-vulture-695342.hostingersite.com/api/getMenuItems ?category=${selectedCategory}`)
+        axios.get(`https://yappari-coffee-bar.shop/api/getMenuItems?category=${selectedCategory}`)
             .then(response => {
                 if (response.data.success) {
                     setFoodItems(response.data.data);

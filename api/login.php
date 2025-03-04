@@ -5,8 +5,9 @@ include __DIR__ . "/db.php";
 
 header("Access-Control-Allow-Origin: https://yappari-coffee-bar.vercel.app");
 header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+header('Content-Type: application/json; charset=UTF-8');
 
 // ✅ Handle CORS preflight request
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
@@ -42,7 +43,7 @@ try {
         setcookie("PHPSESSID", session_id(), [
             "expires" => 0,
             "path" => "/",
-            "domain" => "https://yappari-coffee-bar.vercel.app", // Change for production
+            "domain" => "localhost", // Change for production
             "secure" => true,        // Ensure it's only sent over HTTPS
             "httponly" => true,      // Prevent JavaScript access
             "samesite" => "None"     // Prevent CSRF attacks

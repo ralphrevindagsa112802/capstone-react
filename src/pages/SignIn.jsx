@@ -25,19 +25,26 @@ const SignIn = () => {
       setError("Passwords do not match");
       return;
     }
-
+  
     try {
-      const response = await fetch(
-        "https://blueviolet-vulture-695342.hostingersite.com/api/signup",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      const data = await response.json();
-      console.log(data); // Log the response for debugging
+      const response = await fetch("https://yappari-coffee-bar.shop/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+  
+      const text = await response.text(); // Read response as text first
+      console.log("Raw response:", text);
+  
+      let data;
+      try {
+        data = JSON.parse(text); // Try parsing JSON
+      } catch (error) {
+        console.error("Invalid JSON response:", text);
+        setError("Server error: Invalid response");
+        return;
+      }
+  
       if (data.success) {
         alert("Signup successful! You can now log in.");
         navigate("/login");
@@ -48,7 +55,7 @@ const SignIn = () => {
       console.error("Error:", error);
       setError("Failed to connect to server");
     }
-  };
+  };  
 
   return (
     <div>
