@@ -32,9 +32,9 @@ CREATE TABLE food (
     price_small DECIMAL(10,2) DEFAULT NULL,
     price_medium DECIMAL(10,2) DEFAULT NULL,
     price_large DECIMAL(10,2) DEFAULT NULL,
-    availability_small TINYINT(1) DEFAULT 0, -- 0 = Not Available, 1 = Available
-    availability_medium TINYINT(1) DEFAULT 0,
-    availability_large TINYINT(1) DEFAULT 0,
+    availability_small VARCHAR(255) DEFAULT "Not Available",
+    availability_medium VARCHAR(255) DEFAULT "Not Available",
+    availability_large VARCHAR(255) DEFAULT "Not Available",
     image_path VARCHAR(255) DEFAULT NULL,
     description TEXT NOT NULL,
     INDEX (category)

@@ -25,11 +25,6 @@ import UserCart from './users/UserCart'
 import UserHistory from './users/UserHistory'
 import CheckOut from './components/CheckOut'
 import Payment from './components/Payment'
-import AdminLogin from './admin/AdminLogin'
-import AdminDashboard from './admin/AdminDashboard'
-import AdminMenu from './admin/AdminMenu'
-import AdminFeedback from './admin/AdminFeedback'
-import AdminRequireAuth from './components/AdminRequireAuth';
 import UserRequireAuth from './components/UserRequireAuth';
 
 
@@ -105,27 +100,7 @@ const router = createBrowserRouter([{
   path: '/user/payment',
   element: <UserRequireAuth><Payment /></UserRequireAuth>,
   errorElement: <NotFound/>,  
-}, {
-  path: '/admin/login',
-  element: <AdminLogin />,
-  errorElement: <NotFound/>,
-}, { 
-  path: '/admin/dashboard', 
-  element: <AdminRequireAuth><AdminDashboard /></AdminRequireAuth>, 
-  errorElement: <NotFound/> 
-},{ 
-  path: '/admin/menu', 
-  element: <AdminRequireAuth><AdminMenu /></AdminRequireAuth>, 
-  errorElement: <NotFound/> 
-}, {
-  path: '/admin/feedback',
-  element: <AdminRequireAuth><AdminFeedback/></AdminRequireAuth>,
-  errorElement: <NotFound/>
-}, { 
-  path: '/admin/logout', 
-  element: <AdminLogin/>, 
-  errorElement: <NotFound/> 
-},]);
+}]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

@@ -1,99 +1,79 @@
 <?php
 session_start();
+include __DIR__ . "/db.php";
 
-include 'db.php';
-
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://admin.yappari-coffee-bar.shop");
 header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
+header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json');
 
-error_log("Session Data: " . print_r($_SESSION, true));
+// ✅ Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
+// ✅ Ensure admin is logged in
 if (!isset($_SESSION["admin_id"])) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Unauthorized: Admin login required",
-        "session_data" => $_SESSION // ✅ Debug: Check session data
-    ]);
+    echo json_encode(["success" => false, "message" => "Unauthorized: Admin login required"]);
     exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    error_log("POST Data: " . print_r($_POST, true));
+// ✅ Check if request is POST
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    echo json_encode(["success" => false, "message" => "Invalid request method"]);
+    exit();
+}
 
-    // ✅ Get Data from Request
-    $food_id = $_POST["food_id"] ?? null;
-    $food_name = $_POST["food_name"] ?? "";
-    $description = $_POST["description"] ?? "";
-    $category = $_POST["category"] ?? "";
-    $price_small = $_POST["price_small"] ?? null;
-    $price_medium = $_POST["price_medium"] ?? null;
-    $price_large = $_POST["price_large"] ?? null;
+// ✅ Get Data from Request
+$data = $_POST;
+$food_id = $data["food_id"] ?? null;
+$food_name = $data["food_name"] ?? "";
+$description = $data["description"] ?? "";
+$category = $data["category"] ?? "";
+$price_small = $data["price_small"] ?? null;
+$price_medium = $data["price_medium"] ?? null;
+$price_large = $data["price_large"] ?? null;
 
-    if (!$food_id || !$food_name || !$category) {
-        echo json_encode(["success" => false, "message" => "Missing required fields"]);
+if (!$food_id || !$food_name || !$category) {
+    echo json_encode(["success" => false, "message" => "Missing required fields"]);
+    exit();
+}
+
+// ✅ Handle Image Upload
+$target_file = null;
+if (!empty($_FILES["food_img"]["name"])) {
+    $image_name = time() . "_" . str_replace(" ", "_", $_FILES["food_img"]["name"]); // Prevent filename conflicts
+    $target_dir = __DIR__ . "/uploads/"; // Upload directory
+    $target_file = $target_dir . $image_name;
+
+    // ✅ Ensure directory exists
+    if (!is_dir($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
+
+    // ✅ Move uploaded file
+    if (move_uploaded_file($_FILES["food_img"]["tmp_name"], $target_file)) {
+        $target_file = "/uploads/" . $image_name; // ✅ Store relative path in DB
+    } else {
+        echo json_encode(["success" => false, "message" => "Failed to upload image"]);
         exit();
     }
+} else {
+    // ✅ Keep existing image if no new one is uploaded
+    $stmt = $pdo->prepare("SELECT image_path FROM food WHERE food_id = ?");
+    $stmt->execute([$food_id]);
+    $existing_image = $stmt->fetchColumn();
+    $target_file = $existing_image;
+}
 
-    // ✅ Handle Image Upload
-    $target_file = null;
-    if (!empty($_FILES["food_img"]["name"])) {
-        $image = $_FILES["food_img"]["name"];
-
-        // ✅ Set the correct path to React's public folder
-        $target_dir = $_SERVER["DOCUMENT_ROOT"] . "/capstone-react/public/uploads/";
-        $target_file = $target_dir . basename($_FILES["food_img"]["name"]);
-
-        // ✅ Ensure the directory exists
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true); // Create uploads folder if missing
-        }
-
-        // ✅ Fix spaces in filenames
-        $image_name = str_replace(" ", "_", $_FILES["food_img"]["name"]);
-        $target_file = $target_dir . basename($image_name);
-
-        // ✅ Move the file to React's `public/uploads/`
-        if (move_uploaded_file($_FILES["food_img"]["tmp_name"], $target_file)) {
-            error_log("File uploaded successfully: " . $target_file);
-            $target_file = "/uploads/" . basename($image_name); // Relative path for frontend
-        } else {
-            error_log("Failed to upload file: " . $_FILES["food_img"]["error"]);
-            echo json_encode(["success" => false, "message" => "Failed to upload image"]);
-            exit();
-        }
-
-
-    } else {
-        // ✅ Keep the existing image if no new one is uploaded
-        $query = "SELECT image_path FROM food WHERE food_id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("i", $food_id);
-        $stmt->execute();
-        $stmt->bind_result($existing_image);
-        $stmt->fetch();
-        $stmt->close();
-        
-        $target_file = $existing_image; // ✅ Keep existing image path
-    }
-
-    // ✅ Prepare SQL Statement
+// ✅ Update Product Data
+try {
     $query = "UPDATE food SET food_name=?, description=?, category=?, price_small=?, price_medium=?, price_large=?, image_path=? WHERE food_id=?";
-    $stmt = $conn->prepare($query);
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([$food_name, $description, $category, $price_small, $price_medium, $price_large, $target_file, $food_id]);
 
-    if (!$stmt) {
-        die(json_encode(["success" => false, "message" => "Prepare failed: " . $conn->error]));
-    }
-
-    $stmt->bind_param("sssssssi", $food_name, $description, $category, $price_small, $price_medium, $price_large, $target_file, $food_id);
-    if ($stmt->execute()) {
-        echo json_encode(["success" => true, "message" => "Product updated successfully"]);
-    } else {
-        echo json_encode(["success" => false, "message" => "Update failed: " . $stmt->error]);
-    }
-
-    $stmt->close();
+    echo json_encode(["success" => true, "message" => "Product updated successfully"]);
+} catch (PDOException $e) {
+    echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
 }
 ?>
