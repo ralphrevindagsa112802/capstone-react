@@ -1,13 +1,14 @@
 <?php
 session_start();
-include 'db.php';
+include __DIR__ . "/db.php"; // Ensure db.php uses PDO
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header('Content-Type: application/json');
+header("Content-Type: application/json");
 
+// ✅ Ensure user is logged in
 if (!isset($_SESSION["user_id"])) {
     echo json_encode(["success" => false, "message" => "Unauthorized: Login required"]);
     exit();
@@ -15,14 +16,15 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 
-$stmt = $conn->prepare("SELECT * FROM orders WHERE user_id=? ORDER BY created_at DESC");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$orders = $result->fetch_all(MYSQLI_ASSOC);
+try {
+    // ✅ Fetch all orders for the logged-in user
+    $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC");
+    $stmt->execute([$user_id]);
+    $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-echo json_encode(["success" => true, "orders" => $orders]);
+    echo json_encode(["success" => true, "orders" => $orders]);
 
-$stmt->close();
-$conn->close();
+} catch (PDOException $e) {
+    echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
+}
 ?>

@@ -23,10 +23,11 @@ export const CartProvider = ({children}) => {
         await fetch("https://yappari-coffee-bar.shop/api/logout", {
             method: "POST",
             credentials: "include",
+            headers: {"Content-Type": "application/json"},
         });
         
         sessionStorage.clear()
-        localStorage.removeItem("cartItems_guest"); // ✅ Remove guest cart
+        localStorage.clear; // ✅ Remove guest cart
         setUserId(null);
         setCartItems([]); // ✅ Clear cart
     } catch (error) {

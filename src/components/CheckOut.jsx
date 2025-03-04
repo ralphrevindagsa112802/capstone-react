@@ -4,6 +4,7 @@ import axios from "axios";
 import { CartContext } from "../context/CartContext"; // Import Cart Context
 
 const CheckOut = () => {
+  const navigate = useNavigate();
   const { setCartItems } = useContext(CartContext); // Clear cart after checkout
   const [cartItems, setCartItemsState] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);

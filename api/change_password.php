@@ -7,54 +7,58 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
 
-include 'db.php';
+include __DIR__ . "/db.php"; // Ensure db.php uses PDO
 
-// Check if the user is logged in
+// Check if user is logged in
 if (!isset($_SESSION["user_id"])) {
     echo json_encode(["success" => false, "message" => "User not logged in"]);
     exit();
 }
-$user_id = $_SESSION["user_id"]; // ✅ Get user ID from session
 
+$user_id = $_SESSION["user_id"];
+
+// Read JSON input
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!$data) {
-    die(json_encode(["success" => false, "error" => "Invalid input."]));
+if (!$data || !isset($data["current_password"]) || !isset($data["new_password"])) {
+    echo json_encode(["success" => false, "error" => "Invalid input."]);
+    exit();
 }
 
-// Get user input
-$current_password = $data["current_password"] ?? '';
-$new_password = $data["new_password"] ?? '';
+$current_password = $data["current_password"];
+$new_password = $data["new_password"];
 
-// Fetch stored password from DB
-$stmt = $conn->prepare("SELECT password FROM users WHERE ID = ?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$stmt->store_result();
-$stmt->bind_result($stored_password);
-$stmt->fetch();
+try {
+    // Fetch stored password from database
+    $stmt = $pdo->prepare("SELECT password FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$stored_password) {
-    die(json_encode(["success" => false, "error" => "User not found."]));
+    if (!$user) {
+        echo json_encode(["success" => false, "error" => "User not found."]);
+        exit();
+    }
+
+    $stored_password = $user["password"];
+
+    // Verify current password
+    if (!password_verify($current_password, $stored_password)) {
+        echo json_encode(["success" => false, "error" => "Current password is incorrect."]);
+        exit();
+    }
+
+    // Hash the new password before storing
+    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+    // Update the password in the database
+    $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+    if ($stmt->execute([$hashed_password, $user_id])) {
+        echo json_encode(["success" => true, "message" => "Password updated successfully."]);
+    } else {
+        echo json_encode(["success" => false, "error" => "Failed to update password."]);
+    }
+
+} catch (PDOException $e) {
+    echo json_encode(["success" => false, "error" => "Database error: " . $e->getMessage()]);
 }
-
-// Verify current password
-if (!password_verify($current_password, $stored_password)) {
-    die(json_encode(["success" => false, "error" => "Current password is incorrect."]));
-}
-
-// Hash the new password before storing
-$hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-
-// Update the password in the database
-$stmt = $conn->prepare("UPDATE users SET password = ? WHERE ID = ?");
-$stmt->bind_param("si", $hashed_password, $user_id);
-if ($stmt->execute()) {
-    echo json_encode(["success" => true, "message" => "Password updated successfully."]);
-} else {
-    echo json_encode(["success" => false, "error" => "Failed to update password."]);
-}
-
-$stmt->close();
-$conn->close();
 ?>

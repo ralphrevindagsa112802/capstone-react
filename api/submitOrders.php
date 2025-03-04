@@ -1,7 +1,7 @@
 <?php
 session_start(); // ✅ Start the session
 
-include 'db.php';
+include __DIR__ . "/db.php"; // Ensure db.php uses PDO
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Credentials: true");
@@ -18,27 +18,26 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = intval($_SESSION['user_id']); // ✅ Get user_id from session
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data['items'])) {
+// ✅ Validate request
+if (!isset($data['items']) || !is_array($data['items'])) {
     echo json_encode(["success" => false, "message" => "Invalid request - No items received"]);
     exit;
 }
 
 $items = $data['items'];
 
-$conn->begin_transaction();
-
 try {
+    $pdo->beginTransaction();
+
     // ✅ Insert order into orders table
-    $stmt = $conn->prepare("INSERT INTO orders (user_id, total_amount) VALUES (?, 0)");
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $order_id = $conn->insert_id;
-    $stmt->close();
+    $stmt = $pdo->prepare("INSERT INTO orders (user_id, total_amount) VALUES (?, 0)");
+    $stmt->execute([$user_id]);
+    $order_id = $pdo->lastInsertId();
 
     $total_amount = 0;
 
     // ✅ Insert items into order_items table
-    $stmt = $conn->prepare("INSERT INTO order_items (orders_id, food_id, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO order_items (orders_id, food_id, size, quantity, price) VALUES (?, ?, ?, ?, ?)");
 
     foreach ($items as $item) {
         $food_id = intval($item['food_id']);
@@ -48,24 +47,18 @@ try {
 
         $total_amount += $price * $quantity;
 
-        $stmt->bind_param("iisid", $order_id, $food_id, $size, $quantity, $price);
-        $stmt->execute();
+        $stmt->execute([$order_id, $food_id, $size, $quantity, $price]);
     }
 
-    $stmt->close();
-
     // ✅ Update total order amount
-    $stmt = $conn->prepare("UPDATE orders SET total_amount = ? WHERE orders_id = ?");
-    $stmt->bind_param("di", $total_amount, $order_id);
-    $stmt->execute();
-    $stmt->close();
+    $stmt = $pdo->prepare("UPDATE orders SET total_amount = ? WHERE orders_id = ?");
+    $stmt->execute([$total_amount, $order_id]);
 
-    $conn->commit();
+    $pdo->commit();
     echo json_encode(["success" => true, "order_id" => $order_id]);
-} catch (Exception $e) {
-    $conn->rollback();
+
+} catch (PDOException $e) {
+    $pdo->rollBack();
     echo json_encode(["success" => false, "message" => "Order submission failed: " . $e->getMessage()]);
 }
-
-$conn->close();
 ?>

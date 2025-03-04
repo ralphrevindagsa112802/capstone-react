@@ -6,25 +6,26 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
-include 'db.php';
+include __DIR__ . "/db.php"; // Ensure db.php uses PDO
 
 // ✅ Check if user is logged in
 if (!isset($_SESSION["user_id"])) {
-    die(json_encode(["success" => false, "error" => "User ID not found in session."]));
+    echo json_encode(["success" => false, "error" => "User not logged in."]);
+    exit();
 }
-$user_id = intval($_SESSION["user_id"]); // ✅ Ensure ID is an integer
 
-// ✅ Debugging: Check user ID
-file_put_contents("debug_user_id.txt", "User ID: " . $user_id . "\n");
+$user_id = intval($_SESSION["user_id"]); // ✅ Ensure ID is an integer
 
 // ✅ Check if file was uploaded
 if (!isset($_FILES["profile_pic"])) {
-    die(json_encode(["success" => false, "error" => "No file was uploaded."]));
+    echo json_encode(["success" => false, "error" => "No file was uploaded."]);
+    exit();
 }
 
 // ✅ Check for upload errors
 if ($_FILES["profile_pic"]["error"] !== UPLOAD_ERR_OK) {
-    die(json_encode(["success" => false, "error" => "File upload error: " . $_FILES["profile_pic"]["error"]]));
+    echo json_encode(["success" => false, "error" => "File upload error: " . $_FILES["profile_pic"]["error"]]);
+    exit();
 }
 
 // ✅ Set upload directory
@@ -39,23 +40,21 @@ $targetFile = "uploads/" . $filename;
 
 // ✅ Move the uploaded file
 if (!move_uploaded_file($_FILES["profile_pic"]["tmp_name"], $uploadDir . $filename)) {
-    die(json_encode(["success" => false, "error" => "Failed to move uploaded file."]));
+    echo json_encode(["success" => false, "error" => "Failed to move uploaded file."]);
+    exit();
 }
 
-// ✅ Debugging: Log SQL query before execution
-file_put_contents("debug_sql.txt", "Query: UPDATE users SET profile_pic = '$targetFile' WHERE ID = $user_id\n", FILE_APPEND);
+try {
+    // ✅ Save file path in the database
+    $query = "UPDATE users SET profile_pic = ? WHERE id = ?";
+    $stmt = $pdo->prepare($query);
 
-// ✅ Save file path in the database
-$query = "UPDATE users SET profile_pic = ? WHERE ID = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("si", $targetFile, $user_id);
-
-if ($stmt->execute()) {
-    echo json_encode(["success" => true, "profile_pic" => $targetFile]);
-} else {
-    echo json_encode(["success" => false, "error" => "Database update failed: " . $stmt->error]);
+    if ($stmt->execute([$targetFile, $user_id])) {
+        echo json_encode(["success" => true, "profile_pic" => $targetFile]);
+    } else {
+        echo json_encode(["success" => false, "error" => "Failed to update database."]);
+    }
+} catch (PDOException $e) {
+    echo json_encode(["success" => false, "error" => "Database error: " . $e->getMessage()]);
 }
-
-$stmt->close();
-$conn->close();
 ?>
