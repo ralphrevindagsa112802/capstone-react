@@ -1,33 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Payment = () => {
   const navigate = useNavigate();
+  const [orderId, setOrderId] = useState(null);
+
+  useEffect(() => {
+    // ✅ Retrieve order ID from localStorage (set during checkout)
+    const storedOrderId = localStorage.getItem("orderId");
+    if (storedOrderId) {
+      setOrderId(storedOrderId);
+    } else {
+      console.error("No order ID found in localStorage.");
+    }
+  }, []);
 
   const handleConfirmPayment = async () => {
+    if (!orderId) {
+      alert("No order found. Please try again.");
+      return;
+    }
+
     try {
       const response = await fetch("https://yappari-coffee-bar.shop/api/save-order.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          order_id: orderId,
           status: "Paid",
           paymentMethod: "GCash",
         }),
-        credentials: "include", // ✅ Ensure session cookies are sent
+        credentials: "include",
       });
 
       const data = await response.json();
-      console.log("API Response:", data); // ✅ Log the response for debugging
+      console.log("API Response:", data);
 
       if (data.success) {
         alert("Payment confirmed! Your order is now being processed.");
         navigate(`/user-status?order_id=${data.order_id}`);
       } else {
-        alert("Payment failed: " + data.message); // ✅ Show API error message
+        alert("Payment failed: " + data.message);
       }
     } catch (error) {
       console.error("Fetch Error:", error);
-      alert("An error occurred. Please try again.");
+      alert("An error occurred. Please check your connection and try again.");
     }
   };
 
