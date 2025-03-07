@@ -3,7 +3,7 @@ session_start(); // ✅ Start the session
 
 include __DIR__ . "/db.php"; // Ensure db.php uses PDO
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://yappari-coffee-bar.shop");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -25,6 +25,8 @@ if (!isset($data['items']) || !is_array($data['items'])) {
 }
 
 $items = $data['items'];
+$shipping_method = $data['shipping_method'];
+$payment_method = $data['payment_method'];
 
 try {
     $pdo->beginTransaction();
@@ -51,8 +53,8 @@ try {
     }
 
     // ✅ Update total order amount
-    $stmt = $pdo->prepare("UPDATE orders SET total_amount = ? WHERE orders_id = ?");
-    $stmt->execute([$total_amount, $order_id]);
+    $stmt = $pdo->prepare("UPDATE orders SET total_amount = ?, shipping_method = ?, payment_method = ? WHERE orders_id = ?");
+    $stmt->execute([$total_amount, $shipping_method, $payment_method, $order_id]);
 
     $pdo->commit();
     echo json_encode(["success" => true, "order_id" => $order_id]);

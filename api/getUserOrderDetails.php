@@ -22,7 +22,7 @@ $user_id = $_SESSION['user_id'];
 
 try {
     // ✅ Fetch user details
-    $stmt = $pdo->prepare("SELECT f_name, l_name, address FROM users WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT email, f_name, l_name, address, phone FROM users WHERE id = ?");
     $stmt->execute([$user_id]);
     $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -41,8 +41,9 @@ try {
     echo json_encode([
         "success" => true,
         "name" => $userData['f_name'] . " " . $userData['l_name'],
+        "phone" => $userData['phone'],
         "address" => $userData['address'],
-        "order_id" => $orderData['orders_id'] ?? null // ✅ Return `null` if no order found
+        "orders_id" => $orderData['orders_id'] ?? null // ✅ Return `null` if no order found
     ]);
 
 } catch (PDOException $e) {

@@ -8,11 +8,9 @@ const CheckOut = () => {
   const { setCartItems } = useContext(CartContext); // Clear cart after checkout
   const [cartItems, setCartItemsState] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [shippingMethod, setShippingMethod] = useState("delivery");
-  const [user, setUser] = useState({ name: "", address: "", phone: "" });
-  const [paymentMethod, setPaymentMethod] = useState("Gcash"); // ✅ Added state for payment method
-
-
+  const [shippingMethod, setShippingMethod] = useState();
+  const [user, setUser] = useState({ name: "", address: "", phone: "", order_id: "", });
+  const [paymentMethod, setPaymentMethod] = useState(); // ✅ Added state for payment method
 
   useEffect(() => {
     // Load cart from local storage
@@ -26,7 +24,7 @@ const CheckOut = () => {
     axios.get("https://yappari-coffee-bar.shop/api/getUserOrderDetails", { withCredentials: true })
       .then(response => {
         if (response.data.success) {
-          setUser({ name: response.data.name, address: response.data.address, phone: response.data.phone });
+          setUser({ name: response.data.name, address: response.data.address, phone: response.data.phone, orders_id: response.data.orders_id });
         } else {
           console.error(response.data.message);
         }
@@ -41,47 +39,11 @@ const CheckOut = () => {
       return;
     }
 
-    if (paymentMethod === "Gcash") {
+    if (paymentMethod === "GCash") {
+      localStorage.setItem("shipping_method", shippingMethod);
+      localStorage.setItem("payment_method", paymentMethod);
       navigate("/user/payment");
       return;
-    }
-
-
-    const requestData = {
-      items: cartItems?.map((item) => ({
-        food_id: item.food_id,
-        size: item.size,
-        food_price: item.food_price,
-        quantity: item.quantity,
-      })),
-      shipping_method: shippingMethod,
-      payment_method: paymentMethod, // ✅ Sends selected payment method
-    };
-
-    console.log("Sending Order Data:", requestData); // ✅ Debug the request being sent
-
-    try {
-      const response = await axios.post(
-        "https://yappari-coffee-bar.shop/api/submitOrders", // ✅ Use correct API
-        requestData,
-        { headers: { "Content-Type": "application/json" }, withCredentials: true }
-      );
-
-      console.log("Server Response:", response.data); // ✅ Debug API response
-
-      if (response.data.success) {
-        setCartItems([]); // ✅ Clear cart after order
-        localStorage.removeItem("checkoutOrder");
-        localStorage.removeItem("totalAmount");
-        alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
-        navigate("/user/cart"); // ✅ Redirect to confirmation page
-        window.location.reload();
-      } else {
-        alert("Order submission failed: " + response.data.message);
-      }
-    } catch (error) {
-      console.error("Error submitting order:", error);
-      alert("Failed to place order. Please try again.");
     }
   };
 
@@ -112,11 +74,11 @@ const CheckOut = () => {
                 <h2 className="text-xl font-bold text-blue-800 mb-4">Shipping Information</h2>
                 <div className="flex gap-4">
                   <label className="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
-                    <input type="radio" name="shipping-method" value="delivery" checked={shippingMethod === "delivery"} onChange={() => setShippingMethod("delivery")} />
+                    <input type="radio" name="shipping_method" value="Delivery" checked={shippingMethod === "Delivery"} onChange={() => setShippingMethod("Delivery")} />
                     <p className="font-semibold text-sm">Delivery</p>
                   </label>
                   <label className="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
-                    <input type="radio" name="shipping-method" value="pickup" checked={shippingMethod === "pickup"} onChange={() => setShippingMethod("pickup")} />
+                    <input type="radio" name="shipping_method" value="Pickup" checked={shippingMethod === "Pickup"} onChange={() => setShippingMethod("Pickup")} />
                     <p className="font-semibold text-sm">Pick up</p>
                   </label>
                 </div>
@@ -132,19 +94,19 @@ const CheckOut = () => {
                 <div className="mt-4 border-2 border-[#1C359A] rounded-lg p-4 flex items-center space-x-3">
                   <input
                     type="radio"
-                    name="payment-method"
-                    value="Gcash"
-                    checked={paymentMethod === "Gcash"}
-                    onChange={() => setPaymentMethod("Gcash")}
+                    name="payment_method"
+                    value="GCash"
+                    checked={paymentMethod === "GCash"}
+                    onChange={() => setPaymentMethod("GCash")}
                   />
-                  <span className="text-lg font-semibold">Gcash</span>
-                  <img src="../img/gcash-icon.png" alt="Gcash" className="w-6 h-6" />
+                  <span className="text-lg font-semibold">GCash</span>
+                  <img src="../img/gcash-icon.png" alt="GCash" className="w-6 h-6" />
                 </div>
 
                 <div className="mt-4 border-2 border-[#1C359A] rounded-lg p-4 flex items-center space-x-3">
                   <input
                     type="radio"
-                    name="payment-method"
+                    name="payment_method"
                     value="PayMaya"
                     checked={paymentMethod === "PayMaya"}
                     onChange={() => setPaymentMethod("PayMaya")}

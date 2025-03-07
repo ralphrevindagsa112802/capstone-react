@@ -1,50 +1,75 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext, } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { CartContext } from "../context/CartContext";
 
 const Payment = () => {
   const navigate = useNavigate();
-  const [orderId, setOrderId] = useState(null);
+  const { setCartItems } = useContext(CartContext); // Clear cart after checkout
+  const [cartItems, setCartItemsState] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [user, setUser] = useState({ name: "", address: "", phone: "", order_id: "", });
 
   useEffect(() => {
-    // ✅ Retrieve order ID from localStorage (set during checkout)
-    const storedOrderId = localStorage.getItem("orderId");
-    if (storedOrderId) {
-      setOrderId(storedOrderId);
-    } else {
-      console.error("No order ID found in localStorage.");
-    }
+    // Load cart from local storage
+    const storedCart = JSON.parse(localStorage.getItem("checkoutOrder")) || [];
+    const storedTotal = localStorage.getItem("totalAmount") || 0;
+
+    setCartItemsState(storedCart);
+    setTotalAmount(storedTotal);
+
+    // Fetch user details from API
+    axios.get("https://yappari-coffee-bar.shop/api/getUserOrderDetails", { withCredentials: true })
+      .then(response => {
+        if (response.data.success) {
+          setUser({ name: response.data.name, address: response.data.address, phone: response.data.phone, orders_id: response.data.orders_id });
+        } else {
+          console.error(response.data.message);
+        }
+      })
+      .catch(error => console.error("Error fetching user details:", error));
   }, []);
 
   const handleConfirmPayment = async () => {
-    if (!orderId) {
-      alert("No order found. Please try again.");
-      return;
-    }
+    const shippingMethod = localStorage.getItem("shipping_method");
+    const paymentMethod = localStorage.getItem("payment_method");
+
+    const requestData = {
+      items: cartItems?.map((item) => ({
+        food_id: item.food_id,
+        size: item.size,
+        food_price: item.food_price,
+        quantity: item.quantity,
+      })),
+      shipping_method: shippingMethod,
+      payment_method: paymentMethod, // ✅ Sends selected payment method
+    };
+
+    console.log("Sending Order Data:", requestData); // ✅ Debug the request being sent
 
     try {
-      const response = await fetch("https://yappari-coffee-bar.shop/api/save-order.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          order_id: orderId,
-          status: "Paid",
-          paymentMethod: "GCash",
-        }),
-        credentials: "include",
-      });
+      const response = await axios.post(
+        "https://yappari-coffee-bar.shop/api/submitOrders", // ✅ Use correct API
+        requestData,
+        { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      );
 
-      const data = await response.json();
-      console.log("API Response:", data);
+      console.log("Server Response:", response.data); // ✅ Debug API response
 
-      if (data.success) {
-        alert("Payment confirmed! Your order is now being processed.");
-        navigate(`/user-status?order_id=${data.order_id}`);
+      if (response.data.success) {
+        setCartItems([]); // ✅ Clear cart after order
+        localStorage.removeItem("checkoutOrder");
+        localStorage.removeItem("totalAmount");
+        localStorage.removeItem("shipping_method");
+        alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
+        navigate("/user/cart"); // ✅ Redirect to confirmation page
+        window.location.reload();
       } else {
-        alert("Payment failed: " + data.message);
+        alert("Order submission failed: " + response.data.message);
       }
     } catch (error) {
-      console.error("Fetch Error:", error);
-      alert("An error occurred. Please check your connection and try again.");
+      console.error("Error submitting order:", error);
+      alert("Failed to place order. Please try again.");
     }
   };
 
