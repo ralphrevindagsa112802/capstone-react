@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 
 
 const UserHistory = () => {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,6 +15,20 @@ const UserHistory = () => {
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [comment, setComment] = useState("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const [userData, setUserData] = useState({
+    id: '',
+    username: '',
+    f_name: '',
+    l_name: '',
+    email: '',
+    phone: '',
+    address: '',
+    profile_pic: '',
+  });
 
   useEffect(() => {
     const userId = sessionStorage.getItem("user_id");
@@ -44,6 +59,25 @@ const UserHistory = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    fetch('https://yappari-coffee-bar.shop/api/getUser', {
+        credentials: 'include',
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Fetched user data:", data); // ✅ Debugging
+            if (data.success) {
+                setUserData({
+                    ...data.user,
+                    user_id: data.user.id, // ✅ Ensures user_id is stored
+                });
+            } else {
+                console.error("Error: User ID is missing in API response.");
+            }
+        })
+        .catch(error => console.error('Error fetching user data:', error));
+  }, []);
+
   const handleFeedbackSubmit = (orderId) => {
     if (!feedback || !comment) {
       Swal.fire("Error", "Please provide a rating and comment.", "error");
@@ -71,8 +105,11 @@ const UserHistory = () => {
       Swal.fire("Error", "Failed to submit feedback. Please try again.", "error");
     });
   };
-  
-  
+
+  const handleOrderClick = (order) => {
+    setSelectedOrder(order);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="bg-[#DCDEEA] min-h-screen">
@@ -126,35 +163,68 @@ const UserHistory = () => {
          {/**Main content */}
 
 
-      <div className="container mx-auto pt-6 px-4 md:px-36 flex flex-col w-full">
-        {loading ? (
-          <p className="text-center text-gray-500">Loading...</p>
-        ) : error ? (
-          <p className="text-center text-red-500">{error}</p>
-        ) : orders.length > 0 ? (
-          orders.map((order) => (
-            <div key={order.orders_id} className="w-full mx-auto bg-white p-8 rounded-xl shadow-xl mb-4">
-              <h2 className="font-bold">Order number: {order.orders_id}</h2>
-              <p className="text-black">Date: {order.created_at}</p>
-              <p className="text-black">Total cost: ₱ {order.total_amount}</p>
-              {/* Show feedback button only if order_feedback is empty */}
-                {!order.order_feedback && (
-                  <button
-                    onClick={() => {
-                      setIsFeedbackOpen(true);
-                      setSelectedOrderId(order.orders_id);
-                    }}
-                    className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+         <div className="container mx-auto pt-6 px-4 md:px-36 flex flex-col w-full">
+            {loading ? (
+              <p className="text-center text-gray-500">Loading...</p>
+            ) : error ? (
+              <p className="text-center text-red-500">{error}</p>
+            ) : orders.length > 0 ? (
+              orders
+                .filter(order => order.order_status === "Completed" || order.order_status === "Cancelled")
+                .map((order) => (
+                  <div 
+                    key={order.orders_id} 
+                    className="w-full mx-auto bg-white p-8 rounded-xl shadow-xl mb-4 cursor-pointer"
+                    onClick={() => handleOrderClick(order)}
                   >
-                    Give Feedback
-                  </button>
-                )}
+                    <h2 className="font-bold">Order number: {order.orders_id}</h2>
+                    <p className="text-black">Date: {order.created_at}</p>
+                    <p className="text-black">Total cost: ₱ {order.total_amount}</p>
+                    {!order.order_feedback && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsFeedbackOpen(true);
+                          setSelectedOrderId(order.orders_id);
+                        }}
+                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+                      >
+                        Give Feedback
+                      </button>
+                    )}
+                  </div>
+                ))
+            ) : (
+              <p className="text-center text-gray-500">No orders found.</p>
+            )}
+          </div>
+
+          {isModalOpen && selectedOrder && (
+            <div className="fixed inset-0 flex items-center justify-center backdrop-blur-xs z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                >
+                  ✖
+                </button>
+                <h2 className="text-lg font-bold text-center text-blue-900">Order Details</h2>
+                <p className="text-black">Order Number: {selectedOrder.orders_id}</p>
+                <p className="text-black">Date: {selectedOrder.created_at}</p>
+                <p className="text-black">Total Cost: ₱ {selectedOrder.total_amount}</p>
+                <p className="text-black">Status: {selectedOrder.order_status}</p>
+                <h3 className="font-bold mt-4">Items:</h3>
+                <ul>
+                  {selectedOrder.order_items?.map((item) => (
+                    <li key={item.order_items_id} className="border-b py-2">
+                      <p className="text-black">{item.food_name} ({item.size}) - {item.quantity}x ₱{item.price}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          ))
-        ) : (
-          <p className="text-center text-gray-500">No orders found.</p>
-        )}
-      </div>
+          )}
+
       {isFeedbackOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-100">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">

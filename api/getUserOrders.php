@@ -16,10 +16,22 @@ if (!isset($_SESSION["user_id"])) {
 $user_id = $_SESSION["user_id"]; // Always use session user_id
 
 try {
+    // Fetch all orders of the logged-in user
     $stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id");
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
     $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($orders as &$order) {
+        // Fetch order items for each order
+        $stmtItems = $pdo->prepare("SELECT oi.*, f.food_name 
+                                    FROM order_items oi
+                                    JOIN food f ON oi.food_id = f.food_id
+                                    WHERE oi.orders_id = :orders_id");
+        $stmtItems->bindParam(':orders_id', $order['orders_id'], PDO::PARAM_INT);
+        $stmtItems->execute();
+        $order['order_items'] = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     echo json_encode($orders);
 } catch (PDOException $e) {

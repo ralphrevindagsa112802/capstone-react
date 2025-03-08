@@ -175,13 +175,13 @@ const UserCart = () => {
                 </div>
 
               
-<button
-    id="editProfileBtn"
-    className="md:mt-8 mt-8 md:ml-auto px-4 py-2 bg-white text-black font-bold rounded-md"
-    onClick={() => navigate("/user/account")} // ✅ Redirect to edit profile
->
-    Edit Profile
-</button>
+                <button
+                    id="editProfileBtn"
+                    className="md:mt-8 mt-8 md:ml-auto px-4 py-2 bg-white text-black font-bold rounded-md"
+                    onClick={() => navigate("/user/account")} // ✅ Redirect to edit profile
+                >
+                    Edit Profile
+                </button>
             </div>
 
             <div className="container mx-auto pt-6 px-4 md:px-36 flex flex-col md:flex-row w-full">

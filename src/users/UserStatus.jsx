@@ -3,35 +3,87 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
+import Swal from 'sweetalert2';
 
 const UserStatus = () => {
   const navigate = useNavigate();
   const { orderId } = useParams(); // Get orderId from URL params
-  const [order, setOrder] = useState(null);
+  const [orders, setOrders] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false); // Track modal state
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const [userData, setUserData] = useState({
+    id: '',
+    username: '',
+    f_name: '',
+    l_name: '',
+    email: '',
+    phone: '',
+    address: '',
+    profile_pic: '',
+  });
 
   useEffect(() => {
-    axios.get(`https://yappari-coffee-bar.shop/api/getOrder?orderId=${orderId}`)
-      .then(response => {
+    fetch('https://yappari-coffee-bar.shop/api/getUser', {
+        credentials: 'include',
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Fetched user data:", data); // ✅ Debugging
+            if (data.success) {
+                setUserData({
+                    ...data.user,
+                    user_id: data.user.id, // ✅ Ensures user_id is stored
+                });
+            } else {
+                console.error("Error: User ID is missing in API response.");
+            }
+        })
+        .catch(error => console.error('Error fetching user data:', error));
+  }, []);
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem("user_id");
+    console.log("Retrieved user_id:", userId);
+
+    if (!userId) {
+      setError("User ID not found. Please log in.");
+      setLoading(false);
+      return;
+    }
+
+    axios
+      .get(`https://yappari-coffee-bar.shop/api/getUserOrders?user_id=${userId}`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log("API Response:", response.data);
         if (response.data.error) {
           setError(response.data.error);
         } else {
-          setOrder(response.data);
+          setOrders(response.data);
         }
       })
-      .catch(err => setError("Failed to fetch order"))
+      .catch((err) => {
+        console.error("Fetch Error:", err);
+        setError("Failed to fetch orders.");
+      })
       .finally(() => setLoading(false));
-  }, [orderId]);
+  }, []);
 
   // Function to cancel order
-  const handleCancelOrder = () => {
-    axios.post(`https://yappari-coffee-bar.shop/api/cancelOrder`, { orderId })
+  const handleCancelOrder = (orderId) => {
+    axios.post(`https://yappari-coffee-bar.shop/api/cancelOrder`, { order_id: orderId })
       .then(response => {
         if (response.data.success) {
-          setOrder(prevOrder => ({ ...prevOrder, order_status: "Cancelled" }));
+          setOrders(prevOrders => prevOrders.map(order => 
+            order.orders_id === orderId ? { ...order, order_status: "Cancelled" } : order
+          ));
+          Swal.fire("Success", "Order successfully cancelled.", "success");
           setMessage("Order successfully cancelled.");
         } else {
           setMessage(response.data.error || "Failed to cancel order.");
@@ -39,13 +91,16 @@ const UserStatus = () => {
       })
       .catch(() => setMessage("Failed to cancel order."));
   };
-
+  
   // Function to mark order as received
-  const handleOrderReceived = () => {
-    axios.post(`https://yappari-coffee-bar.shop/api/orderReceived`, { orderId })
+  const handleOrderReceived = (orderId) => {
+    axios.post(`https://yappari-coffee-bar.shop/api/orderReceived`, { order_id: orderId })
       .then(response => {
         if (response.data.success) {
-          setOrder(prevOrder => ({ ...prevOrder, order_status: "Received" }));
+          setOrders(prevOrders => prevOrders.map(order => 
+            order.orders_id === orderId ? { ...order, order_status: "Completed" } : order
+          ));
+          Swal.fire("Success", "Order successfully marked as received.", "success");
           setMessage("Order successfully marked as received.");
         } else {
           setMessage(response.data.error || "Failed to update order status.");
@@ -54,10 +109,10 @@ const UserStatus = () => {
       .catch(() => setMessage("Failed to update order status."));
   };
 
-    // Open modal
-    const openModal = () => setIsModalOpen(true);
-    // Close modal
-    const closeModal = () => setIsModalOpen(false);
+  const handleOrderClick = (order) => {
+    setSelectedOrder(order);
+    setIsModalOpen(true);
+  };
 
   return (
 
@@ -113,78 +168,82 @@ const UserStatus = () => {
         {/**Main content */}
 
         {/**this content should be hidden until the user completed a checkout order */}
-        <div className="container mx-auto pt-6 px-4 md:px-36 flex flex-col md:flex-row w-full">
-          <div className="w-full mx-auto h-2/3 md:h-1/3 bg-white p-8 rounded-xl shadow-xl">
+        <div className="container mx-auto pt-6 px-4 md:px-36 flex flex-col w-full">
             {loading ? (
               <p className="text-center text-gray-500">Loading...</p>
             ) : error ? (
               <p className="text-center text-red-500">{error}</p>
-            ) : order ? (
-              <div className="flex flex-row items-center space-x-6">
-                <img src={order.image_url} 
-                                onClick={openModal} // Open modal when image is clicked
-                                alt="Order" className="cursor-pointer w-32 h-32 rounded-md object-cover" />
-                <div className="flex-1">
-                  <h2 className="font-bold">Order number: {order.order_number}</h2>
-                  <p className="text-black">Date: {order.order_date}</p>
-                  <p className="text-black">Total cost: <span className="font-bold">₱ {order.total_cost}</span></p>
-                  <p className="text-black">Service option: {order.service_option}</p>
-                  <p className="text-blue-600 font-semibold">{order.order_status}</p>
+            ) : orders.length > 0 ? (
+              orders
+                .filter(order => order.order_status !== "Completed")
+                .map((order) => (
+                  <div 
+                    key={order.orders_id} 
+                    className="w-full mx-auto bg-white p-8 rounded-xl shadow-xl mb-4 cursor-pointer"
+                    onClick={() => handleOrderClick(order)}
+                  >
+                    <h2 className="font-bold">Order number: {order.orders_id}</h2>
+                    <p className="text-black">Date: {order.created_at}</p>
+                    <p className="text-black">Total cost: ₱ {order.total_amount}</p>
 
-                  <div className="mt-4 flex space-x-4">
                     <button
-                      onClick={handleCancelOrder}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCancelOrder(order.orders_id);
+                      }}
                       className="px-4 py-2 bg-blue-600 text-white rounded disabled:bg-gray-400"
-                      disabled={order.order_status === "Cancelled"}
+                      disabled={order.order_status !== "Pending"}
                     >
                       Cancel Order
                     </button>
-                    <button onClick={handleOrderReceived}
+
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOrderReceived(order.orders_id);
+                      }}
                       className="px-4 py-2 bg-gray-300 text-black rounded disabled:bg-gray-400"
-                      disabled={order.order_status === "Cancelled" || order.order_status === "Received"}>Order Received</button>
+                      disabled={order.order_status !== "Out For Delivery"}
+                    >
+                      Order Received
+                    </button>
+
                   </div>
-
-                  {message && <p className="text-center text-sm text-green-600 mt-2">{message}</p>}
-
-                </div>
-              </div>
+                ))
             ) : (
-              <p className="text-center text-gray-500">No order found.</p>
+              <p className="text-center text-gray-500">No orders found.</p>
             )}
           </div>
-        </div>
-      </div>
-              {/* Modal */}
-      {isModalOpen && order && (
 
-        //User Info here Name, address, number
-        <div className="fixed inset-0 bg-opacity-90 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-            <h2 className="text-lg font-bold text-center">Order Details</h2>
-            <div className="border-b my-2"></div>
-            <div className="flex items-center space-x-4">
-              <img src={order.image_url} alt="Order" className="w-20 h-20 rounded object-cover" />
-              <div>
-                <p className="text-gray-700 font-bold">{order.order_number}</p>
-                <p className="text-gray-500">Date: {order.order_date}</p>
-                <p className="text-gray-500">Total Cost: ₱ {order.total_cost}</p>
-                <p className="text-gray-500">Service Option: {order.service_option}</p>
-                <p className="text-gray-500">Status: {order.order_status}</p>
-              </div>
-              <div className="">
-                
+          {isModalOpen && selectedOrder && (
+            <div className="fixed inset-0 flex items-center justify-center backdrop-blur-xs z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                >
+                  ✖
+                </button>
+                <h2 className="text-lg font-bold text-center text-blue-900">Order Details</h2>
+                <p className="text-black">Order Number: {selectedOrder.orders_id}</p>
+                <p className="text-black">Date: {selectedOrder.created_at}</p>
+                <p className="text-black">Total Cost: ₱ {selectedOrder.total_amount}</p>
+                <p className="text-black">Status: {selectedOrder.order_status}</p>
+                <h3 className="font-bold mt-4">Items:</h3>
+                <ul>
+                  {selectedOrder.order_items?.map((item) => (
+                    <li key={item.order_items_id} className="border-b py-2">
+                      <p className="text-black">{item.food_name} ({item.size}) - {item.quantity}x ₱{item.price}</p>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
-            <button
-              onClick={closeModal}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded w-full"
-            >
-              Close
-            </button>
-          </div>
+          )}
         </div>
-      )}
+          
       <Footer />
+    
     </div>
   );
 };
