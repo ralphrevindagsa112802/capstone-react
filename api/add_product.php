@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include __DIR__ . "/db.php";
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Credentials: true");
