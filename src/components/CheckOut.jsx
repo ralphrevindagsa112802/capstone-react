@@ -2,6 +2,7 @@ import { useEffect, useState, useContext, } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartContext } from "../context/CartContext"; // Import Cart Context
+import Swal from "sweetalert2";
 
 const CheckOut = () => {
   const navigate = useNavigate();
@@ -32,13 +33,33 @@ const CheckOut = () => {
       .catch(error => console.error("Error fetching user details:", error));
   }, []);
 
+   //Handles Shipping Method
+   const handleShippingMethodChange = (method) => {
+    if (method === "Delivery") {
+      // Check if the user's address contains "Taguig"
+      if (!user.address || !user.address.includes("Taguig")) {
+        Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning");
+        return; // Don't change shipping method
+      }
+    }
+    
+    // If we passed validation or method isn't "Delivery", update the state
+    setShippingMethod(method);
+  };
+
   //handling payment gcash or paymaya
   const handlePayment = async () => {
     if (cartItems.length === 0) {
-      alert("Your cart is empty!");
+      Swal.fire("Warning", "Your cart is empty!", "warning");
       return;
     }
-
+  
+    // Double-check Taguig address requirement for delivery
+    if (shippingMethod === "Delivery" && (!user.address || !user.address.includes("Taguig"))) {
+      Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning");
+      return;
+    }
+  
     if (paymentMethod === "GCash") {
       localStorage.setItem("shipping_method", shippingMethod);
       localStorage.setItem("payment_method", paymentMethod);
@@ -73,14 +94,26 @@ const CheckOut = () => {
               <div className="mb-6 mt-6">
                 <h2 className="text-xl font-bold text-blue-800 mb-4">Shipping Information</h2>
                 <div className="flex gap-4">
-                  <label className="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
-                    <input type="radio" name="shipping_method" value="Delivery" checked={shippingMethod === "Delivery"} onChange={() => setShippingMethod("Delivery")} />
-                    <p className="font-semibold text-sm">Delivery</p>
-                  </label>
-                  <label className="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
-                    <input type="radio" name="shipping_method" value="Pickup" checked={shippingMethod === "Pickup"} onChange={() => setShippingMethod("Pickup")} />
-                    <p className="font-semibold text-sm">Pick up</p>
-                  </label>
+                <label className="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
+                  <input 
+                    type="radio" 
+                    name="shipping_method" 
+                    value="Delivery" 
+                    checked={shippingMethod === "Delivery"} 
+                    onChange={() => handleShippingMethodChange("Delivery")} 
+                  />
+                  <p className="font-semibold text-sm">Delivery</p>
+                </label>
+                <label className="flex items-center gap-2 border-[#1C359A] border-[2px] rounded-lg p-4 w-full">
+                  <input 
+                    type="radio" 
+                    name="shipping_method" 
+                    value="Pickup" 
+                    checked={shippingMethod === "Pickup"} 
+                    onChange={() => handleShippingMethodChange("Pickup")} 
+                  />
+                  <p className="font-semibold text-sm">Pickup</p>
+                </label>
                 </div>
               </div>
 
