@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import { Link, useLocation } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import axios from "axios";
 import { CartContext } from "../context/CartContext";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 
@@ -15,6 +15,7 @@ const UserNavbar = () => {
   const [isNotificationOpen, setNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const notificationRef = useRef(null);
+  const [error, setError] = useState(null);
 
 
   // Function to toggle dropdown
@@ -62,25 +63,43 @@ const UserNavbar = () => {
 
   //notification
   // Fetch order notifications from API
-  const fetchNotifications = async () => {
-    try {
-      const response = await fetch("https://yappari-coffee-bar.shop/api/get_order_notifications", {
-        credentials: "include", // Ensures session data is sent
-      });
-      const data = await response.json();
-      if (!data.error) {
-        setNotifications(data);
-      }
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
-    }
-  };
-
   // Fetch notifications when component mounts & auto-refresh every 10 seconds
   useEffect(() => {
+    // Declare interval variable outside the fetch function so we can clear it later
+    let intervalId;
+    
+    const fetchNotifications = async () => {
+      const userId = sessionStorage.getItem("user_id");
+      
+      try {
+        const response = await axios.get(
+          `https://yappari-coffee-bar.shop/api/getUserOrders?user_id=${userId}`, 
+          { withCredentials: true }
+        );
+        
+        console.log("API Response:", response.data);
+        
+        if (response.data.error) {
+          setError(response.data.error);
+        } else {
+          setNotifications(response.data);
+        }
+      } catch (err) {
+        console.error("Fetch Error:", err);
+        setError("Failed to fetch orders.");
+      }
+    };
+  
+    // Call the function immediately when component mounts
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 10000); // Refresh every 10s
-    return () => clearInterval(interval); // Cleanup on unmount
+    
+    // Set up interval for periodic refreshes
+    intervalId = setInterval(fetchNotifications, 10000);
+    
+    // Clean up function to clear interval when component unmounts
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, []);
 
   // Toggle notification dropdown
@@ -219,10 +238,12 @@ const UserNavbar = () => {
             </div>
             <div className="max-h-60 overflow-y-auto">
               {notifications.length > 0 ? (
-                notifications.map((notification) => (
-                  <div key={notification.order_id} className="p-4 border-b">
-                    <span className="font-semibold">{notification.status}</span>
-                    <p className="text-sm text-gray-600">{notification.message}</p>
+                notifications
+                .filter(notification => notification.order_status !== "Cancelled" && notification.order_status !== "Order Received" && notification.order_status !== "Completed")
+                .map((notification) => (
+                  <div key={notification.orders_id} className="p-4 border-b">
+                    <span className="font-semibold">Order Status</span>
+                    <p className="text-sm text-gray-600">Your order #{notification.orders_id} is {notification.order_status}</p>
                   </div>
                 ))
               ) : (

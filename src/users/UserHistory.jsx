@@ -170,7 +170,7 @@ const UserHistory = () => {
               <p className="text-center text-red-500">{error}</p>
             ) : orders.length > 0 ? (
               orders
-                .filter(order => order.order_status === "Completed" || order.order_status === "Cancelled")
+                .filter(order => order.order_status === "Order Received" || order.order_status === "Cancelled" || order.order_status === "Completed" )
                 .map((order) => (
                   <div 
                     key={order.orders_id} 
@@ -180,7 +180,7 @@ const UserHistory = () => {
                     <h2 className="font-bold">Order number: {order.orders_id}</h2>
                     <p className="text-black">Date: {order.created_at}</p>
                     <p className="text-black">Total cost: ₱ {order.total_amount}</p>
-                    {!order.order_feedback && (
+                    {!order.order_feedback && order.order_status !== "Cancelled" && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();

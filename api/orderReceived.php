@@ -23,7 +23,7 @@ $order_id = intval($data["order_id"]);
 $user_id = $_SESSION["user_id"];
 
 try {
-    $stmt = $pdo->prepare("UPDATE orders SET order_status = 'Completed' WHERE orders_id = :order_id AND user_id = :user_id");
+    $stmt = $pdo->prepare("UPDATE orders SET order_status = 'Order Received' WHERE orders_id = :order_id AND user_id = :user_id");
     $stmt->bindParam(":order_id", $order_id, PDO::PARAM_INT);
     $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
     

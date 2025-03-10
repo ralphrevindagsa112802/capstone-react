@@ -98,7 +98,7 @@ const UserStatus = () => {
       .then(response => {
         if (response.data.success) {
           setOrders(prevOrders => prevOrders.map(order => 
-            order.orders_id === orderId ? { ...order, order_status: "Completed" } : order
+            order.orders_id === orderId ? { ...order, order_status: "Order Received" } : order
           ));
           Swal.fire("Success", "Order successfully marked as received.", "success");
           setMessage("Order successfully marked as received.");
@@ -175,14 +175,14 @@ const UserStatus = () => {
               <p className="text-center text-red-500">{error}</p>
             ) : orders.length > 0 ? (
               orders
-                .filter(order => order.order_status !== "Completed")
+                .filter(order => order.order_status !== "Order Received" && order.order_status !== "Cancelled" && order.order_status !== "Completed" )
                 .map((order) => (
                   <div 
                     key={order.orders_id} 
                     className="w-full mx-auto bg-white p-8 rounded-xl shadow-xl mb-4 cursor-pointer"
                     onClick={() => handleOrderClick(order)}
                   >
-                    <h2 className="font-bold">Order number: {order.orders_id}</h2>
+                    <h2 className="font-bold">Order Number: {order.orders_id}</h2>
                     <p className="text-black">Date: {order.created_at}</p>
                     <p className="text-black">Total cost: ₱ {order.total_amount}</p>
 
@@ -203,7 +203,7 @@ const UserStatus = () => {
                         handleOrderReceived(order.orders_id);
                       }}
                       className="px-4 py-2 bg-gray-300 text-black rounded disabled:bg-gray-400"
-                      disabled={order.order_status !== "Out For Delivery"}
+                      disabled={order.order_status !== "Out For Delivery" && order.order_status !== "Ready To Pickup"}
                     >
                       Order Received
                     </button>
