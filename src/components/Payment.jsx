@@ -2,6 +2,7 @@ import { useEffect, useState, useContext, } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartContext } from "../context/CartContext";
+import Swal from "sweetalert2";
 
 const Payment = () => {
   const navigate = useNavigate();
@@ -61,15 +62,14 @@ const Payment = () => {
         localStorage.removeItem("checkoutOrder");
         localStorage.removeItem("totalAmount");
         localStorage.removeItem("shipping_method");
-        alert(`Order placed successfully! Order ID: ${response.data.order_id}`);
+        Swal.fire("Success", `Order placed successfully! Order ID: ${response.data.order_id}`, "success");
         navigate("/user/cart"); // ✅ Redirect to confirmation page
-        window.location.reload();
       } else {
-        alert("Order submission failed: " + response.data.message);
+        Swal.fire("Error", `"Order submission failed: ${response.data.message}`, "success");
       }
     } catch (error) {
       console.error("Error submitting order:", error);
-      alert("Failed to place order. Please try again.");
+      Swal.fire("Success", `Failed to place order. Please try again.`, "success");
     }
   };
 

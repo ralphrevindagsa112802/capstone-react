@@ -22,7 +22,7 @@ const UserCart = () => {
 
     const handleCheckout = () => {
         if (cartItems.length === 0) {
-            alert("Your cart is empty!");
+            Swal.fire("Warning", `Your cart is empty!`, "warning");
             return;
         }
 
@@ -83,9 +83,9 @@ const UserCart = () => {
 
                 if (data.success) {
                     setUserData(prev => ({ ...prev, profile_pic: data.profile_pic }));
-                    alert("Profile picture updated successfully!");
+                    Swal.fire("Success", `Profile picture updated successfully!`, "success");
                 } else {
-                    alert("Error uploading profile picture: " + data.error);
+                    Swal.fire("Error", `Error uploading profile picture: ${data.error}`, "error");
                 }
             })
             .catch(error => console.error("Error uploading profile picture:", error));

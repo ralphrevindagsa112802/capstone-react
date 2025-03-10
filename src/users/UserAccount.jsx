@@ -156,9 +156,9 @@ const UserAccount = () => {
 
         if (data.success) {
           setUserData(prev => ({ ...prev, profile_pic: data.profile_pic }));
-          alert("Profile picture updated successfully!");
+          Swal.fire("Success", `Profile picture updated successfully!`, "success");
         } else {
-          alert("Error uploading profile picture: " + data.error);
+          Swal.fire("Error", `Error uploading profile picture: ${data.error}`, "error");
         }
       })
       .catch(error => console.error("Error uploading profile picture:", error));
@@ -170,12 +170,12 @@ const UserAccount = () => {
     console.log("Updating password..."); // Debugging
   
     if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
-      window.alert('Please fill in all fields.');
+      Swal.fire("Warning", `Please fill in all fields.`, "warning");
       return;
     }
   
     if (passwordData.new_password !== passwordData.confirm_password) {
-      window.alert('New passwords do not match.');
+      Swal.fire("Warning", `New passwords do not match.`, "warning");
       return;
     }
 
@@ -192,18 +192,18 @@ const UserAccount = () => {
     
           if (data.success) {
             setTimeout(() => {
-              window.alert('Password updated successfully!'); // ✅ Ensure alert is shown
+              Swal.fire("Success", `Password updated successfully!`, "success"); // ✅ Ensure alert is shown
             }, 100);
     
             setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
             setIsEditingPassword(false);
           } else {
-            window.alert('Error: ' + data.error);
+            Swal.fire("Error", `Error: ${data.error}`, "error");
           }
         })
     } catch (error) {
       console.error('Error updating password:', error);
-      window.alert('Something went wrong. Please try again.');
+      Swal.fire("Error", `Something went wrong. Please try again.`, "error");
     }
   };  
 

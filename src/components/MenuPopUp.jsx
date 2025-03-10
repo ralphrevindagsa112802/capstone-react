@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const MenuPopup = ({ food, onClose, onAddToCart }) => {
 
@@ -47,7 +48,7 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
 
   const handleAddToCart = () => {
     onAddToCart({ ...food, size: selectedSize, food_price: selectedPrice, quantity: 1 });
-    alert(`${food.food_name} (${selectedSize}) added to your cart for ₱${selectedPrice}!`);
+    Swal.fire("Success", `${food.food_name} (${selectedSize}) added to your cart for ₱${selectedPrice}!`, "success");
     onClose();
   };
 

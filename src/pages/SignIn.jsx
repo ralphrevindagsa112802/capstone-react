@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -21,41 +22,59 @@ const SignIn = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
+    
+    // STEP 1: Check for any empty required fields
+    const requiredFields = ['name', 'email', 'phone', 'address', 'password', 'confirmPassword'];
+    for (const field of requiredFields) {
+        if (!formData[field] || formData[field].trim() === '') {
+            setError(`${field.charAt(0).toUpperCase() + field.slice(1)} is required`);
+            return;
+        }
     }
-  
-    try {
-      const response = await fetch("https://yappari-coffee-bar.shop/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-  
-      const text = await response.text(); // Read response as text first
-      console.log("Raw response:", text);
-  
-      let data;
-      try {
-        data = JSON.parse(text); // Try parsing JSON
-      } catch (error) {
-        console.error("Invalid JSON response:", text);
-        setError("Server error: Invalid response");
+    
+    // STEP 2: Validate email format
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        setError("Please enter a valid email address");
         return;
-      }
-  
-      if (data.success) {
-        alert("Signup successful! You can now log in.");
-        navigate("/login");
-      } else {
-        setError(data.message || "Signup failed");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Failed to connect to server");
     }
-  };  
+    
+    // STEP 3: Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+        setError("Passwords do not match");
+        return;
+    }
+    
+    // STEP 4: Submit the form if all validations pass
+    try {
+        const response = await fetch("https://yappari-coffee-bar.shop/api/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+        });
+        
+        const text = await response.text();
+        console.log("Raw response:", text);
+        
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (error) {
+            console.error("Invalid JSON response:", text);
+            setError("Server error: Invalid response");
+            return;
+        }
+        
+        if (data.success) {
+            Swal.fire("Success", 'Signup successful! You can now log in.', "success");
+            navigate("/login");
+        } else {
+            setError(data.message || "Signup failed");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        setError("Failed to connect to server");
+    }
+  };
 
   return (
     <div>

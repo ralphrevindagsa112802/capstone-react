@@ -80,7 +80,7 @@ const UserHistory = () => {
 
   const handleFeedbackSubmit = (orderId) => {
     if (!feedback || !comment) {
-      Swal.fire("Error", "Please provide a rating and comment.", "error");
+      Swal.fire("Warning", "Please provide a rating and comment.", "warning");
       return;
     }
   
@@ -226,8 +226,8 @@ const UserHistory = () => {
           )}
 
       {isFeedbackOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-100">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+        <div className="fixed inset-0 flex items-center justify-center backdrop-blur-xs z-100">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full relative">
               <button
               onClick={() => setIsFeedbackOpen(false)}
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
