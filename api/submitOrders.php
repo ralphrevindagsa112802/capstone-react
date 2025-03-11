@@ -9,6 +9,12 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
 
+// Function to calculate points from order total
+function calculatePoints($orderTotal) {
+    // Every 40 in purchase adds 0.1 points
+    return floor($orderTotal / 40) * 0.1;
+}
+
 // ✅ Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(["success" => false, "message" => "User not logged in"]);
@@ -56,8 +62,32 @@ try {
     $stmt = $pdo->prepare("UPDATE orders SET total_amount = ?, shipping_method = ?, payment_method = ? WHERE orders_id = ?");
     $stmt->execute([$total_amount, $shipping_method, $payment_method, $order_id]);
 
+    // ✅ Calculate and add points for this order
+    $pointsEarned = calculatePoints($total_amount);
+    
+    // Update user's points balance
+    $stmt = $pdo->prepare("UPDATE users SET points = COALESCE(points, 0) + ? WHERE id = ?");
+    $stmt->execute([$pointsEarned, $user_id]);
+    
+    // Record the points transaction in points_history table
+    // Make sure you've created this table first
+    if ($pointsEarned > 0) {
+        $stmt = $pdo->prepare("INSERT INTO points_history (user_id, order_id, points_earned, notes) 
+                              VALUES (?, ?, ?, ?)");
+        $stmt->execute([
+            $user_id, 
+            $order_id, 
+            $pointsEarned, 
+            "Points earned from order #" . $order_id
+        ]);
+    }
+
     $pdo->commit();
-    echo json_encode(["success" => true, "order_id" => $order_id]);
+    echo json_encode([
+        "success" => true, 
+        "order_id" => $order_id,
+        "points_earned" => $pointsEarned
+    ]);
 
 } catch (PDOException $e) {
     $pdo->rollBack();

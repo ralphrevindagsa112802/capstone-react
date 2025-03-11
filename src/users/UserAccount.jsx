@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Swal from 'sweetalert2';
 
 const UserAccount = () => {
+  const [points, setPoints] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
@@ -207,6 +208,22 @@ const UserAccount = () => {
     }
   };  
 
+  useEffect(() => {
+    // Fetch user points
+    fetch("https://yappari-coffee-bar.shop/api/getUser?action=get_points", {
+      credentials: "include"
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        setPoints(Number(data.points));
+      }
+    })
+    .catch(error => console.error("Error fetching points:", error));
+  }, []);
+
+  
+
   return (
     <div className='bg-[#DCDEEA]'>
       <UserNavbar />
@@ -287,6 +304,7 @@ const UserAccount = () => {
               {userData.f_name} {userData.l_name}
             </h2>
             <p className="text-sm text-white" id="userAddress">{userData.address}</p>
+            <p className="text-xs text-white" id="userPoints">Points: {typeof points === 'number' ? points.toFixed(1) : '0.0'}</p>
           </div>
         </div>
 

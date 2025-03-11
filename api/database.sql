@@ -20,8 +20,35 @@ CREATE TABLE users (
     address TEXT NOT NULL,
     password VARCHAR(255) NOT NULL,
     profile_pic VARCHAR(255),
+    points DECIMAL(10,2) DEFAULT 0.0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX (email)
+) CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create points history table if not exists
+CREATE TABLE IF NOT EXISTS points_history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    order_id INT,
+    points_earned DECIMAL(10,2) DEFAULT 0.0,
+    points_used DECIMAL(10,2) DEFAULT 0.0,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    notes VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (order_id) REFERENCES orders(orders_id) ON DELETE SET NULL
+) CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create points history table if not exists
+CREATE TABLE IF NOT EXISTS points_history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    order_id INT,
+    points_earned DECIMAL(10,2) DEFAULT 0.0,
+    points_used DECIMAL(10,2) DEFAULT 0.0,
+    transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    notes VARCHAR(255),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (order_id) REFERENCES orders(orders_id) ON DELETE SET NULL
 ) CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create food table with size-based pricing
@@ -65,6 +92,20 @@ CREATE TABLE order_items (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (orders_id) REFERENCES orders(orders_id) ON DELETE CASCADE,
     FOREIGN KEY (food_id) REFERENCES food(food_id) ON DELETE CASCADE
+) CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--Create order history table
+CREATE TABLE `order_history` (
+  id int(11) NOT NULL,
+  order_id int(11) NOT NULL,
+  customer_name varchar(255) NOT NULL,
+  date datetime NOT NULL,
+  order_details text NOT NULL,
+  total decimal(10,2) NOT NULL,
+  location varchar(255) NOT NULL,
+  status varchar(50) NOT NULL,
+  shipping_method enum('Pickup','Delivery') NOT NULL,
+  phone varchar(222) NOT NULL
 ) CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Create the admin table

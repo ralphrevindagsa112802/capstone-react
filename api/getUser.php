@@ -16,6 +16,35 @@ if (!isset($_SESSION["user_id"])) {
 
 $user_id = $_SESSION["user_id"];
 
+
+// Get user points
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'get_points') {
+    $userId = $user_id;
+    
+    $stmt = $pdo->prepare("SELECT points FROM users WHERE id = :userId");
+    $stmt->execute([':userId' => $userId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($result) {
+        echo json_encode(["success" => true, "points" => $result['points']]);
+    } else {
+        echo json_encode(["success" => false, "message" => "User not found"]);
+    }
+    exit();
+}
+
+// Get points history
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'points_history') {
+    $userId = $user_id;
+    
+    $stmt = $pdo->prepare("SELECT * FROM points_history WHERE user_id = :userId ORDER BY transaction_date DESC");
+    $stmt->execute([':userId' => $userId]);
+    $history = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    echo json_encode(["success" => true, "history" => $history]);
+    exit();
+}
+
 try {
     // ✅ Use PDO for better security and error handling
     $stmt = $pdo->prepare("SELECT id, username, f_name, l_name, email, phone, address, profile_pic FROM users WHERE id = ?");
