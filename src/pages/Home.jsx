@@ -14,7 +14,7 @@ const Home = () => {
         <section className="">
           <img src="" alt="" />
 
-          <div className="header flex flex-col items-center text-center py-8 relative">
+          <div className=" header flex flex-col items-center text-center py-8 relative">
 
             <div className="text-[#1C359A] text-sm flex justify-center w-full space-x-[290px]">
               <div>No Lines, Just Good Coffee</div>
@@ -32,15 +32,15 @@ const Home = () => {
               ORDER NOW
             </button>
 
-            <div className="relative w-full h-[600px] flex justify-center items-center">
+            <div className="relative w-full h-[300px] flex justify-center items-center">
 
               {/* Plate Image - Back Layer */}
-              <img src="/img/plate.png" className="relative bottom-[-65%] w-[110vh] z-[10] opacity-100" style={{ animation: "spin 10s linear infinite" }} alt="plate" />
+              <img src="/img/plate.png" className="relative bottom-[-105%] w-[110vh] z-[10] opacity-100 animate-spin-slow" alt="plate" />
 
               {/* Drink Image - Front Layer */}
               <img
                 src="/img/frontdrink.png"
-                className="absolute top-[17%] left-1/2 transform -translate-x-1/2 w-[35vw] max-w-[350px] h-auto z-20 animate-tilt-float"
+                className="absolute top-[0%] left-1/2 transform -translate-x-1/2 w-[20vw] max-w-[350px] h-auto z-20 animate-tilt-float"
                 alt="Floating Drink"
               />
             </div>
