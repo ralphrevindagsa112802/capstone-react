@@ -75,7 +75,7 @@ const SignIn = () => {
   const handleGoogleSuccess = (response) => {
     console.log("Google login success", response);
     alert("Login successful! Redirecting...");
-    navigate("/UserHome");
+    navigate("/Home");
   };
 
   const handleGoogleFailure = () => {

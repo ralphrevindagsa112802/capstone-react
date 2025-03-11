@@ -29,7 +29,7 @@ import UserRequireAuth from './components/UserRequireAuth';
 
 
 const router = createBrowserRouter([{
-  path: '/',
+  path: '/Home',
   element: <Home />,
   errorElement: <NotFound/>,
 }, {
