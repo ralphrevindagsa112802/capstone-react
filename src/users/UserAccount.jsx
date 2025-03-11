@@ -453,7 +453,7 @@ const UserAccount = () => {
     </div>
   );
 };
-
+/**side bar profile section */
 export default UserAccount;
 
 
