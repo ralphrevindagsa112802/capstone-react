@@ -11,7 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.0.9",
+    "@react-oauth/google": "^0.12.1",
+    "@tailwindcss/vite": "^4.0.13",
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.8.1",
     "lucide-react": "^0.475.0",
@@ -21,8 +22,8 @@
     "react-router": "^7.2.0",
     "react-router-dom": "^7.2.0",
     "router": "^2.0.0",
-    "sweetalert2": "^11.17.2",
-    "tailwindcss": "^4.0.9"
+    "sweetalert2": "^11.6.13",
+    "tailwindcss": "^4.0.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

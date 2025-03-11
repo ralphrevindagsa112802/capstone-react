@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +26,7 @@ const SignIn = () => {
     e.preventDefault();
     
     // STEP 1: Check for any empty required fields
-    const requiredFields = ['name', 'email', 'phone', 'address', 'password', 'confirmPassword'];
+    const requiredFields = ['firstname', 'lastname', 'username', 'email', 'phone', 'address', 'password', 'confirmPassword'];
     for (const field of requiredFields) {
         if (!formData[field] || formData[field].trim() === '') {
             setError(`${field.charAt(0).toUpperCase() + field.slice(1)} is required`);
@@ -248,17 +250,12 @@ const SignIn = () => {
           <p className="text-gray-600 mb-2">
             "Your perfect brew is just a click away!"
           </p>
-          <button
-            type="button"
-            className="flex items-center justify-center w-96 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
-          >
-            <img
-              src="..\img\google-logo.png"
-              alt="Google"
-              className="mr-2 w-8 h-8"
-            />
-            Login with Google
-          </button>
+          
+        <GoogleOAuthProvider clientId="702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com"><GoogleLogin
+        onSuccess={(response) => console.log("Google login success", response)}
+        onError={() => console.log("Google login failed")}
+        />
+        </GoogleOAuthProvider>;
     </div>
   </div>
 </div>
