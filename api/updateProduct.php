@@ -4,7 +4,7 @@ include __DIR__ . "/db.php";
 
 header("Access-Control-Allow-Origin: https://admin.yappari-coffee-bar.shop");
 header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header('Content-Type: application/json');
 
@@ -43,8 +43,8 @@ if (!$food_id || !$food_name || !$category) {
 $target_file = null;
 if (!empty($_FILES["food_img"]["name"])) {
     $image_name = time() . "_" . str_replace(" ", "_", $_FILES["food_img"]["name"]); // Prevent filename conflicts
-    $target_dir = __DIR__ . "/uploads/"; // Upload directory
-    $target_file = $target_dir . $image_name;
+    $target_dir = $_SERVER["DOCUMENT_ROOT"] . "/uploads/"; // Upload directory
+    $target_file = $target_dir . basename($image_name);
 
     // ✅ Ensure directory exists
     if (!is_dir($target_dir)) {
@@ -53,7 +53,7 @@ if (!empty($_FILES["food_img"]["name"])) {
 
     // ✅ Move uploaded file
     if (move_uploaded_file($_FILES["food_img"]["tmp_name"], $target_file)) {
-        $target_file = "/uploads/" . $image_name; // ✅ Store relative path in DB
+        $target_file = "/uploads/" . basename($image_name); // ✅ Store relative path in DB
     } else {
         echo json_encode(["success" => false, "message" => "Failed to upload image"]);
         exit();

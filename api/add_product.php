@@ -2,7 +2,7 @@
 session_start();
 include __DIR__ . "/db.php";
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://yappari-coffee-bar.shop");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -36,8 +36,8 @@ if (!$food_name || !$category) {
 // ✅ Handle Image Upload
 $target_file = null;
 if (!empty($_FILES["food_img"]["name"])) {
-    $image_name = str_replace(" ", "_", $_FILES["food_img"]["name"]);
-    $target_dir = $_SERVER["DOCUMENT_ROOT"] . "/capstone-react/public/uploads/";
+    $image_name = time() . "_" . str_replace(" ", "_", $_FILES["food_img"]["name"]);
+    $target_dir = $_SERVER["DOCUMENT_ROOT"] . "/uploads/";
     $target_file = $target_dir . basename($image_name);
 
     if (!is_dir($target_dir)) {
