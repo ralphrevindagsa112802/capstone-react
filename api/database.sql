@@ -64,6 +64,7 @@ CREATE TABLE food (
     availability_large VARCHAR(255) DEFAULT "Not Available",
     image_path VARCHAR(255) DEFAULT NULL,
     description TEXT NOT NULL,
+    allergen TEXT NOT NULL,
     INDEX (category)
 ) CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
