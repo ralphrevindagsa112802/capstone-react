@@ -53,7 +53,7 @@ const UserAccount = () => {
 */
   //fetch user
 
-  
+
   useEffect(() => {
     fetch('https://yappari-coffee-bar.shop/api/getUser', {
       credentials: 'include',
@@ -169,18 +169,18 @@ const UserAccount = () => {
   const handlePasswordUpdate = (e) => {
     e.preventDefault();
     console.log("Updating password..."); // Debugging
-  
+
     if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
       Swal.fire("Warning", `Please fill in all fields.`, "warning");
       return;
     }
-  
+
     if (passwordData.new_password !== passwordData.confirm_password) {
       Swal.fire("Warning", `New passwords do not match.`, "warning");
       return;
     }
 
-    try{
+    try {
       fetch('https://yappari-coffee-bar.shop/api/change_password', {
         method: 'POST',
         credentials: 'include',
@@ -190,12 +190,12 @@ const UserAccount = () => {
         .then(response => response.json())
         .then(data => {
           console.log("API Response:", data); // Debugging
-    
+
           if (data.success) {
             setTimeout(() => {
               Swal.fire("Success", `Password updated successfully!`, "success"); // ✅ Ensure alert is shown
             }, 100);
-    
+
             setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
             setIsEditingPassword(false);
           } else {
@@ -206,23 +206,23 @@ const UserAccount = () => {
       console.error('Error updating password:', error);
       Swal.fire("Error", `Something went wrong. Please try again.`, "error");
     }
-  };  
+  };
 
   useEffect(() => {
     // Fetch user points
     fetch("https://yappari-coffee-bar.shop/api/getUser?action=get_points", {
       credentials: "include"
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        setPoints(Number(data.points));
-      }
-    })
-    .catch(error => console.error("Error fetching points:", error));
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setPoints(Number(data.points));
+        }
+      })
+      .catch(error => console.error("Error fetching points:", error));
   }, []);
 
-  
+
 
   return (
     <div className='bg-[#DCDEEA]'>
@@ -276,13 +276,16 @@ const UserAccount = () => {
                   />
                 </div>
 
-                {/* Upload Button */}
-                <button
-                  onClick={handleUpload}
-                  className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm shadow-md hover:bg-blue-700 mt-1"
-                >
-                  Upload
-                </button>
+
+                {/* Upload Button                                 */}
+
+                                <button
+                                    onClick={handleUpload}
+                                    className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm shadow-md hover:bg-blue-700 mt-1"
+                                >
+                                    Upload
+                                </button>
+                                
               </div>
             )}
 
@@ -321,22 +324,49 @@ const UserAccount = () => {
         {/**side bar profile section */}
         <aside className="w-full mt-12 md:w-64 h-auto md:h-screen py-4 flex flex-col space-y-6">
           <nav className="space-y-4">
-            <Link to="/user/account" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+            <Link
+              to="/user/account"
+              className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+              </svg>
               <span className="font-semibold">User Profile</span>
             </Link>
-            <Link to="/user/cart" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+            <Link
+              to="/user/cart"
+              className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z" />
+              </svg>
               <span className="font-semibold">Cart</span>
             </Link>
-            <Link to="/user/status" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+            <Link
+              to="/user/status"
+              className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+              </svg>
               <span className="font-semibold">Order Status</span>
             </Link>
-            <Link to="/user/history" className="flex items-center space-x-4 text-gray-800 hover:text-blue-600">
+            <Link
+              to="/user/history"
+              className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
+                <path fillRule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clipRule="evenodd" />
+              </svg>
               <span className="font-semibold">Order History</span>
             </Link>
           </nav>
           <div className="mt-6">
-            <button className="flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700">
-              <img src="path-to-sign-out-icon.svg" alt="Sign Out" className="w-5 h-5 mr-2" />
+            <button className="flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
+              </svg>
               SIGN OUT
             </button>
           </div>
@@ -453,7 +483,6 @@ const UserAccount = () => {
     </div>
   );
 };
-/**side bar profile section */
 export default UserAccount;
 
 
