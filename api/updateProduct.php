@@ -6,7 +6,6 @@ header("Access-Control-Allow-Origin: https://admin.yappari-coffee-bar.shop");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header('Content-Type: application/json');
 
 // ✅ Enable error reporting for debugging
 error_reporting(E_ALL);
@@ -29,6 +28,7 @@ $data = $_POST;
 $food_id = $data["food_id"] ?? null;
 $food_name = $data["food_name"] ?? "";
 $description = $data["description"] ?? "";
+$allergen = $data["allergen"] ?? "";
 $category = $data["category"] ?? "";
 $price_small = $data["price_small"] ?? null;
 $price_medium = $data["price_medium"] ?? null;
@@ -68,9 +68,9 @@ if (!empty($_FILES["food_img"]["name"])) {
 
 // ✅ Update Product Data
 try {
-    $query = "UPDATE food SET food_name=?, description=?, category=?, price_small=?, price_medium=?, price_large=?, image_path=? WHERE food_id=?";
+    $query = "UPDATE food SET food_name=?, description=?, allergen=?, category=?, price_small=?, price_medium=?, price_large=?, image_path=? WHERE food_id=?";
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$food_name, $description, $category, $price_small, $price_medium, $price_large, $target_file, $food_id]);
+    $stmt->execute([$food_name, $description, $allergen, $category, $price_small, $price_medium, $price_large, $target_file, $food_id]);
 
     echo json_encode(["success" => true, "message" => "Product updated successfully"]);
 } catch (PDOException $e) {
