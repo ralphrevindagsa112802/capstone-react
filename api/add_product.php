@@ -2,11 +2,17 @@
 session_start();
 include __DIR__ . "/db.php";
 
-header("Access-Control-Allow-Origin: https://yappari-coffee-bar.shop");
+header("Access-Control-Allow-Origin: https://admin.yappari-coffee-bar.shop");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header('Content-Type: application/json');
+
+
+// Handle preflight requests (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 error_log("Session Data: " . print_r($_SESSION, true));
 
@@ -27,6 +33,7 @@ $price_small = $_POST["price_small"] ?? null;
 $price_medium = $_POST["price_medium"] ?? null;
 $price_large = $_POST["price_large"] ?? null;
 $description = $_POST["description"] ?? null;
+$allergen = $_POST["allergen"] ?? null;
 
 if (!$food_name || !$category) {
     echo json_encode(["success" => false, "message" => "Missing required fields"]);
@@ -54,8 +61,8 @@ if (!empty($_FILES["food_img"]["name"])) {
 
 // ✅ Insert into database using PDO
 try {
-    $query = "INSERT INTO food (food_name, category, price_small, price_medium, price_large, description, image_path) 
-              VALUES (:food_name, :category, :price_small, :price_medium, :price_large, :description, :image_path)";
+    $query = "INSERT INTO food (food_name, category, price_small, price_medium, price_large, description, allergen, image_path) 
+              VALUES (:food_name, :category, :price_small, :price_medium, :price_large, :description, :allergen, :image_path)";
     
     $stmt = $pdo->prepare($query);
     $stmt->execute([
@@ -65,11 +72,14 @@ try {
         ':price_medium' => $price_medium,
         ':price_large' => $price_large,
         ':description' => $description,
+        ':allergen' => $allergen,
         ':image_path' => $target_file,
     ]);
 
     echo json_encode(["success" => true, "message" => "Product added successfully"]);
+    exit();
 } catch (PDOException $e) {
     echo json_encode(["success" => false, "message" => "Insert failed: " . $e->getMessage()]);
+    exit();
 }
 ?>
