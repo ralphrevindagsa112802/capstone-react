@@ -9,6 +9,47 @@ const UserHome = () => {
   const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // State to track screen size and collapsed state
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Handle window resize and set appropriate states
+  useEffect(() => {
+    const handleResize = () => {
+      const smallScreen = window.innerWidth < 768;
+      setIsSmallScreen(smallScreen);
+
+      // Only auto-collapse on small screens on initial load
+      if (smallScreen && !isCollapsed && !document.hasOwnProperty('_feedbackExpanded')) {
+        setIsCollapsed(true);
+      } else if (!smallScreen) {
+        // Auto-expand on larger screens
+        setIsCollapsed(false);
+      }
+    };
+
+    // Set initial states
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isCollapsed]);
+
+  // Function to toggle collapsed state
+  const toggleCollapsed = (e) => {
+    e.stopPropagation(); // Prevent event bubbling
+    setIsCollapsed(!isCollapsed);
+    // Mark that the user has explicitly toggled the feedback panel
+    document._feedbackExpanded = true;
+  };
+
+  // Stop propagation for panel clicks
+  const handlePanelClick = (e) => {
+    e.stopPropagation();
+  };
+
+
 
   // Fetch user data to get names and profile pictures
   useEffect(() => {
@@ -103,35 +144,89 @@ const UserHome = () => {
       <UserNavbar></UserNavbar>
 
       {/**user positive feedback */}
-      {/* Floating Feedback Section */}
-      <div className="fixed bottom-10 left-10 bg-white shadow-lg rounded-2xl p-4 w-56 z-50">
-        <h2 className="text-sm font-semibold text-center text-blue-700">
-          What are you waiting for?<br /> Come and get your coffee now!
-        </h2>
+      <div className={`fixed z-50 transition-all duration-300 ${isCollapsed
+        ? 'bottom-4 left-4 w-12 h-12'
+        : 'bottom-4 left-4 sm:bottom-6 sm:right-6 md:bottom-10 md:left-10 w-full max-w-xs sm:max-w-sm md:w-56'
+        }`}
+      >
+        {isSmallScreen && isCollapsed && (
+          <div className="fixed bottom-4 right-4 z-50">
+            <button
+              onClick={() => setIsCollapsed(false)}
+              className="w-12 h-12 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-lg hover:bg-blue-800 transition-all"
+              aria-label="Show feedback"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </button>
+          </div>
+        )}
 
-        <div className="mt-4 space-y-4 overflow-y-auto max-h-42">
-          {loading ? (
-            <p className="text-gray-500 text-center">Loading feedback...</p>
-          ) : error ? (
-            <p className="text-red-500 text-center text-sm">{error}</p>
-          ) : feedbacks.length > 0 ? (
-            feedbacks.map((feedback, index) => (
-              <div
-                key={feedback.orders_id || index}
-                className="flex items-center bg-white shadow-md p-4 rounded-xl"
+        {/* Show the feedback panel when not collapsed or on larger screens */}
+        {/* Only show the icon button on small screens when collapsed */}
+        {isSmallScreen && isCollapsed && (
+          <div className="fixed bottom-4 right-4 z-50">
+            <button
+              onClick={toggleCollapsed}
+              className="w-12 h-12 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-lg hover:bg-blue-800 transition-all"
+              aria-label="Show feedback"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </button>
+          </div>
+        )}
+
+        {/* Show the feedback panel when not collapsed or on larger screens */}
+        {(!isSmallScreen || !isCollapsed) && (
+          <div
+            className="fixed z-50 bg-white shadow-lg rounded-2xl p-4 
+                    bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-10 md:left-10 
+                    w-full max-w-xs sm:max-w-sm md:w-56"
+            onClick={handlePanelClick} // Add click handler to prevent propagation
+          >
+            {/* Close button - only on small screens */}
+            {isSmallScreen && (
+              <button
+                onClick={toggleCollapsed}
+                className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                aria-label="Close feedback"
               >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
 
+            <h2 className="text-sm font-semibold text-center text-blue-700 mb-3">
+              What are you waiting for?<br /> Come and get your coffee now!
+            </h2>
 
-                <div className="ml-3">
-                  <p className="font-semibold text-sm">{getFullName(feedback.user_id)}</p>
-                  <p className="text-gray-600 text-sm">{feedback.order_feedback}</p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-500 text-center">No feedback available</p>
-          )}
-        </div>
+            <div className="mt-2 space-y-3 overflow-y-auto max-h-48 md:max-h-42">
+              {loading ? (
+                <p className="text-gray-500 text-center py-2">Loading feedback...</p>
+              ) : error ? (
+                <p className="text-red-500 text-center text-sm py-2">{error}</p>
+              ) : feedbacks.length > 0 ? (
+                feedbacks.map((feedback, index) => (
+                  <div
+                    key={feedback.orders_id || index}
+                    className="flex items-center bg-white shadow-md p-3 rounded-xl"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm truncate">{getFullName(feedback.user_id)}</p>
+                      <p className="text-gray-600 text-xs sm:text-sm line-clamp-2">{feedback.order_feedback}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500 text-center py-2">No feedback available</p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <main className="mt-16 sm:mt-20 md:mt-24 lg:mt-32 w-full">

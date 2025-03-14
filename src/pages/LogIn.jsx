@@ -64,81 +64,109 @@ const Login = () => {
     }
   };  
   
-
   return (
-    <div className="bg-[#1C359A] flex flex-col md:flex-row items-center justify-center min-h-screen">
-      <div className="flex flex-col justify-start w-1/3 md:w-1/2 text-white h-screen">
-        <div className="flex flex-col items-center min-h-screen justify-start">
-          <div className="w-3/4 md:w-2/3">
+    <div className="bg-[#1C359A] flex flex-col md:flex-row items-stretch justify-center min-h-screen w-full">
+      {/* Left side with logos - hidden on mobile, visible on medium screens and up */}
+      <div className="hidden md:flex md:flex-col md:justify-start md:w-1/3 lg:w-1/2 text-white">
+        <div className="flex flex-col items-center justify-start py-8">
+          <div className="w-full md:w-3/4 lg:w-2/3 px-4 mb-6">
             <img src="../img/YCB LOGO (CREAM) (1).png" alt="YCB Logo" className="w-full h-auto object-contain"/>
           </div>
-          <div className="w-2/3 md:w-1/2">
+          <div className="w-full md:w-2/3 lg:w-1/2 px-4">
             <img src="../img/cafeviennaNobg.png" alt="Coffee and Croissant" className="w-full h-auto object-contain"/>
           </div>
         </div>
       </div>
 
-      <div className="w-2/3 md:w-2/3 bg-white rounded-lg p-8 shadow-lg h-screen ">
-        <div className="flex justify-between items-center px-4 py-2 text-gray-600 text-sm mb-6">
-          <Link to="/" className="flex items-center hover:text-gray-800">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-            Return Home
-          </Link>
-          <div>
-            <span>Don't have an account? </span>
-            <Link to="/signIn" className='text-[#1C359A] font-bold hover:underline'>SIGN-UP</Link>
-          </div>
+      {/* Right side with form */}
+      <div className="w-full sm:w-11/12 md:w-2/3 lg:w-1/2 bg-white rounded-lg shadow-lg flex flex-col">
+        {/* Mobile logo - only visible on small screens */}
+        <div className="flex md:hidden w-full justify-center py-6 bg-[#1C359A]">
+          <img src="../img/YCB LOGO (CREAM) (1).png" alt="YCB Logo" className="w-3/4 max-w-xs h-auto object-contain" />
         </div>
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-[#1C359A]">WELCOME BACK TO YAPPARI COFFEE BAR!</h2>
-          <p className="mt-2 text-gray-600">"Log in to order your favorite coffee!"</p>
-        </div>
-        <form onSubmit={handleLogin} className="mt-6 flex items-center justify-center flex-col">
-          {error && <p className="text-red-500 text-center">{error}</p>}
-          <div className="mb-4">
-            <input type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-          </div>
-          <div className="mb-4">
-            <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} className="w-96 px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
-          </div>
-          <button className="w-96 py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">Log In</button>
-          
-        </form>
-
-
         
-        <div className="text-center mt-4">
-          <a href="#" className="text-sm text-[#1C359A] hover:underline">Having issues with your password?</a>
-        </div>
-
-        <h1 className="text-sm text-gray-500 text-center mt-4">OR</h1>
-
-        <div className="mt-4">
-          <div className="flex items-center justify-between">
-            <span className="w-1/5 border-b border-gray-300"></span>
-            <span className="text-xl text-[#1C359A] font-black">Login with</span>
-            <span className="w-1/5 border-b border-gray-300"></span>
+        <div className="p-4 sm:p-6 md:p-8 flex flex-col flex-grow">
+          <div className="flex flex-col sm:flex-row justify-between items-center text-gray-600 text-sm mb-4 sm:mb-6">
+            <Link to="/" className="flex items-center hover:text-gray-800 mb-2 sm:mb-0">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              Return Home
+            </Link>
+            <div>
+              <span>Don't have an account? </span>
+              <Link to="/signIn" className='text-[#1C359A] font-bold hover:underline'>SIGN-UP</Link>
+            </div>
           </div>
-          <div className="text-center mt-4 flex items-center justify-center flex-col">
-            <p className="text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
-              <button type="button"
-                className="flex items-center justify-center w-96 py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
-                <img 
-                src="..\img\google-logo.png"
-                alt="Google"
-                className="mr-2 w-8 h-8"/> 
-                
-                Login with Google
-              </button>
+          
+          <div className="text-center mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1C359A]">WELCOME BACK TO YAPPARI COFFEE BAR!</h2>
+            <p className="mt-2 text-sm sm:text-base text-gray-600">"Log in to order your favorite coffee!"</p>
+          </div>
+          
+          <form onSubmit={handleLogin} className="flex flex-col items-center w-full">
+            {error && <p className="text-red-500 text-center text-sm mb-3 w-full max-w-md">{error}</p>}
+            
+            <div className="w-full flex flex-col items-center">
+              <div className="mb-4 w-full max-w-md px-3">
+                <input 
+                  type="text" 
+                  name="username" 
+                  placeholder="Username" 
+                  value={formData.username} 
+                  onChange={handleChange} 
+                  className="w-full px-3 sm:px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+                />
+              </div>
+              
+              <div className="mb-4 w-full max-w-md px-3">
+                <input 
+                  type="password" 
+                  name="password" 
+                  placeholder="Password" 
+                  value={formData.password} 
+                  onChange={handleChange} 
+                  className="w-full px-3 sm:px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" 
+                />
+              </div>
+              
+              <div className="w-full max-w-md px-3">
+                <button className="w-full py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">Log In</button>
+              </div>
+            </div>
+          </form>
+          
+          <div className="text-center mt-4">
+            <a href="#" className="text-xs sm:text-sm text-[#1C359A] hover:underline">Having issues with your password?</a>
+          </div>
+
+          <h1 className="text-xs sm:text-sm text-gray-500 text-center mt-4">OR</h1>
+
+          <div className="mt-4">
+            <div className="flex items-center justify-between">
+              <span className="w-1/5 border-b border-gray-300"></span>
+              <span className="text-lg sm:text-xl text-[#1C359A] font-black">Login with</span>
+              <span className="w-1/5 border-b border-gray-300"></span>
+            </div>
+            <div className="text-center mt-4 flex items-center justify-center flex-col">
+              <p className="text-xs sm:text-sm text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
+              <div className="w-full max-w-md px-3">
+                <button 
+                  type="button"
+                  className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+                  <img 
+                    src="..\img\google-logo.png"
+                    alt="Google"
+                    className="mr-2 w-6 h-6 sm:w-8 sm:h-8"/> 
+                  Login with Google
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-
-
       </div>
     </div>
   );
 };
 
-export default Login
+export default Login;
