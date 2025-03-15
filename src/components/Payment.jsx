@@ -8,6 +8,7 @@ const Payment = () => {
   const navigate = useNavigate();
   const { setCartItems } = useContext(CartContext); // Clear cart after checkout
   const [cartItems, setCartItemsState] = useState([]);
+  
   const [totalAmount, setTotalAmount] = useState(0);
   const [user, setUser] = useState({ name: "", address: "", phone: "", order_id: "", });
 
@@ -74,36 +75,41 @@ const Payment = () => {
   };
 
   return (
-    <div className="relative flex flex-col items-center min-h-screen h-screen bg-gray-100">
-      {/* Header */}
-      <div className="w-full bg-[#022DB8] text-white flex items-center justify-between h-42 p-6">
-        <button className="text-sm">&lt; back</button>
-        <div className="flex-1 text-center text-xl font-bold">GCash</div>
-      </div>
+    <div className="relative flex flex-col items-center min-h-screen w-full bg-gray-100">
+  {/* Header */}
+  <div className="w-full bg-[#022DB8] text-white flex items-center justify-between p-4 md:p-6">
+    <button 
+      className="text-sm"
+      onClick={() => navigate("/user/home")}
+    >
+      &lt; back
+    </button>
+    <div className="flex-1 text-center text-lg md:text-xl font-bold">GCash</div>
+    <div className="w-8"></div> {/* Spacer for alignment */}
+  </div>
 
-      {/* QR Code Section */}
-      <div className="relative bg-white shadow-lg rounded-lg p-8 text-center w-[60%] max-w-xl mt-[-50px] z-10">
-        <p className="text-blue-600 font-medium">A safer way to pay!</p>
-        <p className="text-gray-600 mb-4">
-          Log in to GCash and scan this QR with the QR scanner.
-        </p>
-        <div className="flex justify-center">
-          <img
-            src="/mnt/data/image.png"
-            alt="GCash QR Code"
-            className="w-48 h-48"
-          />
-        </div>
-
-        {/* Confirm Payment Button */}
-        <button
-          onClick={handleConfirmPayment}
-          className="mt-6 bg-[#1C359A] hover:bg-[#b1bef3] cursor-pointer text-white w-full py-3 rounded-lg text-lg font-bold"
-        >
-          Confirm Payment
-        </button>
-      </div>
+  {/* QR Code Section */}
+  <div className="relative bg-white shadow-lg rounded-lg p-4 md:p-8 text-center w-11/12 md:w-4/5 lg:w-3/5 max-w-xl mt-4 md:mt-[-50px] z-10 mx-2">
+    <p className="text-blue-600 font-medium text-sm md:text-base">A safer way to pay!</p>
+    <p className="text-gray-600 mb-4 text-xs md:text-sm">
+      Log in to GCash and scan this QR with the QR scanner.
+    </p>
+    <div className="flex justify-center">
+      <img
+        src="../img/gcash-payment.jpg"
+        alt="GCash QR Code"
+        className="w-36 h-36 md:w-48 md:h-48"
+      />
     </div>
+    {/* Confirm Payment Button */}
+    <button
+      onClick={handleConfirmPayment}
+      className="mt-4 md:mt-6 bg-[#1C359A] hover:bg-[#b1bef3] active:bg-[#0c1d5a] cursor-pointer text-white w-full py-2 md:py-3 rounded-lg text-base md:text-lg font-bold transition duration-200"
+    >
+      Confirm Payment
+    </button>
+  </div>
+</div>
   );
 };
 

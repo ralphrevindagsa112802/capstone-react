@@ -107,8 +107,9 @@ const UserMenu = () => {
                     <div className="w-full flex flex-col">
                         {/* Header with menu and dropdown for mobile */}
                         <div className="w-full flex justify-between items-center px-4 py-4 md:h-16 relative">
-                            <h1 className="text-[#1C359A] font-bold text-lg">All Menu</h1>
-
+                        <h1 className="text-[#1C359A] font-bold text-lg">
+        {selectedCategory === "All" ? "All Menu" : selectedCategory}
+    </h1>
                             {/* Mobile dropdown button */}
                             <div className="relative md:hidden">
                                 <button

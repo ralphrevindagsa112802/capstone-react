@@ -64,14 +64,14 @@ const Special = () => {
               <img
                 src="/img/318211064_695008868645411_4565065949629406948_n.jpg"
                 alt="Event 1"
-                className="w-full h-72 md:h-72 object-cover rounded-lg shadow-md"
+                className="w-full h-full md:h-full object-cover rounded-lg shadow-md"
               />
             </div>
             <div className="flex justify-center">
               <img
                 src="/img/327973672_563233255846521_3442598739534082680_n.jpg"
                 alt="Event 2"
-                className="w-full h-72 md:h-72 object-cover rounded-lg shadow-md"
+                className="w-full h-full md:h-full object-cover rounded-lg shadow-md"
               />
             </div>
           </div>

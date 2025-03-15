@@ -52,8 +52,6 @@ const UserAccount = () => {
   }, []);
 */
   //fetch user
-
-
   useEffect(() => {
     fetch('https://yappari-coffee-bar.shop/api/getUser', {
       credentials: 'include',
@@ -95,7 +93,9 @@ const UserAccount = () => {
       })
       return;
     }
+    
 
+    //handle update user
     fetch("https://yappari-coffee-bar.shop/api/update_user", {
       method: "POST",
       credentials: "include",
@@ -208,6 +208,7 @@ const UserAccount = () => {
     }
   };
 
+      // Fetch user points
   useEffect(() => {
     // Fetch user points
     fetch("https://yappari-coffee-bar.shop/api/getUser?action=get_points", {
@@ -223,13 +224,22 @@ const UserAccount = () => {
   }, []);
 
 
-
+  function ScrollToTop() {
+    const { pathname } = useLocation();
+  
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+  
+    return null;
+  }
   return (
     <div className='bg-[#DCDEEA]'>
       <UserNavbar />
 
-      <div className="flex flex-row bg-[#1C359A] py-10 px-4 md:px-36 mt-32 ">
-        <div className="flex flex-row absolute -mb-42 md:flex-row">
+      {/**header and sidebar */}
+      <div className="flex flex-col md:flex-row bg-[#1C359A] py-10 px-4 md:px-36 mt-18 md:mt-32 ">
+        <div className="flex flex-col md:flex-row md:items-start items-center md:absolute md:-mb-42">
           {/** 
             <div className="w-40 h-40 shadow-2xl rounded-full bg-white flex items-center justify-center text-[#1C359A] text-2xl md:text-4xl">
               <span id="userInitials">{userData.f_name.charAt(0) + userData.l_name.charAt(0)}</span>
@@ -279,13 +289,13 @@ const UserAccount = () => {
 
                 {/* Upload Button                                 */}
 
-                                <button
-                                    onClick={handleUpload}
-                                    className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm shadow-md hover:bg-blue-700 mt-1"
-                                >
-                                    Upload
-                                </button>
-                                
+                <button
+                  onClick={handleUpload}
+                  className="bg-blue-600 text-white px-3 py-1 rounded-md text-sm shadow-md hover:bg-blue-700 mt-1"
+                >
+                  Upload
+                </button>
+
               </div>
             )}
 
@@ -320,57 +330,117 @@ const UserAccount = () => {
         </button>
       </div>
 
-      <div className="container mx-auto pt-6 px-4 md:px-36 flex flex-col md:flex-row w-full">
+      <div className="container mx-auto pt-6 md:px-52 flex flex-col md:flex-row w-full">
         {/**side bar profile section */}
-        <aside className="w-full mt-12 md:w-64 h-auto md:h-screen py-4 flex flex-col space-y-6">
-          <nav className="space-y-4">
+        <aside className="fixed md:relative bottom-0 left-0 w-full md:w-64 md:h-screen  z-10 md:z-0">
+          {/* Mobile Bottom Navigation Bar */}
+          <div className="md:hidden flex justify-around items-center h-16 border-t border-gray-200 bg-white">
             <Link
               to="/user/account"
-              className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+              className="flex flex-col items-center justify-center w-1/4 py-2 text-gray-800 hover:text-blue-600 active:text-blue-800"
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
               </svg>
-              <span className="font-semibold">User Profile</span>
+              <span className="text-xs mt-1">Profile</span>
             </Link>
             <Link
               to="/user/cart"
-              className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+              className="flex flex-col items-center justify-center w-1/4 py-2 text-gray-800 hover:text-blue-600 active:text-blue-800"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z" />
               </svg>
-              <span className="font-semibold">Cart</span>
+              <span className="text-xs mt-1">Cart</span>
             </Link>
             <Link
               to="/user/status"
-              className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+              className="flex flex-col items-center justify-center w-1/4 py-2 text-gray-800 hover:text-blue-600 active:text-blue-800"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
               </svg>
-              <span className="font-semibold">Order Status</span>
+              <span className="text-xs mt-1">Status</span>
             </Link>
             <Link
               to="/user/history"
-              className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+              className="flex flex-col items-center justify-center w-1/4 py-2 text-gray-800 hover:text-blue-600 active:text-blue-800"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
                 <path fillRule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clipRule="evenodd" />
               </svg>
-              <span className="font-semibold">Order History</span>
+              <span className="text-xs mt-1">History</span>
             </Link>
-          </nav>
-          <div className="mt-6">
-            <button className="flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200">
+
+            <Link
+              to="/"
+              className="flex flex-col items-center justify-center w-1/4 py-2 text-gray-800 hover:text-blue-600 active:text-blue-800"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
               </svg>
-              SIGN OUT
-            </button>
+              <span className="text-xs mt-1">Sign Out</span>
+            </Link>
+          </div>
+
+          {/* Desktop Sidebar */}
+          <div className="hidden md:mt-12 md:w-64 md:flex md:flex-col h-full pt-4 py-4 space-y-6 ">
+            <nav className="space-y-4">
+              <Link
+                to="/user/account"
+                className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                </svg>
+                <span className="font-semibold">User Profile</span>
+              </Link>
+              <Link
+                to="/user/cart"
+                className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z" />
+                </svg>
+                <span className="font-semibold">Cart</span>
+              </Link>
+              <Link
+                to="/user/status"
+                className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                </svg>
+                <span className="font-semibold">Order Status</span>
+              </Link>
+              <Link
+                to="/user/history"
+                className="flex items-center space-x-4 text-gray-800 hover:text-blue-600 active:text-blue-800 transition-colors duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />
+                  <path fillRule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clipRule="evenodd" />
+                </svg>
+                <span className="font-semibold">Order History</span>
+              </Link>
+            </nav>
+            <div className="mt-6">
+              <button className="flex items-center justify-center w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clipRule="evenodd" />
+                </svg>
+                SIGN OUT
+              </button>
+            </div>
           </div>
         </aside>
+        {/**end of header and sidebar */}
+
+
 
         {/** main content*/}
 

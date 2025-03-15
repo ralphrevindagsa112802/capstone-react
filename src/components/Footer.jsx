@@ -3,7 +3,7 @@ import '../css/Footer.css';
 const Footer = () => {
   return (
     <div className="w-full">
-      <footer className="grid grid-cols-1 md:grid-cols-[500px_1fr] bg-[#1C359A] w-full h-auto p-8 gap-6">
+      <footer className="grid grid-cols-1 md:grid-cols-[500px_1fr] bg-[#1C359A] w-full h-auto  items-center p-6 gap-6">
         
         {/* Logo Section */}
         <div className="flex justify-center md:justify-start">
@@ -11,11 +11,9 @@ const Footer = () => {
         </div>
 
         {/* Content Section */}
-        <div className="grid grid-rows-2 gap-6">
-
+        <div>
           {/* Top Row: Button & Social Media */}
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-4">
-            
             {/* Order Now Button */}
             <div className="mb-2 md:mb-0">
               <button className="bg-white text-blue-900 py-2 px-6 h-14 w-48 text-sm rounded-full font-semibold hover:bg-gray-200 transition">
@@ -35,11 +33,10 @@ const Footer = () => {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-white"></div>
+          <hr className="border-t border-white my-4" />
 
           {/* Bottom Row: Info, Contact, Address, Privacy */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
-            
             {/* Info */}
             <div>
               <h3 className="text-base underline text-white mb-2 font-bold">Info</h3>
@@ -69,9 +66,7 @@ const Footer = () => {
               <p className="text-sm text-gray-300">&copy; 2024. All rights reserved</p>
               <a href="#" className="text-sm text-gray-300 hover:text-white block">Privacy Policy</a>
             </div>
-
           </div>
-
         </div>
       </footer>
     </div>

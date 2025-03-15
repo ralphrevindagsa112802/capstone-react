@@ -18,10 +18,10 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
     "Dessert": { small: "Regular" }, // Only has one size
     "Snacks and Pasta": { small: "Regular", medium: "Large", large: "Extra Large" }
   };
-  
+
   // Get category-specific labels or default to generic
   const labels = sizeLabels[food.category] || { small: "Small", medium: "Medium", large: "Large" };
-  
+
   const sizeOptions = [];
   if (food.availability_small === "Available") {
     sizeOptions.push({ size: labels.small, price: food.price_small });
@@ -40,11 +40,11 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
   const handleSizeChange = (e) => {
     const newSize = e.target.value;
     const newPrice = sizeOptions.find(option => option.size === newSize)?.price || food.price_small;
-    
+
     setSelectedSize(newSize);
     setSelectedPrice(newPrice);
   };
-  
+
 
   const handleAddToCart = () => {
     onAddToCart({ ...food, size: selectedSize, food_price: selectedPrice, quantity: 1 });
@@ -53,16 +53,25 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
   };
 
   return (
-    <div className=" fixed inset-0 bg-opacity-50 backdrop-blur-xs flex w-full justify-center items-center z-[50] ">
-      <div className="bg-white rounded-lg p-6 w-2/3 h-2/3">
+    <div className="fixed inset-0 bg-opacity-50 backdrop-blur-xs flex w-full justify-center items-center z-[50] p-4">
+      <div className="bg-white rounded-lg p-4 md:p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <button onClick={onClose} className="text-[#1C359A] text-sm mb-2">← Back</button>
 
-        <div className="grid grid-cols-2 gap-10">
-          <img src={food.image_path} className="w-full h-96 object-cover rounded-lg" alt={food.food_name} />
-          <div className="">
-            <h3 className="text-xl font-bold text-[#1C359A] underline">{food.food_name}</h3>
-            <p className="text-gray-600 text-sm">{food.description}</p>
+        {/* Change from grid to flex column on mobile, grid on larger screens */}
 
+        <div className="flex flex-col md:grid md:grid-cols-2 md:gap-10">
+          <img src={food.image_path}
+            className="w-full h-48 sm:h-64 md:h-96 object-cover rounded-lg"
+            alt={food.food_name} />
+          <div className="mt-4 md:mt-0">
+            <h3 className="text-xl font-bold text-[#1C359A] underline">{food.food_name}</h3>
+            <p className="text-gray-600 text-sm mt-2">{food.description}</p>
+            {food.allergen && (
+              <div className="bg-[#DCDEEA] border-l-4 border-[#1C359A] text-black p-2 rounded-md mt-2">
+                <h3 className="font-semibold text-xs">Ingredient Notice</h3>
+                <p className="text-xs italic">Contains: {food.allergen}</p>
+              </div>
+            )}
             {/* Size Selection */}
             <div className="mt-4">
               <span className="text-[#1C359A] font-bold">Size:</span>
@@ -79,8 +88,8 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
               <p className="text-lg">₱{selectedPrice}</p>
             </div>
 
-            <button 
-              onClick={handleAddToCart} 
+            <button
+              onClick={handleAddToCart}
               className="bg-blue-600 text-white px-4 py-2 mt-4 rounded-md w-full"
             >
               Add to Cart
