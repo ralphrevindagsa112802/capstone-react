@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import Swal from "sweetalert2";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -72,7 +71,7 @@ const SignIn = () => {
       }
 
       if (data.success) {
-        Swal.fire("Success", 'Signup successful! You can now log in.', "success");
+        Swal.fire("Success", 'Signup successful! You can now log in.', "success", {timer: 3000});
         navigate("/login");
       } else {
         setError(data.message || "Signup failed");
@@ -85,13 +84,13 @@ const SignIn = () => {
 
   const handleGoogleSuccess = (response) => {
     console.log("Google login success", response);
-    alert("Login successful! Redirecting...");
+    Swal.fire("Login successful!", 'Redirecting...','success', {timer: 3000})
     navigate("/user/home");
   };
 
   const handleGoogleFailure = () => {
     console.log("Google login failed");
-    Swal.fire('Oops...','Google login failed. Please try again.','error')
+    Swal.fire('Oops...','Google login failed. Please try again.','error', {timer: 3000})
   };
 
   return (

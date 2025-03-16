@@ -99,7 +99,7 @@ const UserHistory = () => {
 
   const handleFeedbackSubmit = (orderId) => {
     if (!feedback || !comment) {
-      Swal.fire("Warning", "Please provide a rating and comment.", "warning");
+      Swal.fire("Warning", "Please provide a rating and comment.", "warning", {timer: 3000});
       return;
     }
 
@@ -118,14 +118,15 @@ const UserHistory = () => {
         score: feedbackScores[feedback],
       })
       .then((response) => {
-        Swal.fire("Success", response.data.message, "success");
+        Swal.fire("Success", response.data.message, "success", {timer: 3000});
         setIsFeedbackOpen(false);
       })
       .catch((error) => {
         Swal.fire(
           "Error",
           "Failed to submit feedback. Please try again.",
-          "error"
+          "error",
+         {timer: 3000}
         );
       });
   };
@@ -188,13 +189,15 @@ const UserHistory = () => {
           Swal.fire(
             "Success",
             `Profile picture updated successfully!`,
-            "success"
+            "success",
+            {timer: 3000}
           );
         } else {
           Swal.fire(
             "Error",
             `Error uploading profile picture: ${data.error}`,
-            "error"
+            "error", 
+            {timer: 3000}
           );
         }
       })

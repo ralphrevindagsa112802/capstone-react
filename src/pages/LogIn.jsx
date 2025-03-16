@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -62,9 +63,21 @@ const Login = () => {
       console.error("Error:", error);
       setError("Failed to connect to server");
     }
-  };  
+  };
+
+  const handleGoogleSuccess = (response) => {
+    console.log("Google login success", response);
+    Swal.fire("Login successful!", 'Redirecting...','success', {timer: 3000})
+    navigate("/user/home");
+  };
+
+  const handleGoogleFailure = () => {
+    console.log("Google login failed");
+    Swal.fire('Oops...','Google login failed. Please try again.','error', {timer: 3000})
+  };
   
   return (
+    <GoogleOAuthProvider clientId="702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com">
     <div className="bg-[#1C359A] flex flex-col md:flex-row items-stretch justify-center min-h-screen w-full">
       {/* Left side with logos - hidden on mobile, visible on medium screens and up */}
       <div className="hidden md:flex md:flex-col md:justify-start md:w-1/3 lg:w-1/2 text-white">
@@ -151,21 +164,16 @@ const Login = () => {
             <div className="text-center mt-4 flex items-center justify-center flex-col">
               <p className="text-xs sm:text-sm text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
               <div className="w-full max-w-md px-3">
-                <button 
-                  type="button"
-                  className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
-                  <img 
-                    src="..\img\google-logo.png"
-                    alt="Google"
-                    className="mr-2 w-6 h-6 sm:w-8 sm:h-8"/> 
-                  Login with Google
-                </button>
+                <div className="w-full flex justify-center">
+                    <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleFailure} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </GoogleOAuthProvider>
   );
 };
 

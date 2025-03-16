@@ -165,9 +165,9 @@ const UserCart = () => {
 
                 if (data.success) {
                     setUserData(prev => ({ ...prev, profile_pic: data.profile_pic }));
-                    Swal.fire("Success", `Profile picture updated successfully!`, "success");
+                    Swal.fire("Success", `Profile picture updated successfully!`, "success", {timer: 3000});
                 } else {
-                    Swal.fire("Error", `Error uploading profile picture: ${data.error}`, "error");
+                    Swal.fire("Error", `Error uploading profile picture: ${data.error}`, "error", {timer: 3000});
                 }
             })
             .catch(error => console.error("Error uploading profile picture:", error));

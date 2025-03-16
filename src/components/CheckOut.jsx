@@ -38,7 +38,7 @@ const CheckOut = () => {
     if (method === "Delivery") {
       // Check if the user's address contains "Taguig"
       if (!user.address || !user.address.includes("Taguig")) {
-        Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning");
+        Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning", {timer: 3000});
         return; // Don't change shipping method
       }
     }
@@ -50,13 +50,13 @@ const CheckOut = () => {
   //handling payment gcash or paymaya
   const handlePayment = async () => {
     if (cartItems.length === 0) {
-      Swal.fire("Warning", "Your cart is empty!", "warning");
+      Swal.fire("Warning", "Your cart is empty!", "warning", {timer: 3000});
       return;
     }
   
     // Double-check Taguig address requirement for delivery
     if (shippingMethod === "Delivery" && (!user.address || !user.address.includes("Taguig"))) {
-      Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning");
+      Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning", {timer: 3000});
       return;
     }
   

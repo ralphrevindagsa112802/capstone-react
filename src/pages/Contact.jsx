@@ -43,7 +43,8 @@ const Contact = () => {
         Swal.fire({
           title: "Thank You!",
           text: "Message sent!",
-          icon: "success"
+          icon: "success",
+          timer: 3000,
         });
 
         // Reset form fields
@@ -56,11 +57,11 @@ const Contact = () => {
         });
       } else {
         console.error("Error:", res.message);
-        Swal.fire("Error", "Message failed to send: " + res.message, "error");
+        Swal.fire("Error", "Message failed to send: " + res.message, "error", {timer: 3000});
       }
     } catch (error) {
       console.error("Fetch error:", error);
-      Swal.fire("Error", "Error sending message. Please try again.", "error");
+      Swal.fire("Error", "Error sending message. Please try again.", "error", {timer: 3000});
     }
   };
 

@@ -34,6 +34,7 @@ const PublicMenu = () => {
       text: 'Please sign up or log in to add items to your cart!',
       icon: 'info',
       confirmButtonText: 'OK',
+      timer: 3000,
     }).then(() => {
       setTimeout(() => {
         navigate("/login")

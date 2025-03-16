@@ -101,7 +101,7 @@ const UserStatus = () => {
           setOrders(prevOrders => prevOrders.map(order =>
             order.orders_id === orderId ? { ...order, order_status: "Cancelled" } : order
           ));
-          Swal.fire("Success", "Order successfully cancelled.", "success");
+          Swal.fire("Success", "Order successfully cancelled.", "success", {timer: 3000});
           setMessage("Order successfully cancelled.");
         } else {
           setMessage(response.data.error || "Failed to cancel order.");
@@ -118,7 +118,7 @@ const UserStatus = () => {
           setOrders(prevOrders => prevOrders.map(order =>
             order.orders_id === orderId ? { ...order, order_status: "Order Received" } : order
           ));
-          Swal.fire("Success", "Order successfully marked as received.", "success");
+          Swal.fire("Success", "Order successfully marked as received.", "success", {timer: 3000});
           setMessage("Order successfully marked as received.");
         } else {
           setMessage(response.data.error || "Failed to update order status.");
@@ -183,9 +183,9 @@ const UserStatus = () => {
 
         if (data.success) {
           setUserData(prev => ({ ...prev, profile_pic: data.profile_pic }));
-          Swal.fire("Success", `Profile picture updated successfully!`, "success");
+          Swal.fire("Success", `Profile picture updated successfully!`, "success", {timer: 3000});
         } else {
-          Swal.fire("Error", `Error uploading profile picture: ${data.error}`, "error");
+          Swal.fire("Error", `Error uploading profile picture: ${data.error}`, "error", {timer: 3000});
         }
       })
       .catch(error => console.error("Error uploading profile picture:", error));

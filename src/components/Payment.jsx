@@ -63,14 +63,14 @@ const Payment = () => {
         localStorage.removeItem("checkoutOrder");
         localStorage.removeItem("totalAmount");
         localStorage.removeItem("shipping_method");
-        Swal.fire("Success", `Order placed successfully! Order ID: ${response.data.order_id}`, "success");
+        Swal.fire("Success", `Order placed successfully! Order ID: ${response.data.order_id}`, "success", {timer: 3000});
         navigate("/user/cart"); // ✅ Redirect to confirmation page
       } else {
-        Swal.fire("Error", `"Order submission failed: ${response.data.message}`, "success");
+        Swal.fire("Error", `"Order submission failed: ${response.data.message}`, "success", {timer: 3000});
       }
     } catch (error) {
       console.error("Error submitting order:", error);
-      Swal.fire("Success", `Failed to place order. Please try again.`, "success");
+      Swal.fire("Success", `Failed to place order. Please try again.`, "success", {timer: 3000});
     }
   };
 

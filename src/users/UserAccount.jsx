@@ -90,6 +90,7 @@ const UserAccount = () => {
         text: 'User ID is missing in React.',
         icon: 'error',
         confirmButtonText: 'OK',
+        timer: 3000,
       })
       return;
     }
@@ -110,7 +111,7 @@ const UserAccount = () => {
             title: 'Success!',
             text: 'Profile updated successfully!',
             icon: 'success',
-            timer: 2000,
+            timer: 3000,
           })
           setIsEditing(false);
         } else {
@@ -157,9 +158,9 @@ const UserAccount = () => {
 
         if (data.success) {
           setUserData(prev => ({ ...prev, profile_pic: data.profile_pic }));
-          Swal.fire("Success", `Profile picture updated successfully!`, "success");
+          Swal.fire("Success", `Profile picture updated successfully!`, "success", {timer: 3000});
         } else {
-          Swal.fire("Error", `Error uploading profile picture: ${data.error}`, "error");
+          Swal.fire("Error", `Error uploading profile picture: ${data.error}`, "error", {timer: 3000});
         }
       })
       .catch(error => console.error("Error uploading profile picture:", error));
@@ -171,12 +172,12 @@ const UserAccount = () => {
     console.log("Updating password..."); // Debugging
 
     if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
-      Swal.fire("Warning", `Please fill in all fields.`, "warning");
+      Swal.fire("Warning", `Please fill in all fields.`, "warning", {timer: 3000});
       return;
     }
 
     if (passwordData.new_password !== passwordData.confirm_password) {
-      Swal.fire("Warning", `New passwords do not match.`, "warning");
+      Swal.fire("Warning", `New passwords do not match.`, "warning", {timer: 3000});
       return;
     }
 
@@ -193,18 +194,18 @@ const UserAccount = () => {
 
           if (data.success) {
             setTimeout(() => {
-              Swal.fire("Success", `Password updated successfully!`, "success"); // ✅ Ensure alert is shown
+              Swal.fire("Success", `Password updated successfully!`, "success", {timer: 3000}); // ✅ Ensure alert is shown
             }, 100);
 
             setPasswordData({ current_password: '', new_password: '', confirm_password: '' });
             setIsEditingPassword(false);
           } else {
-            Swal.fire("Error", `Error: ${data.error}`, "error");
+            Swal.fire("Error", `Error: ${data.error}`, "error", {timer: 3000});
           }
         })
     } catch (error) {
       console.error('Error updating password:', error);
-      Swal.fire("Error", `Something went wrong. Please try again.`, "error");
+      Swal.fire("Error", `Something went wrong. Please try again.`, "error", {timer: 3000});
     }
   };
 
