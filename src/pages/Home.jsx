@@ -2,6 +2,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import '../css/Home.css'
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -235,11 +236,11 @@ const Home = () => {
                 Anytime, Anywhere!
               </div>
             </div>
-
-            <button className="mt-4 sm:mt-6 mb-4 sm:mb-6 bg-[#ffffff] text-xs sm:text-sm font-semibold text-[#1C359A] py-2 sm:py-3 px-6 sm:px-10 rounded-full shadow-lg hover:bg-[#1C359A] hover:text-[#ffffff] cursor-pointer">
+            <Link to="/menu">
+            <button  className="mt-4 sm:mt-6 mb-4 sm:mb-6 bg-[#ffffff] text-xs sm:text-sm font-semibold text-[#1C359A] py-2 sm:py-3 px-6 sm:px-10 rounded-full shadow-lg hover:bg-[#1C359A] hover:text-[#ffffff] cursor-pointer">
               ORDER NOW
             </button>
-
+          </Link>
             {/* Image container with responsive heights */}
             <div className="relative w-full h-64 sm:h-96 md:h-[450px] lg:h-[550px] flex justify-center items-center">
               {/* Plate Image - Back Layer */}
@@ -384,11 +385,12 @@ const Home = () => {
               </div>
             </div>
           </div>
-
+        <Link to="/menu">
           <button
             className="mt-8 bg-[#1C359A] text-sm font-semibold text-white py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
             More
           </button>
+          </Link>
         </section>
 
 
@@ -434,10 +436,11 @@ const Home = () => {
               </div>
             </div>
           </div>
-
+          <Link to="/company">
           <button class="mt-8 bg-[#1C359A] text-sm font-semibold text-white py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
             About Us
           </button>
+          </Link>
         </section>
 
         <section className="bg-white h-auto text-center py-6 mt-12 w-full px-2 sm:px-4 md:px-6 overflow-hidden">

@@ -198,11 +198,13 @@ const UserNavbar = () => {
       
 
         <div className="flex items-center justify-center md:justify-start">
-          <img 
-            src="../img/YCB LOGO (BLUE).png" 
-            alt="Logo" 
-            className="h-16 sm:h-20 md:h-24 max-w-full object-scale-down" 
-          />
+        <a href="/user/home">
+    <img 
+      src="../img/YCB LOGO (BLUE).png" 
+      alt="Logo" 
+      className="h-16 sm:h-20 md:h-24 max-w-full object-scale-down cursor-pointer" 
+    />
+  </a>
         </div>
         {/* Hamburger Menu (Mobile) */}
         <button

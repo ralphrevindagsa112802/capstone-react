@@ -96,9 +96,9 @@ const Payment = () => {
     </p>
     <div className="flex justify-center">
       <img
-        src="../img/gcash-payment.jpg"
+        src="../img/cashg-payment.jpg"
         alt="GCash QR Code"
-        className="w-36 h-36 md:w-48 md:h-48"
+        className="w-52 h-52 md:w-72 md:h-72"
       />
     </div>
     {/* Confirm Payment Button */}

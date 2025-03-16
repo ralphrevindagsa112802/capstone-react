@@ -5,6 +5,7 @@ import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
 import { CartContext } from "../context/CartContext"; // Import context
 import MenuPopup from "../components/MenuPopUp"; // Import the new popup component
+import { Link } from "react-router-dom";
 
 const UserMenu = () => {
     const { cartItems, addToCart } = useContext(CartContext); // Use context
@@ -209,14 +210,18 @@ const UserMenu = () => {
                             </div>
 
                             {/* Desktop cart icon */}
+                            <Link to="/user/cart">
                             <div className="hidden md:block relative z-10">
                                 <img src="/img/cart.png" alt="Cart" className="h-6 w-6" />
                             </div>
 
                             {/* Mobile cart icon */}
+
                             <div className="md:hidden">
                                 <img src="/img/cart.png" alt="Cart" className="h-6 w-6" />
                             </div>
+                            </Link>
+
                         </div>
 
                         <hr className="border-t border-black mx-4 my-2 w-auto" />
