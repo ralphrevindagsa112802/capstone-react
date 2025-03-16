@@ -32,7 +32,7 @@ if (!isset($_SESSION["admin_id"])) {
 try {
    $stmt = $pdo->prepare("
     SELECT 
-        o.orders_id, o.total_amount, o.created_at, o.shipping_method,
+        o.orders_id, o.total_amount, o.created_at, o.shipping_method, o.payment_method,
         u.id AS user_id, u.username, u.email, u.f_name, u.l_name, u.phone, u.address,
         oi.food_id, f.food_name, oi.size, oi.quantity, oi.price
     FROM orders o
@@ -60,6 +60,7 @@ try {
                 'total_amount' => floatval($row['total_amount']),
                 'created_at' => $row['created_at'],
                 'shipping_method' => $row['shipping_method'], // Added Shipping Method
+                'payment_method' => $row['payment_method'], // Added Payment Method
                 'user' => [
                     'user_id' => $row['user_id'],
                     'username' => $row['username'],

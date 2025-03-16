@@ -33,7 +33,7 @@ const UserStatus = () => {
   // Fetch user points
   useEffect(() => {
     // Fetch user points
-    fetch("https://yappari-coffee-bar.shop/api/getUser?action=get_points", {
+    fetch(`https://yappari-coffee-bar.shop/api/getUser?action=get_points`, {
       credentials: "include"
     })
       .then(response => response.json())
@@ -529,6 +529,10 @@ const UserStatus = () => {
                   <div>
                     <span className="text-sm text-gray-600">Total Amount</span>
                     <p className="font-medium">₱{parseFloat(selectedOrder.total_amount).toFixed(2)}</p>
+                  </div>
+                  <div>
+                    <span className="text-sm text-gray-600">Payment Option</span>
+                    <p className="font-medium">{selectedOrder.payment_method}</p>
                   </div>
                 </div>
               </div>
