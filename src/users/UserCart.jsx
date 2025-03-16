@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
+import Swal from "sweetalert2";
 
 const UserCart = () => {
     const { cartItems, removeFromCart, setCartItems } = useContext(CartContext);
@@ -82,7 +83,7 @@ const UserCart = () => {
 
     const handleCheckout = () => {
         if (selectedItems.length === 0) {
-            alert("Please select items to order.");
+            Swal.fire('Oops...','Please select items to order.','info');
             return;
         }
 

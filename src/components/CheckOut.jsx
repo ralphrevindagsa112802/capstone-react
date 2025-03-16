@@ -60,10 +60,23 @@ const CheckOut = () => {
       return;
     }
   
+    // Payment Methods
     if (paymentMethod === "GCash") {
       localStorage.setItem("shipping_method", shippingMethod);
       localStorage.setItem("payment_method", paymentMethod);
       navigate("/user/payment");
+      return;
+    } else if (paymentMethod === "Paymaya") {
+      localStorage.setItem("shipping_method", shippingMethod);
+      localStorage.setItem("payment_method", paymentMethod);
+      navigate("/user/payment");
+      return;
+    } else if (paymentMethod === "Cash on Delivery") {
+      localStorage.setItem("shipping_method", shippingMethod);
+      localStorage.setItem("payment_method", paymentMethod);
+      navigate("/user/payment");
+      return;
+    } else {
       return;
     }
   };
@@ -163,6 +176,20 @@ const CheckOut = () => {
                   />
                   <span className="text-base md:text-lg font-semibold">PayMaya</span>
                   <img src="../img/paymaya-icon.png" alt="PayMaya" className="w-5 h-5 md:w-6 md:h-6" />
+                </div>
+              </label>
+
+              <label className="block cursor-pointer border-2 border-[#1C359A] rounded-lg p-3 hover:bg-blue-50 transition-colors">
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    name="payment_method"
+                    value="Cash on Delivery"
+                    checked={paymentMethod === "Cash on Delivery"}
+                    onChange={() => setPaymentMethod("Cash on Delivery")}
+                    className="w-4 h-4"
+                  />
+                  <span className="text-base md:text-lg font-semibold">Cash on Delivery</span>
                 </div>
               </label>
             </div>
