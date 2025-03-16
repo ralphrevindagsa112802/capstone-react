@@ -727,6 +727,10 @@ const UserHistory = () => {
                       ₱{parseFloat(selectedOrder.total_amount).toFixed(2)}
                     </p>
                   </div>
+                  <div>
+                    <span className="text-sm text-gray-600">Payment Option</span>
+                    <p className="font-medium">{selectedOrder.payment_method}</p>
+                  </div>
                 </div>
               </div>
 
