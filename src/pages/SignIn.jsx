@@ -82,19 +82,7 @@ const SignIn = () => {
     }
   };
 
-  const handleGoogleSuccess = (response) => {
-    console.log("Google login success", response);
-    Swal.fire("Login successful!", 'Redirecting...','success', {timer: 3000})
-    navigate("/user/home");
-  };
-
-  const handleGoogleFailure = () => {
-    console.log("Google login failed");
-    Swal.fire('Oops...','Google login failed. Please try again.','error', {timer: 3000})
-  };
-
   return (
-    <GoogleOAuthProvider clientId="702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com">
       <div className="bg-[#1C359A] flex flex-col md:flex-row items-stretch justify-center min-h-screen w-full">
         {/* Left side with logos - hidden on mobile, visible on medium screens and up */}
         <div className="hidden md:flex md:flex-col md:justify-start md:w-1/3 lg:w-1/2 text-white">
@@ -289,26 +277,11 @@ const SignIn = () => {
             <div className="text-center mt-4">
               <a href="#" className="text-xs sm:text-sm text-[#1C359A] hover:underline">Having issues with your password?</a>
             </div>
-
-            <h1 className="text-xs sm:text-sm text-gray-500 text-center mt-4">OR</h1>
-
-            <div className="mt-4">
-              <div className="flex items-center justify-between">
-                <span className="w-1/5 border-b border-gray-300"></span>
-                <span className="text-lg sm:text-xl text-[#1C359A] font-black">Login with</span>
-                <span className="w-1/5 border-b border-gray-300"></span>
-              </div>
-              <div className="text-center mt-4 flex items-center justify-center flex-col">
-                <p className="text-xs sm:text-sm text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
-                <div className="w-full flex justify-center">
-                  <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleFailure} />
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
-    </GoogleOAuthProvider>
+   
   );
 };
 
