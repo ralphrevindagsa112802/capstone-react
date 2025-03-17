@@ -1,4 +1,5 @@
 import '../css/Footer.css';
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -16,9 +17,11 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-4">
             {/* Order Now Button */}
             <div className="mb-2 md:mb-0">
+              <Link to="/user/menu">
               <button className="bg-white text-blue-900 py-2 px-6 h-14 w-48 text-sm rounded-full font-semibold hover:bg-gray-200 transition">
                 ORDER NOW
               </button>
+              </Link>
             </div>
 
             {/* Social Media Icons */}
