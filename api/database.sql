@@ -14,11 +14,12 @@ CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
+    google_id VARCHAR(255) UNIQUE NULL, -- ✅ Added this for Google OAuth
     f_name VARCHAR(100) NOT NULL,
     l_name VARCHAR(100) NOT NULL,
     phone VARCHAR(15) NOT NULL,
     address TEXT NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NULL, -- ✅ Make it NULL for Google users
     profile_pic VARCHAR(255),
     points DECIMAL(10,2) DEFAULT 0.0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

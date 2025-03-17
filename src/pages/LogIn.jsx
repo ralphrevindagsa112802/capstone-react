@@ -70,11 +70,30 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSuccess = (response) => {
+  const handleGoogleSuccess = async (response) => {
     console.log("Google login success", response);
-    Swal.fire("Login successful!", 'Redirecting...','success', {timer: 3000})
-    navigate("/user/home");
+    const credential = response.credential;
+  
+    try {
+      const res = await fetch("https://yappari-coffee-bar.shop/api/googleLogin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential }),
+      });
+  
+      const data = await res.json();
+      if (data.success) {
+        Swal.fire("Login successful!", "Redirecting...", "success", { timer: 3000 });
+        navigate("/user/home"); 
+      } else {
+        Swal.fire("Oops...", data.message, "error", { timer: 3000 });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire("Error", "Failed to connect to server", "error");
+    }
   };
+  
 
   const handleGoogleFailure = () => {
     console.log("Google login failed");
@@ -188,7 +207,13 @@ const Login = () => {
               <p className="text-xs sm:text-sm text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
               <div className="w-full max-w-md px-3">
                 <div className="w-full flex justify-center">
-                    <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleFailure} />
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleFailure}
+                    useOneTap
+                    auto_select={false} // Ensures the user has control over login
+                    cancel_on_tap_outside={false} // Prevents accidental rejections
+                  />
                 </div>
               </div>
             </div>
