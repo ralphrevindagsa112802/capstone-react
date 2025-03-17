@@ -3,7 +3,7 @@ session_start();
 include __DIR__ . "/db.php";
 
 
-header("Access-Control-Allow-Origin: https://yappari-coffee-bar.shop");
+header("Access-Control-Allow-Origin: https://yappari-coffee-bar.vercel.app");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -43,7 +43,7 @@ try {
         setcookie("PHPSESSID", session_id(), [
             "expires" => 0,
             "path" => "/",
-            "domain" => "yappari-coffee-bar.shop", // Change for production
+            "domain" => "localhost", // Change for production
             "secure" => true,        // Ensure it's only sent over HTTPS
             "httponly" => true,      // Prevent JavaScript access
             "samesite" => "None"     // Prevent CSRF attacks
