@@ -7,9 +7,9 @@ session_start(); // Start the session for user authentication
 // Database connection
 include __DIR__ . "/db.php";
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://yappari-coffee-bar.shop");
 header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 // Get POST request data
 $input = json_decode(file_get_contents("php://input"), true);
