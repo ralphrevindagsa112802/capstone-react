@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+const clientId = "702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com"; // Replace with your actual Client ID
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -70,38 +72,25 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSuccess = async (response) => {
+  const onSuccess = (response) => {
     console.log("Google login success", response);
-    const credential = response.credential;
-  
-    try {
-      const res = await fetch("https://yappari-coffee-bar.shop/api/googleLogin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ credential }),
-      });
-  
-      const data = await res.json();
-      if (data.success) {
-        Swal.fire("Login successful!", "Redirecting...", "success", { timer: 3000 });
-        navigate("/user/home"); 
-      } else {
-        Swal.fire("Oops...", data.message, "error", { timer: 3000 });
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      Swal.fire("Error", "Failed to connect to server", "error");
-    }
-  };
-  
 
-  const handleGoogleFailure = () => {
-    console.log("Google login failed");
-    Swal.fire('Oops...','Google login failed. Please try again.','error', {timer: 3000})
+    // Decode JWT token
+    const userData = JSON.parse(atob(response.credential.split(".")[1]));
+
+    // Save user details to localStorage
+    localStorage.setItem("user", JSON.stringify(userData));
+
+    alert("Login successful! Redirecting...");
+    navigate("/user/ProfileAcc"); // Redirect after login
+  };
+
+  const onFailure = (res) => {
+    console.log("Google login failed", res);
+    alert("Google login failed. Please try again.");
   };
   
   return (
-    <GoogleOAuthProvider clientId="702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com">
     <div className="bg-[#1C359A] flex flex-col md:flex-row items-stretch justify-center min-h-screen w-full">
       {/* Left side with logos - hidden on mobile, visible on medium screens and up */}
       <div className="hidden md:flex md:flex-col md:justify-start md:w-1/3 lg:w-1/2 text-white">
@@ -207,13 +196,12 @@ const Login = () => {
               <p className="text-xs sm:text-sm text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
               <div className="w-full max-w-md px-3">
                 <div className="w-full flex justify-center">
-                  <GoogleLogin
-                    onSuccess={handleGoogleSuccess}
-                    onError={handleGoogleFailure}
-                    useOneTap
-                    auto_select={false} // Ensures the user has control over login
-                    cancel_on_tap_outside={false} // Prevents accidental rejections
-                  />
+                  <GoogleOAuthProvider clientId={clientId}>
+                       <div>
+                         <h2>Login with Google</h2>
+                         <GoogleLogin onSuccess={onSuccess} onError={onFailure} />
+                       </div>
+                     </GoogleOAuthProvider>
                 </div>
               </div>
             </div>
@@ -221,7 +209,6 @@ const Login = () => {
         </div>
       </div>
     </div>
-  </GoogleOAuthProvider>
   );
 };
 
