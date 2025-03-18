@@ -13,9 +13,6 @@ if (!isset($data->token)) {
     exit;
 }
 
-$client = new Client();
-$client->setClientId("702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com");
-
 try {
     $payload = $client->verifyIdToken($data->token);
 

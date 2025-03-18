@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"; 
 
+const clientId = "702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com"; // Replace with your actual Client ID
+
 const SignIn = () => {
   const [formData, setFormData] = useState({
     firstname: "",
@@ -82,19 +84,25 @@ const SignIn = () => {
     }
   };
 
-  const handleGoogleSuccess = (response) => {
+  const onSuccess = (response) => {
     console.log("Google login success", response);
+
+    // Decode JWT token
+    const userData = JSON.parse(atob(response.credential.split(".")[1]));
+
+    // Save user details to localStorage
+    localStorage.setItem("user", JSON.stringify(userData));
+
     alert("Login successful! Redirecting...");
-    navigate("/Menu");
+    navigate("/user/ProfileAcc"); // Redirect after login
   };
 
-  const handleGoogleFailure = () => {
-    console.log("Google login failed");
+  const onFailure = (res) => {
+    console.log("Google login failed", res);
     alert("Google login failed. Please try again.");
   };
 
   return (
-    <GoogleOAuthProvider clientId="702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com">
       <div className="bg-[#1C359A] flex flex-col md:flex-row items-stretch justify-center min-h-screen w-full">
         {/* Left side with logos - hidden on mobile, visible on medium screens and up */}
         <div className="hidden md:flex md:flex-col md:justify-start md:w-1/3 lg:w-1/2 text-white">
@@ -299,13 +307,17 @@ const SignIn = () => {
   </div>
   <div className="text-center mt-4 flex items-center justify-center flex-col">
     <p className="text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
-    <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleFailure} />
+    <GoogleOAuthProvider clientId={clientId}>
+      <div>
+        <h2>Login with Google</h2>
+        <GoogleLogin onSuccess={onSuccess} onError={onFailure} />
+      </div>
+    </GoogleOAuthProvider>
           </div>
         </div>
       </div>
       </div>
       </div>
-</GoogleOAuthProvider>
   );
 };
 
