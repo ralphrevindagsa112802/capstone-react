@@ -2,13 +2,14 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartContext } from "../context/CartContext";
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaBars, FaTimes, FaHome, FaUtensils, FaBuilding, FaStar, FaEnvelope, FaShoppingCart } from "react-icons/fa";
 
 const UserNavbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const { logoutUser } = useContext(CartContext);
   const dropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null);
   const [user, setUser] = useState(null);
   const [profileImageError, setProfileImageError] = useState(false);
   const location = useLocation();
@@ -42,6 +43,39 @@ const UserNavbar = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
+  // Close mobile menu if clicking outside
+  useEffect(() => {
+    const handleMobileMenuClickOutside = (event) => {
+      // Only check if menu is open and not when clicking the toggle button itself
+      if (
+        isMobileMenuOpen &&
+        mobileMenuRef.current && 
+        !mobileMenuRef.current.contains(event.target) &&
+        !event.target.closest('[data-menu-toggle="true"]') // Modified selector
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleMobileMenuClickOutside);
+    return () => {
+      document.removeEventListener("click", handleMobileMenuClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
+  // Prevent scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMobileMenuOpen]);
 
   // Fetch user data from the backend
   useEffect(() => {
@@ -122,7 +156,8 @@ const UserNavbar = () => {
     const handleClickOutside = (event) => {
       if (
         notificationRef.current &&
-        !notificationRef.current.contains(event.target)
+        !notificationRef.current.contains(event.target) &&
+        !event.target.closest('[data-notification-toggle="true"]') // Modified selector
       ) {
         setNotificationOpen(false);
       }
@@ -158,19 +193,26 @@ const UserNavbar = () => {
         notification.order_status !== "Completed"
     ).length;
   };
+
+  // Define mobile menu item links with icons for better UX
+  const menuItems = [
+    { path: "/user/home", name: "Home", icon: <FaHome className="w-4 h-4" /> },
+    { path: "/user/menu", name: "Menu", icon: <FaUtensils className="w-4 h-4" /> },
+    { path: "/user/company", name: "Company", icon: <FaBuilding className="w-4 h-4" /> },
+    { path: "/user/special", name: "Special", icon: <FaStar className="w-4 h-4" /> },
+    { path: "/user/contact", name: "Contact", icon: <FaEnvelope className="w-4 h-4" /> },
+  ];
+
   return (
     <nav className="bg-white shadow-md fixed top-0 z-50 w-full">
       <div className="container mx-auto flex items-center justify-between py-3 sm:py-4 md:py-6 px-4 sm:px-8 md:px-16 lg:px-22">
-        {/* Mobile: Left Side with Cart and Notification */}
+        {/* Mobile: Left Side with Notification */}
         <div className="md:hidden flex items-center space-x-3">
-          {/**  <Link to={{ pathname: '/user/cart', state: { cartItems } }} className="flex items-center justify-center">
-            <img src="../img/cart.png" alt="Cart" className="h-5 w-5 sm:h-6 sm:w-6" />
-          </Link>
-          */}
-          {/* Mobile Notification Button */}
-          <div className="absolute">
+          {/* Mobile Notification Button - FIXED: Added data-attribute and adjusted the button size */}
+          <div className="relative">
             <button
               onClick={toggleNotification}
+              data-notification-toggle="true"
               className="w-7 h-7 md:w-8 md:h-8 bg-[#1C359A] rounded-full flex items-center justify-center shadow-md hover:bg-blue-700 transition cursor-pointer"
             >
               <svg
@@ -179,12 +221,14 @@ const UserNavbar = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                data-notification-toggle="true"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 7.165 7 8.388 7 10v4c0 .217-.072.42-.196.58L5 17h5m5 0a3.001 3.001 0 01-6 0m6 0H9"
+                  data-notification-toggle="true"
                 />
               </svg>
             </button>
@@ -195,163 +239,148 @@ const UserNavbar = () => {
         </div>
 
         {/* Logo - Centered on mobile, left-aligned on desktop */}
-      
-
         <div className="flex items-center justify-center md:justify-start">
-        <a href="/user/home">
-    <img 
-      src="../img/YCB LOGO (BLUE).png" 
-      alt="Logo" 
-      className="h-16 sm:h-20 md:h-24 max-w-full object-scale-down cursor-pointer" 
-    />
-  </a>
+          <a href="/user/home">
+            <img 
+              src="../img/YCB LOGO (BLUE).png" 
+              alt="Logo" 
+              className="h-16 sm:h-20 md:h-24 max-w-full object-scale-down cursor-pointer" 
+            />
+          </a>
         </div>
-        {/* Hamburger Menu (Mobile) */}
+
+        {/* Hamburger Menu Button (Mobile) - FIXED: Added data-attribute and made sure all elements have the same attribute */}
         <button
           onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden flex items-center justify-center"
-          aria-label="Toggle menu"
+          className="md:hidden flex items-center justify-center z-50 relative"
+          data-menu-toggle="true"
         >
-          {isMobileMenuOpen ? (
-            <svg
-              className="h-5 w-5 sm:h-6 sm:w-6"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              fill="none"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          ) : (
-            <svg
-              className="h-5 w-5 sm:h-6 sm:w-6"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              fill="none"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            </svg>
-          )}
+          <div 
+            className={`transition-all duration-300 ${isMobileMenuOpen ? 'bg-white text-[#1C359A]' : 'bg-[#1C359A] text-white'} p-2 rounded-full shadow-md`}
+            data-menu-toggle="true"
+          >
+            {isMobileMenuOpen ? (
+              <FaTimes className="h-4 w-4 sm:h-5 sm:w-5" data-menu-toggle="true" />
+            ) : (
+              <FaBars className="h-4 w-4 sm:h-5 sm:w-5" data-menu-toggle="true" />
+            )}
+          </div>
         </button>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex md:space-x-8 lg:space-x-16">
-          <Link
-            to="/user/home"
-            className="uppercase text-black font-bold tracking-wide text-xs lg:text-sm hover:text-[#1C359A] transition-colors"
-          >
-            Home
-          </Link>
-          <Link
-            to="/user/menu"
-            className="uppercase text-black font-bold tracking-wide text-xs lg:text-sm hover:text-[#1C359A] transition-colors"
-          >
-            Menu
-          </Link>
-          <Link
-            to="/user/company"
-            className="uppercase text-black font-bold tracking-wide text-xs lg:text-sm hover:text-[#1C359A] transition-colors"
-          >
-            Company
-          </Link>
-          <Link
-            to="/user/special"
-            className="uppercase text-black font-bold tracking-wide text-xs lg:text-sm hover:text-[#1C359A] transition-colors"
-          >
-            Special
-          </Link>
-          <Link
-            to="/user/contact"
-            className="uppercase text-black font-bold tracking-wide text-xs lg:text-sm hover:text-[#1C359A] transition-colors"
-          >
-            Contact
-          </Link>
+          {menuItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className="uppercase text-black font-bold tracking-wide text-xs lg:text-sm hover:text-[#1C359A] transition-colors"
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
 
-        {/* Mobile Navigation - Full width dropdown */}
-        {isMobileMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-white shadow-lg md:hidden z-50">
-            <div className="flex flex-col p-4 space-y-4">
+        {/* Mobile Navigation - Full screen overlay with animation */}
+        <div 
+          className={`fixed inset-0 bg-white z-40 md:hidden transition-transform duration-300 ease-in-out ${
+            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+          ref={mobileMenuRef}
+        >
+          <div className="flex flex-col h-full pt-24 px-8">
+            {/* Mobile Menu Items */}
+            <div className="flex flex-col space-y-6">
+              {menuItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className="flex items-center space-x-4 text-lg font-medium text-gray-800 hover:text-[#1C359A] transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#1C359A]">
+                    {item.icon}
+                  </div>
+                  <span>{item.name}</span>
+                </Link>
+              ))}
+            </div>
+            
+            {/* Divider */}
+            <div className="border-t border-gray-200 my-8"></div>
+            
+            {/* User Actions */}
+            <div className="flex flex-col space-y-6">
+              {/* Profile Section */}
+              {user && (
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
+                    {hasValidProfilePic() ? (
+                      <img
+                        src={getProfilePicUrl()}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                        onError={handleImageError}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-[#1C359A] flex items-center justify-center">
+                        <FaUser className="text-white" />
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">
+                      {user ? `${user.f_name} ${user.l_name}` : "Guest"}
+                    </p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Account Link */}
               <Link
-                to="/user/home"
-                className="border-l-3 border-black pl-3 uppercase font-light text-sm"
+                to="/user/account"
+                className="flex items-center space-x-4 text-lg font-medium text-gray-800 hover:text-[#1C359A] transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
               >
-                Home
-              </Link>
-              <Link
-                to="/user/menu"
-                className="border-l-3 border-black pl-3 uppercase font-light text-sm"
-              >
-                Menu
-              </Link>
-              <Link
-                to="/user/company"
-                className="border-l-3 border-black pl-3 uppercase font-light text-sm"
-              >
-                Company
-              </Link>
-              <Link
-                to="/user/special"
-                className="border-l-3 border-black pl-3 uppercase font-light text-sm"
-              >
-                Special
-              </Link>
-              <Link
-                to="/user/contact"
-                className="border-l-3 border-black pl-3 uppercase font-light text-sm"
-              >
-                Contact
+                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#1C359A]">
+                  <FaUser className="w-4 h-4" />
+                </div>
+                <span>Account</span>
               </Link>
               
-              <hr className="border border-black w-full" />
-              <div className="flex flex-col gap-6 w-full py-2 items-center justify-center">
-                <div className="flex flex-row justify-center items-center gap-4">
-                  <img
-                    src="../img/user.png"
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                    alt="User icon"
-                  />
-                  <Link
-                    to="/user/account"
-                    className="uppercase text-[#1C359A] font-bold text-sm"
-                  >
-                    Account
-                  </Link>
+              {/* Cart Link */}
+              <Link
+                to={{ pathname: "/user/cart", state: { cartItems } }}
+                className="flex items-center space-x-4 text-lg font-medium text-gray-800 hover:text-[#1C359A] transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#1C359A]">
+                  <FaShoppingCart className="w-4 h-4" />
                 </div>
-                <div className="flex flex-row justify-center items-center gap-4">
-                  <img
-                    src="../img/logout.png"
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                    alt="Logout icon"
-                  />
-                  <Link
-                    to="/"
-                    className="uppercase text-[#1C359A] font-bold text-sm"
-                  >
-                    Logout
-                  </Link>
+                <span>My Cart</span>
+              </Link>
+              
+              {/* Logout Link */}
+              <Link
+                to="/"
+                onClick={() => { logoutUser(); setMobileMenuOpen(false); }}
+                className="flex items-center space-x-4 text-lg font-medium text-gray-800 hover:text-[#1C359A] transition-colors"
+              >
+                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#1C359A]">
+                  <FaSignOutAlt className="w-4 h-4" />
                 </div>
-              </div>
+                <span>Log Out</span>
+              </Link>
             </div>
           </div>
-        )}
+        </div>
 
         {/* Profile Button & Notification Button (Hidden on Mobile) */}
         <div className="gap-3 md:gap-5 items-center hidden md:flex">
-          {/* Notification Button */}
-          {/* Desktop Notification Button */}
+          {/* Desktop Notification Button - FIXED: Added data attribute and made it consistent for all children */}
           <div className="relative">
             <button
               onClick={toggleNotification}
+              data-notification-toggle="true"
               className="w-7 h-7 md:w-8 md:h-8 bg-[#1C359A] rounded-full flex items-center justify-center shadow-md hover:bg-blue-700 transition cursor-pointer"
             >
               <svg
@@ -360,12 +389,14 @@ const UserNavbar = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                data-notification-toggle="true"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 7.165 7 8.388 7 10v4c0 .217-.072.42-.196.58L5 17h5m5 0a3.001 3.001 0 01-6 0m6 0H9"
+                  data-notification-toggle="true"
                 />
               </svg>
             </button>

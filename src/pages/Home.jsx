@@ -144,13 +144,13 @@ const Home = () => {
               className="w-12 h-12 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-lg hover:bg-blue-800 transition-all"
               aria-label="Show feedback"
             >
+              {/* New Feedback Icon - Star or Thumbs Up */}
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
               </svg>
             </button>
           </div>
         )}
-
         {/* Show the feedback panel when not collapsed or on larger screens */}
         {/* Only show the icon button on small screens when collapsed */}
         {isSmallScreen && isCollapsed && (
@@ -160,19 +160,19 @@ const Home = () => {
               className="w-12 h-12 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-lg hover:bg-blue-800 transition-all"
               aria-label="Show feedback"
             >
+              {/* New Feedback Icon - Star or Thumbs Up */}
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
               </svg>
             </button>
           </div>
         )}
-
         {/* Show the feedback panel when not collapsed or on larger screens */}
         {(!isSmallScreen || !isCollapsed) && (
           <div
             className="fixed z-50 bg-white shadow-lg rounded-2xl p-4 
-                    bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-10 md:left-10 
-                    w-full max-w-xs sm:max-w-sm md:w-56"
+              bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-10 md:left-10 
+              w-full max-w-xs sm:max-w-sm md:w-56"
             onClick={handlePanelClick} // Add click handler to prevent propagation
           >
             {/* Close button - only on small screens */}
@@ -187,11 +187,9 @@ const Home = () => {
                 </svg>
               </button>
             )}
-
             <h2 className="text-sm font-semibold text-center text-blue-700 mb-3">
               What are you waiting for?<br /> Come and get your coffee now!
             </h2>
-
             <div className="mt-2 space-y-3 overflow-y-auto max-h-48 md:max-h-42">
               {loading ? (
                 <p className="text-gray-500 text-center py-2">Loading feedback...</p>
@@ -217,6 +215,7 @@ const Home = () => {
         )}
       </div>
 
+      
       <main className="mt-16 sm:mt-20 md:mt-24 lg:mt-32 w-full">
 
         <section className="w-full px-4 sm:px-6 md:px-8 overflow-hidden ">
@@ -237,10 +236,10 @@ const Home = () => {
               </div>
             </div>
             <Link to="/menu">
-            <button  className="mt-4 sm:mt-6 mb-4 sm:mb-6 bg-[#ffffff] text-xs sm:text-sm font-semibold text-[#1C359A] py-2 sm:py-3 px-6 sm:px-10 rounded-full shadow-lg hover:bg-[#1C359A] hover:text-[#ffffff] cursor-pointer">
-              ORDER NOW
-            </button>
-          </Link>
+              <button className="mt-4 sm:mt-6 mb-4 sm:mb-6 bg-[#ffffff] text-xs sm:text-sm font-semibold text-[#1C359A] py-2 sm:py-3 px-6 sm:px-10 rounded-full shadow-lg hover:bg-[#1C359A] hover:text-[#ffffff] cursor-pointer">
+                ORDER NOW
+              </button>
+            </Link>
             {/* Image container with responsive heights */}
             <div className="relative w-full h-64 sm:h-96 md:h-[450px] lg:h-[550px] flex justify-center items-center">
               {/* Plate Image - Back Layer */}
@@ -385,11 +384,11 @@ const Home = () => {
               </div>
             </div>
           </div>
-        <Link to="/menu">
-          <button
-            className="mt-8 bg-[#1C359A] text-sm font-semibold text-white py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
-            More
-          </button>
+          <Link to="/menu">
+            <button
+              className="mt-8 bg-[#1C359A] text-sm font-semibold text-white py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
+              More
+            </button>
           </Link>
         </section>
 
@@ -437,9 +436,9 @@ const Home = () => {
             </div>
           </div>
           <Link to="/company">
-          <button class="mt-8 bg-[#1C359A] text-sm font-semibold text-white py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
-            About Us
-          </button>
+            <button class="mt-8 bg-[#1C359A] text-sm font-semibold text-white py-3 px-10 rounded-full shadow-lg hover:bg-blue-700">
+              About Us
+            </button>
           </Link>
         </section>
 

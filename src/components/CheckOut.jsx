@@ -109,7 +109,6 @@ const CheckOut = () => {
                Name :  {user.name || "Loading..."} <span className="text-black font-light text-xs md:text-sm"> {user.phone || "Loading..."}</span>
               </p>
               <p className="text-xs md:text-sm text-gray-600">Address : {user.address || "Loading..."}</p>
-              <p className="text-xs md:text-sm text-gray-600">Order ID : {user.orders_id || "Loading..."}</p>
             </div>
           </div>
           
