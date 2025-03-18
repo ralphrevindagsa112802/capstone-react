@@ -18,7 +18,7 @@ const UserNavbar = () => {
   const [notifications, setNotifications] = useState([]);
   const notificationRef = useRef(null);
   const [error, setError] = useState(null);
-
+  const currentPath = location.pathname;
   // Function to handle profile image loading errors
   const handleImageError = () => {
     console.log("Profile image failed to load");
@@ -50,7 +50,7 @@ const UserNavbar = () => {
       // Only check if menu is open and not when clicking the toggle button itself
       if (
         isMobileMenuOpen &&
-        mobileMenuRef.current && 
+        mobileMenuRef.current &&
         !mobileMenuRef.current.contains(event.target) &&
         !event.target.closest('[data-menu-toggle="true"]') // Modified selector
       ) {
@@ -71,7 +71,7 @@ const UserNavbar = () => {
     } else {
       document.body.style.overflow = 'auto';
     }
-    
+
     return () => {
       document.body.style.overflow = 'auto';
     };
@@ -241,10 +241,10 @@ const UserNavbar = () => {
         {/* Logo - Centered on mobile, left-aligned on desktop */}
         <div className="flex items-center justify-center md:justify-start">
           <a href="/user/home">
-            <img 
-              src="../img/YCB LOGO (BLUE).png" 
-              alt="Logo" 
-              className="h-16 sm:h-20 md:h-24 max-w-full object-scale-down cursor-pointer" 
+            <img
+              src="../img/YCB LOGO (BLUE).png"
+              alt="Logo"
+              className="h-16 sm:h-20 md:h-24 max-w-full object-scale-down cursor-pointer"
             />
           </a>
         </div>
@@ -255,7 +255,7 @@ const UserNavbar = () => {
           className="md:hidden flex items-center justify-center z-50 relative"
           data-menu-toggle="true"
         >
-          <div 
+          <div
             className={`transition-all duration-300 ${isMobileMenuOpen ? 'bg-white text-[#1C359A]' : 'bg-[#1C359A] text-white'} p-2 rounded-full shadow-md`}
             data-menu-toggle="true"
           >
@@ -273,18 +273,17 @@ const UserNavbar = () => {
             <Link
               key={item.path}
               to={item.path}
-              className="uppercase text-black font-bold tracking-wide text-xs lg:text-sm hover:text-[#1C359A] transition-colors"
-            >
+              className={`uppercase font-bold tracking-wide text-xs lg:text-sm transition-colors ${currentPath === item.path ? "text-[#1C359A]" : "text-black hover:text-[#1C359A]"
+                }`}            >
               {item.name}
             </Link>
           ))}
         </div>
 
         {/* Mobile Navigation - Full screen overlay with animation */}
-        <div 
-          className={`fixed inset-0 bg-white z-40 md:hidden transition-transform duration-300 ease-in-out ${
-            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
+        <div
+          className={`fixed inset-0 bg-white z-40 md:hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
           ref={mobileMenuRef}
         >
           <div className="flex flex-col h-full pt-24 px-8">
@@ -297,17 +296,21 @@ const UserNavbar = () => {
                   className="flex items-center space-x-4 text-lg font-medium text-gray-800 hover:text-[#1C359A] transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#1C359A]">
-                    {item.icon}
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentPath === item.path ? "bg-[#1C359A]/10" : "bg-gray-100"
+                    }`}>
+                    <span className="text-[#1C359A]">
+                      {item.icon}
+                    </span>
                   </div>
-                  <span>{item.name}</span>
-                </Link>
+                  <span className={currentPath === item.path ? "text-[#1C359A]" : "text-gray-800 hover:text-[#1C359A]"}>
+                    {item.name}
+                  </span>                </Link>
               ))}
             </div>
-            
+
             {/* Divider */}
             <div className="border-t border-gray-200 my-8"></div>
-            
+
             {/* User Actions */}
             <div className="flex flex-col space-y-6">
               {/* Profile Section */}
@@ -334,7 +337,7 @@ const UserNavbar = () => {
                   </div>
                 </div>
               )}
-              
+
               {/* Account Link */}
               <Link
                 to="/user/account"
@@ -346,7 +349,7 @@ const UserNavbar = () => {
                 </div>
                 <span>Account</span>
               </Link>
-              
+
               {/* Cart Link */}
               <Link
                 to={{ pathname: "/user/cart", state: { cartItems } }}
@@ -358,7 +361,7 @@ const UserNavbar = () => {
                 </div>
                 <span>My Cart</span>
               </Link>
-              
+
               {/* Logout Link */}
               <Link
                 to="/"

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes, FaHome, FaUtensils, FaBuilding, FaStar, FaEnvelope, FaShoppingCart } from "react-icons/fa";
 import '../css/Navbar.css';
 
@@ -7,6 +7,8 @@ const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [error, setError] = useState(null);
   const mobileMenuRef = useRef(null);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   // Close mobile menu if clicking outside
   useEffect(() => {
@@ -14,7 +16,7 @@ const Navbar = () => {
       // Only check if menu is open and not when clicking the toggle button itself
       if (
         isMobileMenuOpen &&
-        mobileMenuRef.current && 
+        mobileMenuRef.current &&
         !mobileMenuRef.current.contains(event.target) &&
         !event.target.closest('[data-menu-toggle="true"]')
       ) {
@@ -35,7 +37,7 @@ const Navbar = () => {
     } else {
       document.body.style.overflow = 'auto';
     }
-    
+
     return () => {
       document.body.style.overflow = 'auto';
     };
@@ -79,9 +81,9 @@ const Navbar = () => {
           className="md:hidden flex items-center justify-center z-50 relative"
           data-menu-toggle="true"
         >
-          <div 
+          <div
             className={`transition-all duration-300 ${isMobileMenuOpen ? 'bg-white text-[#1C359A]' : 'bg-[#1C359A] text-white'} p-2 rounded-full shadow-md`}
-            data-menu-toggle="true" 
+            data-menu-toggle="true"
           >
             {isMobileMenuOpen ? (
               <FaTimes className="h-4 w-4 sm:h-5 sm:w-5" data-menu-toggle="true" />
@@ -97,7 +99,8 @@ const Navbar = () => {
             <Link
               key={item.path}
               to={item.path}
-              className="uppercase text-black font-bold tracking-wide text-xs lg:text-sm hover:text-[#1C359A] transition-colors"
+              className={`uppercase font-bold tracking-wide text-xs lg:text-sm transition-colors ${currentPath === item.path ? "text-[#1C359A]" : "text-black hover:text-[#1C359A]"
+                }`}
             >
               {item.name}
             </Link>
@@ -112,10 +115,9 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Navigation - Full screen overlay with animation */}
-        <div 
-          className={`fixed inset-0 bg-white z-40 md:hidden transition-transform duration-300 ease-in-out ${
-            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
+        <div
+          className={`fixed inset-0 bg-white z-40 md:hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
           ref={mobileMenuRef}
         >
           <div className="flex flex-col h-full pt-24 px-8">
@@ -125,33 +127,40 @@ const Navbar = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className="flex items-center space-x-4 text-lg font-medium text-gray-800 hover:text-[#1C359A] transition-colors"
+                  className="flex items-center space-x-4 text-lg font-medium transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#1C359A]">
-                    {item.icon}
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentPath === item.path ? "bg-[#1C359A]/10" : "bg-gray-100"
+                    }`}>
+                    <span className="text-[#1C359A]">
+                      {item.icon}
+                    </span>
                   </div>
-                  <span>{item.name}</span>
+                  <span className={currentPath === item.path ? "text-[#1C359A]" : "text-gray-800 hover:text-[#1C359A]"}>
+                    {item.name}
+                  </span>
                 </Link>
               ))}
             </div>
-            
+
             {/* Divider */}
             <div className="border-t border-gray-200 my-8"></div>
-            
+
             {/* Cart Link */}
             <div className="flex flex-col space-y-6">
               <Link
                 to="/cart"
-                className="flex items-center space-x-4 text-lg font-medium text-gray-800 hover:text-[#1C359A] transition-colors"
+                className={`flex items-center space-x-4 text-lg font-medium transition-colors ${currentPath === "/cart" ? "text-[#1C359A]" : "text-gray-800 hover:text-[#1C359A]"
+                  }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[#1C359A]">
-                  <FaShoppingCart className="w-4 h-4" />
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentPath === "/cart" ? "bg-[#1C359A]/10" : "bg-gray-100"
+                  }`}>
+                  <FaShoppingCart className="w-4 h-4 text-[#1C359A]" />
                 </div>
                 <span>Cart</span>
               </Link>
-              
+
               {/* Sign In Button */}
               <Link
                 to="/signin"
