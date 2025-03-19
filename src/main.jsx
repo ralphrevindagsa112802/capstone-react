@@ -13,6 +13,7 @@ import Company from './pages/Company'
 import Special from './pages/Special'
 import Contact from './pages/Contact'
 import LogIn from './pages/LogIn'
+import Privacy from './pages/Privacy'
 import UserHome from './users/UserHome'
 import UserMenu from './users/UserMenu'
 import UserCompany from './users/UserCompany'
@@ -24,6 +25,7 @@ import UserCart from './users/UserCart'
 import UserHistory from './users/UserHistory'
 import CheckOut from './components/CheckOut'
 import Payment from './components/Payment'
+import Paymaya from './components/Paymaya'
 import UserRequireAuth from './components/UserRequireAuth';
 
 
@@ -55,7 +57,11 @@ const router = createBrowserRouter([{
   path: '/login',
   element: <LogIn />,
   errorElement: <NotFound/>,
-}, {
+},  {
+  path: '/privacy',
+  element: <Privacy />,
+  errorElement: <NotFound/>,
+},  {
   path: '/user/home',
   element: <UserRequireAuth><UserHome /></UserRequireAuth>,
   errorElement: <NotFound/>,
@@ -98,6 +104,10 @@ const router = createBrowserRouter([{
 },  {
   path: '/user/payment',
   element: <UserRequireAuth><Payment /></UserRequireAuth>,
+  errorElement: <NotFound/>,
+}, {
+  path: '/user/paymaya',
+  element: <UserRequireAuth><Paymaya /></UserRequireAuth>,
   errorElement: <NotFound/>,  
 }]);
 

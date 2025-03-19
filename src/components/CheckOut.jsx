@@ -69,7 +69,7 @@ const CheckOut = () => {
     } else if (paymentMethod === "Paymaya") {
       localStorage.setItem("shipping_method", shippingMethod);
       localStorage.setItem("payment_method", paymentMethod);
-      navigate("/user/payment");
+      navigate("/user/paymaya");
       return;
     } else if (paymentMethod === "Cash on Delivery") {
       localStorage.setItem("shipping_method", shippingMethod);
@@ -168,9 +168,9 @@ const CheckOut = () => {
                   <input
                     type="radio"
                     name="payment_method"
-                    value="PayMaya"
-                    checked={paymentMethod === "PayMaya"}
-                    onChange={() => setPaymentMethod("PayMaya")}
+                    value="Paymaya"
+                    checked={paymentMethod === "Paymaya"}
+                    onChange={() => setPaymentMethod("Paymaya")}
                     className="w-4 h-4"
                   />
                   <span className="text-base md:text-lg font-semibold">PayMaya</span>
@@ -188,7 +188,7 @@ const CheckOut = () => {
                     onChange={() => setPaymentMethod("Cash on Delivery")}
                     className="w-4 h-4"
                   />
-                  <span className="text-base md:text-lg font-semibold">Cash on Delivery</span>
+                  <span className="text-base md:text-lg font-semibold">Cash</span>
                 </div>
               </label>
             </div>
