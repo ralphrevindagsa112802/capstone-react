@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"; 
-
-const clientId = "702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com"; // Replace with your actual Client ID
 
 const SignIn = () => {
   const [formData, setFormData] = useState({

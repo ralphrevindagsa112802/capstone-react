@@ -1,12 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider} from 'react-router-dom'
 import './index.css'
 import { CartProvider } from "./context/CartContext";
-import { useState, useEffect } from "react";
 
-import ProfileAcc from './users/UserProfileAcc';
-import Profile from './users/UserProfile';
+
 import Home from './pages/Home';
 import Menu from './pages/Menu'
 import NotFound from './pages/NotFound'
@@ -60,14 +58,6 @@ const router = createBrowserRouter([{
 }, {
   path: '/user/home',
   element: <UserRequireAuth><UserHome /></UserRequireAuth>,
-  errorElement: <NotFound/>,
-},{
-  path: '/user/Profile',
-  element: <Profile />,
-  errorElement: <NotFound/>,
-},{
-  path: '/user/ProfileAcc',
-  element: <ProfileAcc />,
   errorElement: <NotFound/>,
 },{
   path: '/user/menu',
