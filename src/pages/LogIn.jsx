@@ -208,7 +208,9 @@ const Login = () => {
           </form>
           
           <div className="text-center mt-4">
-            <a href="#" className="text-xs sm:text-sm text-[#1C359A] hover:underline">Having issues with your password?</a>
+            <Link to='/contact' className="text-xs sm:text-sm text-[#1C359A] hover:underline">
+              Having issues with your password?
+            </Link>
           </div>
 
           <h1 className="text-xs sm:text-sm text-gray-500 text-center mt-4">OR</h1>

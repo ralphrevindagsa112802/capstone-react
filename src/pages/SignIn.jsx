@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+const clientId = "702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com"; // Replace with your actual Client ID
+
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -80,6 +83,51 @@ const SignIn = () => {
       setError("Failed to connect to server");
     }
   };
+
+  const onSuccess = async (response) => {
+    console.log("Google login success", response);
+
+    const credential = JSON.parse(atob(response.credential.split(".")[1]));
+    const userData = JSON.stringify(credential);
+  
+    try {
+      const res = await fetch("https://yappari-coffee-bar.shop/api/googleLogin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userData }),
+      });
+  
+      const text = await res.text(); // Read raw response
+      console.log("Raw response from PHP:", text); // Debugging
+  
+      if (!text.trim()) {
+        throw new Error("Empty response from server"); // Prevents JSON parsing on empty response
+      }
+  
+      const data = JSON.parse(text);
+      console.log("Parsed JSON:", data);
+  
+      if (data.success) {
+        sessionStorage.setItem("user_id", data.user.user_id);
+        sessionStorage.setItem("user_name", data.user.user_name);
+        sessionStorage.setItem("f_name", data.user.f_name);
+        sessionStorage.setItem("l_name", data.user.l_name);
+  
+        Swal.fire("Success!", `Welcome back, ${data.user.f_name} ${data.user.l_name}!`, "success");
+        navigate("/user/home");
+      } else {
+        Swal.fire("Oops...", data.message, "error");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire("Error", "Failed to connect to server", "error");
+    }
+  };
+  
+    const onFailure = (res) => {
+      console.log("Google login failed", res);
+      Swal.fire('Oops...','Google login failed. Please try again.','error')
+    };
 
   return (
       <div className="bg-[#1C359A] flex flex-col md:flex-row items-stretch justify-center min-h-screen w-full">
@@ -274,9 +322,33 @@ const SignIn = () => {
     </form>
 
             <div className="text-center mt-4">
-              <a href="#" className="text-xs sm:text-sm text-[#1C359A] hover:underline">Having issues with your password?</a>
+              <Link to='/contact' className="text-xs sm:text-sm text-[#1C359A] hover:underline">
+                Having issues with your password?
+              </Link>
             </div>
+            
+            <h1 className="text-xs sm:text-sm text-gray-500 text-center mt-4">OR</h1>
 
+          <div className="mt-4">
+            <div className="flex items-center justify-between">
+              <span className="w-1/5 border-b border-gray-300"></span>
+              <span className="text-lg sm:text-xl text-[#1C359A] font-black">Login with</span>
+              <span className="w-1/5 border-b border-gray-300"></span>
+            </div>
+            <div className="text-center mt-4 flex items-center justify-center flex-col">
+              <p className="text-xs sm:text-sm text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
+              <div className="w-full max-w-md px-3">
+                <div className="w-full flex justify-center">
+                  <GoogleOAuthProvider clientId={clientId}>
+                       <div>
+                         <h2>Login with Google</h2>
+                         <GoogleLogin onSuccess={onSuccess} onError={onFailure} />
+                       </div>
+                     </GoogleOAuthProvider>
+                </div>
+              </div>
+            </div>
+          </div>
       </div>
       </div>
       </div>
