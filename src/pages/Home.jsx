@@ -222,8 +222,8 @@ const Home = () => {
           <div className="header flex flex-col items-center text-center py-2 sm:py-4 md:py-6 lg:py-8 relative">    {/* Header info - stack on mobile, flex on larger screens */}
             <div className="text-[#1C359A] text-xs sm:text-sm w-full mb-4">
               <div className="flex flex-col sm:flex-row justify-center sm:space-x-4 md:space-x-8 lg:space-x-16 xl:space-x-32">
-                <div className="mb-2 sm:mb-0">No Lines, Just Good Coffee</div>
-                <div>Monday - Sunday 10:00 AM - 2:00 AM</div>
+               {/**<div className="mb-2 sm:mb-0">No Lines, Just Good Coffee</div>
+                <div>Monday - Sunday 10:00 AM - 2:00 AM</div>  */} 
               </div>
             </div>
 

@@ -233,7 +233,7 @@ const SignIn = () => {
             required
             className="w-full px-3 sm:px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
-          <p className="text-xs text-gray-500 mt-1">Example: 55 Blk 19, Addition Hills, Mandaluyong City</p>
+          <p className="text-xs text-gray-500 mt-1">Example: 55 Guadalupe Taguig City</p>
         </div>
         
         {/* Phone field with 09 prefix and 11 digits validation */}
