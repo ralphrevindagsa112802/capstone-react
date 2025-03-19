@@ -93,10 +93,10 @@ const CheckOut = () => {
   {/* Main Content */}
   <div className="flex-grow p-4 md:p-6">
     <div className="max-w-6xl mx-auto rounded-lg">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-6 gap-6">
         
         {/* Left Column - Checkout Information */}
-        <div className="order-2 lg:order-1">
+        <div className="order-1">
           <h2 className="text-xl font-bold text-[#1C359A] mb-4">Checkout</h2>
           
           {/* Delivery Address */}
@@ -159,7 +159,7 @@ const CheckOut = () => {
                     className="w-4 h-4"
                   />
                   <span className="text-base md:text-lg font-semibold">GCash</span>
-                  <img src="../img/gcash-icon.png" alt="GCash" className="w-5 h-5 md:w-6 md:h-6" />
+                {/**   <img src="../img/gcash-icon.png" alt="GCash" className="w-5 h-5 md:w-6 md:h-6" /> */}
                 </div>
               </label>
 
@@ -174,7 +174,7 @@ const CheckOut = () => {
                     className="w-4 h-4"
                   />
                   <span className="text-base md:text-lg font-semibold">PayMaya</span>
-                  <img src="../img/paymaya-icon.png" alt="PayMaya" className="w-5 h-5 md:w-6 md:h-6" />
+                {/**   <img src="../img/paymaya-icon.png" alt="PayMaya" className="w-5 h-5 md:w-6 md:h-6" /> */}
                 </div>
               </label>
 
@@ -193,14 +193,11 @@ const CheckOut = () => {
               </label>
             </div>
 
-            <button className="mt-4 bg-[#1C359A] text-white w-full py-2 rounded-lg text-base md:text-lg font-bold hover:bg-blue-700 transition-colors">
-              Edit
-            </button>
           </div>
         </div>
 
         {/* Right Column - Order Summary */}
-        <div className="order-1 lg:order-2">
+        <div className="order-2">
           <div className="sticky top-4">
             <h2 className="text-xl font-bold text-[#1C359A] mb-4">Your order</h2>
             <div className="bg-white p-4 rounded-lg border-[#1C359A] border-[2px] shadow-sm">
