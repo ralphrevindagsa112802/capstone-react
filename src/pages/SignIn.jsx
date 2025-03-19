@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"; 
-
-const clientId = "702818809229-bk6vh4bk1v766flofh0vk6rna342gcq1.apps.googleusercontent.com"; // Replace with your actual Client ID
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -82,24 +79,6 @@ const SignIn = () => {
       console.error("Error:", error);
       setError("Failed to connect to server");
     }
-  };
-
-  const onSuccess = (response) => {
-    console.log("Google login success", response);
-
-    // Decode JWT token
-    const userData = JSON.parse(atob(response.credential.split(".")[1]));
-
-    // Save user details to localStorage
-    localStorage.setItem("user", JSON.stringify(userData));
-
-    alert("Login successful! Redirecting...");
-    navigate("/user/ProfileAcc"); // Redirect after login
-  };
-
-  const onFailure = (res) => {
-    console.log("Google login failed", res);
-    alert("Google login failed. Please try again.");
   };
 
   return (
@@ -297,24 +276,7 @@ const SignIn = () => {
             <div className="text-center mt-4">
               <a href="#" className="text-xs sm:text-sm text-[#1C359A] hover:underline">Having issues with your password?</a>
             </div>
-            <h1 className="text-sm text-gray-500 text-center mt-4">OR</h1>
 
-<div className="mt-4">
-  <div className="flex items-center justify-between">
-    <span className="w-1/5 border-b border-gray-300"></span>
-    <span className="text-xl text-[#1C359A] font-black">Login with</span>
-    <span className="w-1/5 border-b border-gray-300"></span>
-  </div>
-  <div className="text-center mt-4 flex items-center justify-center flex-col">
-    <p className="text-gray-600 mb-2">"Your perfect brew is just a click away!"</p>
-    <GoogleOAuthProvider clientId={clientId}>
-      <div>
-        <h2>Login with Google</h2>
-        <GoogleLogin onSuccess={onSuccess} onError={onFailure} />
-      </div>
-    </GoogleOAuthProvider>
-          </div>
-        </div>
       </div>
       </div>
       </div>

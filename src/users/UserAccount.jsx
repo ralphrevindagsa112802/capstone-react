@@ -508,14 +508,16 @@ const UserAccount = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
                 <label htmlFor="address" className="block text-[#1C359A] font-bold">Address</label>
-                <input type="text" id="address" name="address" className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
-                  placeholder="Address" value={userData.address || ''} onChange={handleChange} disabled={!isEditing} />
+                <input type="text" id="address" name="address" pattern=".*[Cc][Ii][Tt][Yy].*"  title="Please enter a full address including the word 'City'" required className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
+                  placeholder="Full Address (including City)" value={userData.address || ''} onChange={handleChange} disabled={!isEditing} />
+                 <p className="text-xs text-gray-500 mt-1">Example: 55 Blk 19, Addition Hills, Mandaluyong City</p>
               </div>
 
               <div>
                 <label htmlFor="phone" className="block text-[#1C359A] font-bold">Phone Number</label>
-                <input type="text" id="phone" name="phone" className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
-                  placeholder="Phone Number" value={userData.phone || ''} onChange={handleChange} disabled={!isEditing} />
+                <input type="text" id="phone" name="phone" pattern="09[0-9]{9}" title="Phone number must start with 09 and be 11 digits long" required className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
+                  placeholder="Phone Number (09XXXXXXXXX)" value={userData.phone || ''} onChange={handleChange} disabled={!isEditing} />
+                <p className="text-xs text-gray-500 mt-1">Example: 09123456789</p>
               </div>
             </div>
 

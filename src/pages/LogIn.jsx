@@ -72,22 +72,49 @@ const Login = () => {
     }
   };
 
-  const onSuccess = (response) => {
+  const onSuccess = async (response) => {
     console.log("Google login success", response);
 
-    // Decode JWT token
-    const userData = JSON.parse(atob(response.credential.split(".")[1]));
-
-    // Save user details to localStorage
-    localStorage.setItem("user", JSON.stringify(userData));
-
-    alert("Login successful! Redirecting...");
-    navigate("/user/ProfileAcc"); // Redirect after login
+    const credential = JSON.parse(atob(response.credential.split(".")[1]));
+    const userData = JSON.stringify(credential);
+  
+    try {
+      const res = await fetch("https://yappari-coffee-bar.shop/api/googleLogin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userData }),
+      });
+  
+      const text = await res.text(); // Read raw response
+      console.log("Raw response from PHP:", text); // Debugging
+  
+      if (!text.trim()) {
+        throw new Error("Empty response from server"); // Prevents JSON parsing on empty response
+      }
+  
+      const data = JSON.parse(text);
+      console.log("Parsed JSON:", data);
+  
+      if (data.success) {
+        sessionStorage.setItem("user_id", data.user.user_id);
+        sessionStorage.setItem("user_name", data.user.user_name);
+        sessionStorage.setItem("f_name", data.user.f_name);
+        sessionStorage.setItem("l_name", data.user.l_name);
+  
+        Swal.fire("Success!", `Welcome back, ${data.user.f_name} ${data.user.l_name}!`, "success");
+        navigate("/user/home");
+      } else {
+        Swal.fire("Oops...", data.message, "error");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      Swal.fire("Error", "Failed to connect to server", "error");
+    }
   };
 
   const onFailure = (res) => {
     console.log("Google login failed", res);
-    alert("Google login failed. Please try again.");
+    Swal.fire('Oops...','Google login failed. Please try again.','error')
   };
   
   return (

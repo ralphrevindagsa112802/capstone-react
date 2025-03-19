@@ -38,10 +38,10 @@ const CheckOut = () => {
     if (method === "Delivery") {
       // Check if the user's address contains "Taguig"
       if (!user.address || !user.address.includes("Taguig")) {
-        Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning", {timer: 3000});
+        Swal.fire("Oops..", "Deliveries are only available to customers within Taguig.", "info", {timer: 3000});
         return; // Don't change shipping method
       }
-    }
+    } 
     
     // If we passed validation or method isn't "Delivery", update the state
     setShippingMethod(method);
