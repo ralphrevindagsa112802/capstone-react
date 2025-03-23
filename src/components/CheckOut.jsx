@@ -97,7 +97,7 @@ const CheckOut = () => {
         localStorage.setItem("payment_method", paymentMethod);
         navigate("/user/paymaya");
         return;
-      } else if (paymentMethod === "Cash on Delivery") {
+      } else if (paymentMethod === "Cash") {
         const requestData = {
           items: cartItems?.map((item) => ({
             food_id: item.food_id,
@@ -242,9 +242,9 @@ const CheckOut = () => {
                   <input
                     type="radio"
                     name="payment_method"
-                    value="Cash on Delivery"
-                    checked={paymentMethod === "Cash on Delivery"}
-                    onChange={() => setPaymentMethod("Cash on Delivery")}
+                    value="Cash"
+                    checked={paymentMethod === "Cash"}
+                    onChange={() => setPaymentMethod("Cash")}
                     className="w-4 h-4"
                   />
                   <span className="text-base md:text-lg font-semibold">Cash</span>

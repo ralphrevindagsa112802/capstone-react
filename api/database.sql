@@ -74,7 +74,7 @@ CREATE TABLE orders (
     orders_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
-    payment_method ENUM('Cash on Delivery', 'Credit Card', 'GCash') NOT NULL DEFAULT 'Cash on Delivery',
+    payment_method ENUM('Cash', 'Credit Card', 'GCash') NOT NULL DEFAULT 'Cash',
     shipping_method ENUM('Pickup', 'Delivery') NOT NULL DEFAULT 'Pickup',
     order_status ENUM('Pending', 'Processing', 'Out for Delivery', 'Completed', 'Cancelled') NOT NULL DEFAULT 'Pending',
     order_feedback TEXT DEFAULT NULL,
