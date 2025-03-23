@@ -13,7 +13,7 @@ import Company from './pages/Company'
 import Special from './pages/Special'
 import Contact from './pages/Contact'
 import LogIn from './pages/LogIn'
-import Privacy from './pages/Privacy'
+
 import UserHome from './users/UserHome'
 import UserMenu from './users/UserMenu'
 import UserCompany from './users/UserCompany'
@@ -57,11 +57,7 @@ const router = createBrowserRouter([{
   path: '/login',
   element: <LogIn />,
   errorElement: <NotFound/>,
-},  {
-  path: '/privacy',
-  element: <Privacy />,
-  errorElement: <NotFound/>,
-},  {
+}, {
   path: '/user/home',
   element: <UserRequireAuth><UserHome /></UserRequireAuth>,
   errorElement: <NotFound/>,

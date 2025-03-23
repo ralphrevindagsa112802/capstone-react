@@ -33,6 +33,30 @@ const CheckOut = () => {
       .catch(error => console.error("Error fetching user details:", error));
   }, []);
 
+    // Function to validate if user info is complete before checkout
+  const validateUserInfo = () => {
+    // Check if all required user fields are filled
+    if (!user.name || !user.address || !user.phone) {
+      Swal.fire("Missing Information", "Please fill in all required fields (name, address, and phone number).", "warning");
+      return false;
+    }
+    
+    // Validate payment method is selected
+    if (!paymentMethod) {
+      Swal.fire("Payment Method Required", "Please select a payment method to continue.", "warning");
+      return false;
+    }
+    
+    // Validate shipping method (assuming you have a shippingMethod state)
+    if (!shippingMethod) {
+      Swal.fire("Shipping Method Required", "Please select a shipping method to continue.", "warning");
+      return false;
+    }
+    
+    // If all validations pass
+    return true;
+  };
+
    //Handles Shipping Method
    const handleShippingMethodChange = (method) => {
     if (method === "Delivery") {
@@ -49,35 +73,70 @@ const CheckOut = () => {
 
   //handling payment gcash or paymaya
   const handlePayment = async () => {
-    if (cartItems.length === 0) {
-      Swal.fire("Warning", "Your cart is empty!", "warning", {timer: 3000});
+
+    if (validateUserInfo()) {
+      if (cartItems.length === 0) {
+        Swal.fire("Warning", "Your cart is empty!", "warning", {timer: 3000});
+        return;
+      }
+    
+      // Double-check Taguig address requirement for delivery
+      if (shippingMethod === "Delivery" && (!user.address || !user.address.includes("Taguig"))) {
+        Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning", {timer: 3000});
+        return;
+      }
+    
+      // Payment Methods
+      if (paymentMethod === "GCash") {
+        localStorage.setItem("shipping_method", shippingMethod);
+        localStorage.setItem("payment_method", paymentMethod);
+        navigate("/user/payment");
+        return;
+      } else if (paymentMethod === "Paymaya") {
+        localStorage.setItem("shipping_method", shippingMethod);
+        localStorage.setItem("payment_method", paymentMethod);
+        navigate("/user/paymaya");
+        return;
+      } else if (paymentMethod === "Cash on Delivery") {
+        const requestData = {
+          items: cartItems?.map((item) => ({
+            food_id: item.food_id,
+            size: item.size,
+            food_price: item.food_price,
+            quantity: item.quantity,
+          })),
+          shipping_method: shippingMethod,
+          payment_method: paymentMethod, // ✅ Sends selected payment method
+        };
+    
+        console.log("Sending Order Data:", requestData); // ✅ Debug the request being sent
+    
+        try {
+          const response = await axios.post(
+            "https://yappari-coffee-bar.shop/api/submitOrders", // ✅ Use correct API
+            requestData,
+            { headers: { "Content-Type": "application/json" }, withCredentials: true }
+          );
+    
+          console.log("Server Response:", response.data); // ✅ Debug API response
+    
+          if (response.data.success) {
+            setCartItems([]); // ✅ Clear cart after order
+            localStorage.removeItem("checkoutOrder");
+            localStorage.removeItem("totalAmount");
+            localStorage.removeItem("shipping_method");
+            Swal.fire("Success", `Order placed successfully! Order ID: ${response.data.order_id}`, "success", {timer: 3000});
+            navigate("/user/cart"); // ✅ Redirect to confirmation page
+          } else {
+            Swal.fire("Error", `"Order submission failed: ${response.data.message}`, "success", {timer: 3000});
+          }
+        } catch (error) {
+          console.error("Error submitting order:", error);
+          Swal.fire("Success", `Failed to place order. Please try again.`, "success", {timer: 3000});
+        }
+      } else {
       return;
-    }
-  
-    // Double-check Taguig address requirement for delivery
-    if (shippingMethod === "Delivery" && (!user.address || !user.address.includes("Taguig"))) {
-      Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning", {timer: 3000});
-      return;
-    }
-  
-    // Payment Methods
-    if (paymentMethod === "GCash") {
-      localStorage.setItem("shipping_method", shippingMethod);
-      localStorage.setItem("payment_method", paymentMethod);
-      navigate("/user/payment");
-      return;
-    } else if (paymentMethod === "Paymaya") {
-      localStorage.setItem("shipping_method", shippingMethod);
-      localStorage.setItem("payment_method", paymentMethod);
-      navigate("/user/paymaya");
-      return;
-    } else if (paymentMethod === "Cash on Delivery") {
-      localStorage.setItem("shipping_method", shippingMethod);
-      localStorage.setItem("payment_method", paymentMethod);
-      navigate("/user/payment");
-      return;
-    } else {
-      return;
+      }
     }
   };
 
