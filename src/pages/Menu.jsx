@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Swal from 'sweetalert2'
+import { Link } from "react-router-dom";
 
 const PublicMenu = () => {
   const [foodItems, setFoodItems] = useState([]);
@@ -226,6 +227,7 @@ const PublicMenu = () => {
               </div>
 
               {/* Desktop cart icon */}
+              <Link to="/signin">
               <div className="hidden md:block relative z-10">
                 <img src="/img/cart.png" alt="Cart" className="h-6 w-6"/>
               </div>
@@ -234,6 +236,7 @@ const PublicMenu = () => {
               <div className="md:hidden">
                 <img src="/img/cart.png" alt="Cart" className="h-6 w-6"/>
               </div>
+              </Link>
             </div>
             <hr className="border-t border-black mx-4 my-2 w-auto"/>
             

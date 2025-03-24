@@ -510,7 +510,7 @@ const UserAccount = () => {
                 <label htmlFor="address" className="block text-[#1C359A] font-bold">Address</label>
                 <input type="text" id="address" name="address" pattern=".*[Cc][Ii][Tt][Yy].*"  title="Please enter a full address including the word 'City'" required className={`w-full p-2 rounded-md bg-white mt-2 ${isEditing ? 'text-black' : 'text-[#ABB1BB]'}`}
                   placeholder="Full Address (including City)" value={userData.address || ''} onChange={handleChange} disabled={!isEditing} />
-                 <p className="text-xs text-gray-500 mt-1">Example: 55 Guadalupe Taguig City</p>
+                 <p className="text-xs text-gray-500 mt-1">Example: 55 BGC Residences Taguig City</p>
               </div>
 
               <div>
