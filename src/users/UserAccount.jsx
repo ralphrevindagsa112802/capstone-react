@@ -308,7 +308,7 @@ const UserAccount = () => {
               </div>
             )}
 
-            {/* Edit Button to Enable Editing Mode */}
+            {/* Edit Button to Enable Editing Mode 
             {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}
@@ -317,6 +317,7 @@ const UserAccount = () => {
                 Edit
               </button>
             )}
+              */}
           </div>
 
 

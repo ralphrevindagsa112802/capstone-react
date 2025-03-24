@@ -249,7 +249,7 @@ const UserCart = () => {
                             </div>
                         )}
 
-                        {/* Edit Button to Enable Editing Mode */}
+                        {/* Edit Button to Enable Editing Mode 
                         {!isEditing && (
                             <button
                                 onClick={() => setIsEditing(true)}
@@ -257,7 +257,7 @@ const UserCart = () => {
                             >
                                 Edit
                             </button>
-                        )}
+                        )} */}
                     </div>
                     <div className="mt-8 md:mt-8 md:ml-4 text-center md:text-left">
                         <h2 className="text-lg md:text-xl text-white font-semibold" id="userName">
