@@ -520,6 +520,8 @@ const UserHistory = () => {
                               { year: "numeric", month: "long", day: "numeric" }
                             )}
                           </p>
+                          <p className="text-gray-600 text-sm mt-2">Service option: {order.shipping_method} </p>
+
                           <p className="text-gray-800 font-semibold mt-2">
                             Total: ₱{parseFloat(order.total_amount).toFixed(2)}
                           </p>
@@ -680,6 +682,10 @@ const UserHistory = () => {
                   <div>
                     <span className="text-sm text-gray-600">Payment Option</span>
                     <p className="font-medium">{selectedOrder.payment_method}</p>
+                  </div>
+                  <div>
+                    <span className="text-sm text-gray-600">Service option</span>
+                    <p className="font-medium">{selectedOrder.shipping_method}</p>
                   </div>
                 </div>
               </div>

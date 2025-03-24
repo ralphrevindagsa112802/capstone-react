@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartContext } from "../context/CartContext";
-import { FaUser, FaSignOutAlt, FaBars, FaTimes, FaHome, FaUtensils, FaBuilding, FaStar, FaEnvelope, FaShoppingCart } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaBars, FaTimes, FaHome, FaUtensils, FaBuilding, FaStar, FaEnvelope, FaShoppingCart, FaBell } from "react-icons/fa";
 
 const UserNavbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -16,9 +16,14 @@ const UserNavbar = () => {
   const cartItems = location.state?.cartItems || [];
   const [isNotificationOpen, setNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [previousNotifications, setPreviousNotifications] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [newNotification, setNewNotification] = useState(null);
   const notificationRef = useRef(null);
   const [error, setError] = useState(null);
   const currentPath = location.pathname;
+  const popupTimerRef = useRef(null);
+
   // Function to handle profile image loading errors
   const handleImageError = () => {
     console.log("Profile image failed to load");
@@ -52,7 +57,7 @@ const UserNavbar = () => {
         isMobileMenuOpen &&
         mobileMenuRef.current &&
         !mobileMenuRef.current.contains(event.target) &&
-        !event.target.closest('[data-menu-toggle="true"]') // Modified selector
+        !event.target.closest('[data-menu-toggle="true"]')
       ) {
         setMobileMenuOpen(false);
       }
@@ -92,7 +97,7 @@ const UserNavbar = () => {
         const data = await response.json();
         if (data.success) {
           console.log(`Welcome, ${data.user.f_name} ${data.user.l_name}`);
-          console.log("User data:", data.user); // Log the full user data to see profile_pic
+          console.log("User data:", data.user);
           // Reset image error state when new data is loaded
           setProfileImageError(false);
           setUser(data.user); // Store user data in state
@@ -107,7 +112,38 @@ const UserNavbar = () => {
     fetchUserData();
   }, []);
 
-  //notification
+  // Function to check for new notifications or status changes
+  const checkForNewNotifications = (currentNotifications, previousNotifications) => {
+    if (!previousNotifications.length) return null;
+    
+    // Check for status changes in existing orders
+    for (const current of currentNotifications) {
+      const previous = previousNotifications.find(n => n.orders_id === current.orders_id);
+      
+      if (previous && previous.order_status !== current.order_status) {
+        // Found an order with a status change
+        return {
+          orders_id: current.orders_id,
+          oldStatus: previous.order_status,
+          newStatus: current.order_status
+        };
+      }
+    }
+    
+    // Check for completely new orders
+    for (const current of currentNotifications) {
+      if (!previousNotifications.some(n => n.orders_id === current.orders_id)) {
+        return {
+          orders_id: current.orders_id,
+          newStatus: current.order_status,
+          isNew: true
+        };
+      }
+    }
+    
+    return null;
+  };
+
   // Fetch order notifications from API
   useEffect(() => {
     // Declare interval variable outside the fetch function so we can clear it later
@@ -125,7 +161,29 @@ const UserNavbar = () => {
         if (response.data.error) {
           setError(response.data.error);
         } else {
+          // Store current notifications for comparison next time
+          setPreviousNotifications(notifications);
+          
+          // Update with new notifications
           setNotifications(response.data);
+          
+          // Check for changes and display popup if needed
+          const changedNotification = checkForNewNotifications(response.data, notifications);
+          
+          if (changedNotification) {
+            setNewNotification(changedNotification);
+            setShowPopup(true);
+            
+            // Clear previous timer if exists
+            if (popupTimerRef.current) {
+              clearTimeout(popupTimerRef.current);
+            }
+            
+            // Auto-dismiss popup after 5 seconds
+            popupTimerRef.current = setTimeout(() => {
+              setShowPopup(false);
+            }, 5000);
+          }
         }
       } catch (err) {
         console.error("Fetch Error:", err);
@@ -142,8 +200,9 @@ const UserNavbar = () => {
     // Clean up function to clear interval when component unmounts
     return () => {
       if (intervalId) clearInterval(intervalId);
+      if (popupTimerRef.current) clearTimeout(popupTimerRef.current);
     };
-  }, []);
+  }, [notifications]);
 
   // Toggle notification dropdown
   const toggleNotification = (event) => {
@@ -157,7 +216,7 @@ const UserNavbar = () => {
       if (
         notificationRef.current &&
         !notificationRef.current.contains(event.target) &&
-        !event.target.closest('[data-notification-toggle="true"]') // Modified selector
+        !event.target.closest('[data-notification-toggle="true"]')
       ) {
         setNotificationOpen(false);
       }
@@ -166,6 +225,14 @@ const UserNavbar = () => {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
+
+  // Function to dismiss popup manually
+  const dismissPopup = () => {
+    setShowPopup(false);
+    if (popupTimerRef.current) {
+      clearTimeout(popupTimerRef.current);
+    }
+  };
 
   // Function to determine if a valid profile picture is available
   const hasValidProfilePic = () => {
@@ -205,10 +272,45 @@ const UserNavbar = () => {
 
   return (
     <nav className="bg-white shadow-md fixed top-0 z-50 w-full">
+{/* Popup Notification */}
+{showPopup && newNotification && (
+  <div 
+    className="fixed z-50 w-full max-w-md bg-white rounded-lg shadow-lg border border-blue-200 overflow-hidden"
+    style={{ 
+      left: "50%", 
+      transform: "translateX(-50%)",
+      top: "40px",
+      animation: "slideInDown 0.3s ease-out forwards" 
+    }}
+  >
+    <div className="bg-blue-600 px-4 py-2 flex justify-between items-center">
+      <div className="flex items-center">
+        <FaBell className="text-white mr-2" />
+        <h3 className="text-white font-medium text-sm">Order Update</h3>
+      </div>
+      <button onClick={dismissPopup} className="text-white hover:text-gray-200">
+        <FaTimes size={16} />
+      </button>
+    </div>
+    <div className="p-4">
+      <p className="text-sm text-gray-700">
+        {newNotification.isNew 
+          ? `New order #${newNotification.orders_id} has been created.` 
+          : `Order #${newNotification.orders_id} status changed from "${newNotification.oldStatus}" to "${newNotification.newStatus}".`}
+      </p>
+      <div className="mt-3 flex justify-end">
+        <Link to="/user/status" onClick={dismissPopup} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+          View Details
+        </Link>
+      </div>
+    </div>
+  </div>
+)}
+
       <div className="container mx-auto flex items-center justify-between py-3 sm:py-4 md:py-6 px-4 sm:px-8 md:px-16 lg:px-22">
         {/* Mobile: Left Side with Notification */}
         <div className="md:hidden flex items-center space-x-3">
-          {/* Mobile Notification Button - FIXED: Added data-attribute and adjusted the button size */}
+          {/* Mobile Notification Button */}
           <div className="relative">
             <button
               onClick={toggleNotification}
@@ -249,7 +351,7 @@ const UserNavbar = () => {
           </a>
         </div>
 
-        {/* Hamburger Menu Button (Mobile) - FIXED: Added data-attribute and made sure all elements have the same attribute */}
+        {/* Hamburger Menu Button (Mobile) */}
         <button
           onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
           className="md:hidden flex items-center justify-center z-50 relative"
@@ -273,8 +375,8 @@ const UserNavbar = () => {
             <Link
               key={item.path}
               to={item.path}
-              className={`uppercase font-bold tracking-wide text-xs lg:text-sm transition-colors ${currentPath === item.path ? "text-[#1C359A]" : "text-black hover:text-[#1C359A]"
-                }`}            >
+              className={`uppercase font-bold tracking-wide text-xs lg:text-sm transition-colors ${currentPath === item.path ? "text-[#1C359A]" : "text-black hover:text-[#1C359A]"}`}
+            >
               {item.name}
             </Link>
           ))}
@@ -282,10 +384,10 @@ const UserNavbar = () => {
 
         {/* Mobile Navigation - Full screen overlay with animation */}
         <div
-          className={`fixed inset-0 bg-white z-40 md:hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}
+          className={`fixed inset-0 bg-white z-40 md:hidden transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
           ref={mobileMenuRef}
         >
+          {/* Mobile menu content - same as original */}
           <div className="flex flex-col h-full pt-24 px-8">
             {/* Mobile Menu Items */}
             <div className="flex flex-col space-y-6">
@@ -296,15 +398,15 @@ const UserNavbar = () => {
                   className="flex items-center space-x-4 text-lg font-medium text-gray-800 hover:text-[#1C359A] transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentPath === item.path ? "bg-[#1C359A]/10" : "bg-gray-100"
-                    }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentPath === item.path ? "bg-[#1C359A]/10" : "bg-gray-100"}`}>
                     <span className="text-[#1C359A]">
                       {item.icon}
                     </span>
                   </div>
                   <span className={currentPath === item.path ? "text-[#1C359A]" : "text-gray-800 hover:text-[#1C359A]"}>
                     {item.name}
-                  </span>                </Link>
+                  </span>
+                </Link>
               ))}
             </div>
 
@@ -379,7 +481,7 @@ const UserNavbar = () => {
 
         {/* Profile Button & Notification Button (Hidden on Mobile) */}
         <div className="gap-3 md:gap-5 items-center hidden md:flex">
-          {/* Desktop Notification Button - FIXED: Added data attribute and made it consistent for all children */}
+          {/* Desktop Notification Button */}
           <div className="relative">
             <button
               onClick={toggleNotification}
@@ -435,7 +537,7 @@ const UserNavbar = () => {
                 id="profileDropdown"
                 className="absolute right-4 sm:right-8 md:right-16 lg:right-22 mt-10 w-56 md:w-64 bg-white shadow-lg rounded-lg border border-gray-200 z-50"
               >
-                {/* Profile Picture & Username Section */}
+                {/* Profile info - same as original */}
                 <div className="p-3 border-b border-gray-300">
                   <div className="flex items-center">
                     <div
@@ -489,7 +591,7 @@ const UserNavbar = () => {
           </div>
         </div>
 
-        {/* Notification Panel */}
+        {/* Notification Panel - same as original */}
         {isNotificationOpen && (
           <div
             ref={notificationRef}
