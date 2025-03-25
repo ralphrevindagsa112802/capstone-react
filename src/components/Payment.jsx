@@ -47,8 +47,6 @@ const Payment = () => {
       payment_method: paymentMethod, // ✅ Sends selected payment method
     };
 
-    console.log("Sending Order Data:", requestData); // ✅ Debug the request being sent
-
     try {
       const response = await axios.post(
         "https://yappari-coffee-bar.shop/api/submitOrders", // ✅ Use correct API
@@ -56,7 +54,6 @@ const Payment = () => {
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );
 
-      console.log("Server Response:", response.data); // ✅ Debug API response
 
       if (response.data.success) {
         setCartItems([]); // ✅ Clear cart after order

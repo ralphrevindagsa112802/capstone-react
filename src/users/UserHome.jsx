@@ -2,11 +2,13 @@ import UserNavbar from '../components/UserNavbar'
 import Footer from '../components/Footer'
 import '../css/Home.css'
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
+import Swal from 'sweetalert2';
 import PopupCart from '../components/Popupcart'; // Import the new component
 
 
 const UserHome = () => {
+  const navigate = useNavigate();
   const [feedbacks, setFeedbacks] = useState([]);
   const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -94,7 +96,6 @@ const UserHome = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("API response:", data);
         if (data.success) {
           // Convert to array if it's not already
           const feedbackArray = Array.isArray(data.feedbacks)
@@ -136,6 +137,10 @@ const UserHome = () => {
       return users[userId].f_name.charAt(0).toUpperCase();
     }
     return String(userId).charAt(0).toUpperCase();
+  };
+
+  const handleAddToCart = (e) => {
+    navigate("/user/menu")
   };
 
   return (
@@ -339,7 +344,7 @@ const UserHome = () => {
                   <div className="price text-sm font-semibold">₱130 - ₱140</div>
                   <button
                     className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => console.log('Add to cart')}>
+                    onClick={() => handleAddToCart}>
                     <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
                     <span>Add</span>
                   </button>
@@ -367,7 +372,7 @@ const UserHome = () => {
                   <div className="price text-sm font-semibold">₱120</div>
                   <button
                     className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => console.log('Add to cart')}>
+                    onClick={() => handleAddToCart}>
                     <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
                     <span>Add</span>
                   </button>
@@ -395,7 +400,7 @@ const UserHome = () => {
                   <div className="price text-sm font-semibold">₱125 - 135</div>
                   <button
                     className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => console.log('Add to cart')}>
+                    onClick={() => handleAddToCart}>
                     <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
                     <span>Add</span>
                   </button>
@@ -423,7 +428,7 @@ const UserHome = () => {
                   <div className="price text-sm font-semibold">₱160</div>
                   <button
                     className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => console.log('Add to cart')}>
+                    onClick={() => handleAddToCart}>
                     <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
                     <span>Add</span>
                   </button>

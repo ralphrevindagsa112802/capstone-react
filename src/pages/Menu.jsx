@@ -16,9 +16,7 @@ const PublicMenu = () => {
     axios
       .get(`https://yappari-coffee-bar.shop/api/getMenuItems?category=${selectedCategory}`)
       .then(response => {
-        console.log("Raw API Response:", response); // Logs the full response
         if (response.data.success) {
-          console.log("Menu Data:", response.data.data); // Logs the menu items
           setFoodItems(response.data.data);
         } else {
           console.error("API Error:", response.data.message);

@@ -130,7 +130,6 @@ const UserCart = () => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log("Fetched user data:", data); // ✅ Debugging
                 if (data.success) {
                     setUserData({
                         ...data.user,
