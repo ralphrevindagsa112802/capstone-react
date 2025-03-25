@@ -73,7 +73,6 @@ const Login = () => {
   };
 
   const onSuccess = async (response) => {
-    console.log("Google login success", response);
 
     const credential = JSON.parse(atob(response.credential.split(".")[1]));
     const userData = JSON.stringify(credential);
@@ -86,14 +85,13 @@ const Login = () => {
       });
   
       const text = await res.text(); // Read raw response
-      console.log("Raw response from PHP:", text); // Debugging
+
   
       if (!text.trim()) {
         throw new Error("Empty response from server"); // Prevents JSON parsing on empty response
       }
   
       const data = JSON.parse(text);
-      console.log("Parsed JSON:", data);
   
       if (data.success) {
         sessionStorage.setItem("user_id", data.user.user_id);

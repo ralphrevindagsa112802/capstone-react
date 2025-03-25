@@ -60,7 +60,6 @@ const UserStatus = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("Fetched user data:", data); // ✅ Debugging
         if (data.success) {
           setUserData({
             ...data.user,
@@ -75,7 +74,6 @@ const UserStatus = () => {
 
   useEffect(() => {
     const userId = sessionStorage.getItem("user_id");
-    console.log("Retrieved user_id:", userId);
 
     if (!userId) {
       setError("User ID not found. Please log in.");
@@ -88,7 +86,6 @@ const UserStatus = () => {
         withCredentials: true,
       })
       .then((response) => {
-        console.log("API Response:", response.data);
         if (response.data.error) {
           setError(response.data.error);
         } else {
@@ -148,7 +145,6 @@ const UserStatus = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("Fetched user data:", data); // ✅ Debugging
         if (data.success) {
           setUserData({
             ...data.user,

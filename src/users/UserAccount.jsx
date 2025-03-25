@@ -66,7 +66,6 @@ const UserAccount = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("Fetched user data:", data); // ✅ Debugging
         if (data.success) {
           setUserData({
             ...data.user,
@@ -90,7 +89,6 @@ const UserAccount = () => {
 
   // ✅ Save Changes
   const handleSave = () => {
-    console.log("Sending user data:", userData); // ✅ Debugging
 
     if (!userData.user_id) {
       Swal.fire({
@@ -113,7 +111,6 @@ const UserAccount = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("Server response:", data); // ✅ Debugging
         if (data.success) {
           Swal.fire({
             title: 'Success!',
@@ -177,7 +174,6 @@ const UserAccount = () => {
   // Handle password update
   const handlePasswordUpdate = (e) => {
     e.preventDefault();
-    console.log("Updating password..."); // Debugging
 
     if (!passwordData.current_password || !passwordData.new_password || !passwordData.confirm_password) {
       Swal.fire("Warning", `Please fill in all fields.`, "warning", {timer: 3000});
@@ -198,7 +194,6 @@ const UserAccount = () => {
       })
         .then(response => response.json())
         .then(data => {
-          console.log("API Response:", data); // Debugging
 
           if (data.success) {
             setTimeout(() => {

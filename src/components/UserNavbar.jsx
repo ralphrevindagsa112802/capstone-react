@@ -26,7 +26,6 @@ const UserNavbar = () => {
 
   // Function to handle profile image loading errors
   const handleImageError = () => {
-    console.log("Profile image failed to load");
     setProfileImageError(true);
   };
 
@@ -96,8 +95,6 @@ const UserNavbar = () => {
 
         const data = await response.json();
         if (data.success) {
-          console.log(`Welcome, ${data.user.f_name} ${data.user.l_name}`);
-          console.log("User data:", data.user);
           // Reset image error state when new data is loaded
           setProfileImageError(false);
           setUser(data.user); // Store user data in state

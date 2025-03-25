@@ -1,10 +1,12 @@
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import '../css/Home.css'
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate  } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 const Home = () => {
+  const navigate = useNavigate();
   const [feedbacks, setFeedbacks] = useState([]);
   const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
@@ -49,6 +51,20 @@ const Home = () => {
     e.stopPropagation();
   };
 
+  const handleAddToCart = (e) => {
+      // Here, since the user is not signed in, redirect them
+      Swal.fire({
+        title: 'Info!',
+        text: 'Please sign up or log in to add items to your cart!',
+        icon: 'info',
+        confirmButtonText: 'OK',
+        timer: 3000,
+      }).then(() => {
+        setTimeout(() => {
+          navigate("/login")
+        }, 500);
+      }) // Adjust the route as needed
+    };
 
   // Fetch feedback data
   useEffect(() => {
@@ -61,7 +77,6 @@ const Home = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("API response:", data);
         if (data.success) {
           // Convert to array if it's not already
           const feedbackArray = Array.isArray(data.feedbacks)
@@ -92,7 +107,7 @@ const Home = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("API response:", data);
+
         if (data.success) {
           // Convert to array if it's not already
           const feedbackArray = Array.isArray(data.feedbacks)
@@ -292,7 +307,7 @@ const Home = () => {
                   <div className="price text-sm font-semibold">₱130 - ₱140</div>
                   <button
                     className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => console.log('Add to cart')}>
+                    onClick={() => handleAddToCart}>
                     <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
                     <span>Add</span>
                   </button>
@@ -320,7 +335,7 @@ const Home = () => {
                   <div className="price text-sm font-semibold">₱120</div>
                   <button
                     className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => console.log('Add to cart')}>
+                    onClick={() => handleAddToCart}>
                     <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
                     <span>Add</span>
                   </button>
@@ -348,7 +363,7 @@ const Home = () => {
                   <div className="price text-sm font-semibold">₱125 - 135</div>
                   <button
                     className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => console.log('Add to cart')}>
+                    onClick={() => handleAddToCart}>
                     <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
                     <span>Add</span>
                   </button>
@@ -376,7 +391,7 @@ const Home = () => {
                   <div className="price text-sm font-semibold">₱160</div>
                   <button
                     className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => console.log('Add to cart')}>
+                    onClick={() => handleAddToCart}>
                     <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
                     <span>Add</span>
                   </button>
