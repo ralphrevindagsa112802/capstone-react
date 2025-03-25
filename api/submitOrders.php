@@ -11,8 +11,8 @@ header("Content-Type: application/json");
 
 // Function to calculate points from order total
 function calculatePoints($orderTotal) {
-    // Every 40 in purchase adds 0.1 points
-    return floor($orderTotal / 40) * 0.1;
+    // Every 100 in purchase adds 0.1 points
+    return floor($orderTotal / 100) * 0.1;
 }
 
 // ✅ Check if user is logged in
