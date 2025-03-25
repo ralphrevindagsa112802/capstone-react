@@ -536,7 +536,7 @@ const UserCart = () => {
                                 {cartItems.length > 0 ? (
                                     cartItems?.map((item) => (
                                         <tr key={`${item.food_id}-${item.size}`} className="border-b">
-                                            <td className="p-2">
+                                            <td className="text-left py-2">
                                                 <input
                                                     type="checkbox"
                                                     checked={selectedItems.includes(`${item.food_id}-${item.size}`)}
