@@ -5,11 +5,15 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ShoppingCart, Trash2, X } from 'lucide-react';
 import Swal from 'sweetalert2';
 
-const PopupCart = ({ isOpen, onClose }) => {
+const PopupCart = ({ isOpen, onClose, onUpdateCartItems }) => {
     const { cartItems, removeFromCart } = useContext(CartContext);
     const navigate = useNavigate();
     const [totalAmount, setTotalAmount] = useState(0);
-
+    useEffect(() => {
+        // When cart items change, update the parent component
+        onUpdateCartItems(cartItems);
+      }, [cartItems, onUpdateCartItems]);
+    
     // Calculate total amount
     useEffect(() => {
         const total = cartItems.reduce((sum, item) => sum + Number(item.food_price) * item.quantity, 0);
