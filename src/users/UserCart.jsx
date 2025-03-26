@@ -548,8 +548,8 @@ const UserCart = () => {
                                             <td className="py-4 flex items-center">
                                                 <img src={item.image_path} alt={item.food_name} className="w-16 h-16 rounded-md object-cover mr-4" />
                                                 <div>
-                                                    <h3 className="text-[#1C359A] font-semibold">{item.food_name}</h3>
-                                                    <h3 className="text-[#1C359A] text-sm font-medium">({item.size})</h3>
+                                                    <h3 data-testid='item-name' className="text-[#1C359A] font-semibold">{item.food_name}</h3>
+                                                    <h3 data-testid='item-size'className="text-[#1C359A] text-sm font-medium">({item.size})</h3>
                                                 </div>
                                             </td>
                                             <td className="text-center py-2">
@@ -560,8 +560,9 @@ const UserCart = () => {
                                                     >
                                                         -
                                                     </button>
-                                                    <span className="border-x px-3 text-lg font-medium">{item.quantity}</span>
+                                                    <span data-testid='item-quantity' className="border-x px-3 text-lg font-medium">{item.quantity}</span>
                                                     <button
+                                                        data-testid='add-item'
                                                         className="px-2 text-lg font-bold text-gray-700"
                                                         onClick={() => handleQuantityChange(item.food_id, item.size, item.quantity + 1)}
                                                     >
@@ -569,10 +570,10 @@ const UserCart = () => {
                                                     </button>
                                                 </div>
                                             </td>
-                                            <td className="text-center py-4">₱{item.food_price}</td>
+                                            <td data-testid='item-price' className="text-center py-4">₱{item.food_price}</td>
                                             <td className="text-center py-4">₱{(item.food_price * item.quantity)}</td>
                                             <td className="text-right py-4">
-                                                <button className="text-sm text-red-700 font-bold hover:text-red-300 rounded cursor-pointer"
+                                                <button data-testid='remove-button' className="text-sm text-red-700 font-bold hover:text-red-300 rounded cursor-pointer"
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         removeFromCart(item.food_id, item.size);
@@ -597,7 +598,7 @@ const UserCart = () => {
                     <div className="mt-6 flex flex-col md:flex-row justify-between items-center md:items-end">
                         <div className="w-full md:w-auto mb-4 md:mb-0">
                             {selectedItems.length > 0 && (
-                                <button className="bg-red-100 text-red-700 px-4 py-2 rounded text-sm font-semibold hover:bg-red-200 mr-2">
+                                <button data-testid='remove-selected' className="bg-red-100 text-red-700 px-4 py-2 rounded text-sm font-semibold hover:bg-red-200 mr-2">
                                     Remove Selected ({selectedItems.length})
                                 </button>
                             )}
@@ -607,6 +608,7 @@ const UserCart = () => {
                             <button
                                 onClick={handleCheckout}
                                 className="bg-[#1C359A] w-full md:w-auto text-sm font-semibold cursor-pointer text-white px-6 py-3 rounded hover:bg-blue-700 transition-colors"
+                                data-testid='checkout'
                             >
                                 Proceed to Checkout
                             </button>
