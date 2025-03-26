@@ -57,7 +57,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between py-3 sm:py-4 md:py-6 px-4 sm:px-8 md:px-16 lg:px-22">
         {/* Mobile: Left Side with Cart */}
         <div className="md:hidden flex items-center space-x-3">
-          <Link to="/cart" className="text-black focus:outline-none">
+          <Link to="/signin" className="text-black focus:outline-none">
             <div className="w-7 h-7 md:w-8 md:h-8 bg-[#1C359A] rounded-full flex items-center justify-center shadow-md hover:bg-blue-700 transition cursor-pointer">
               <FaShoppingCart className="h-3 w-3 md:h-4 md:w-4 text-white" />
             </div>
@@ -149,12 +149,12 @@ const Navbar = () => {
             {/* Cart Link */}
             <div className="flex flex-col space-y-6">
               <Link
-                to="/cart"
-                className={`flex items-center space-x-4 text-lg font-medium transition-colors ${currentPath === "/cart" ? "text-[#1C359A]" : "text-gray-800 hover:text-[#1C359A]"
+                to="/signin"
+                className={`flex items-center space-x-4 text-lg font-medium transition-colors ${currentPath === "/sigin" ? "text-[#1C359A]" : "text-gray-800 hover:text-[#1C359A]"
                   }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentPath === "/cart" ? "bg-[#1C359A]/10" : "bg-gray-100"
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentPath === "/sigin" ? "bg-[#1C359A]/10" : "bg-gray-100"
                   }`}>
                   <FaShoppingCart className="w-4 h-4 text-[#1C359A]" />
                 </div>
