@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import { Mail, MapPin, Phone, Facebook, Instagram } from "lucide-react";
 import Swal from 'sweetalert2'
 import PopupCart from '../components/Popupcart'; // Import the new component
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const UserContact = () => {
   

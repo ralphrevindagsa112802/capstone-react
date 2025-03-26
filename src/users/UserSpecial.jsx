@@ -3,7 +3,7 @@ import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import PopupCart from '../components/Popupcart'; // Import the new component
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Separator Component for reuse
 const Separator = () => {

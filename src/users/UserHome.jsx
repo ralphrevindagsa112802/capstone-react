@@ -2,7 +2,7 @@ import React from "react";
 import UserNavbar from '../components/UserNavbar'
 import Footer from '../components/Footer'
 import '../css/Home.css'
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate} from "react-router-dom";
 import Swal from 'sweetalert2';
 import PopupCart from '../components/Popupcart'; // Import the new component

@@ -3,7 +3,7 @@ import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
 import { User, ChefHat, FileText } from "lucide-react"; // Import icons
 import PopupCart from '../components/Popupcart'; // Import the new component
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const cafeviennaNobg = "/img/cafeviennaNobg - Copy.png";
 const logoImage = "/img/YAPPARI NEW COLOR LOGO.jpg";
