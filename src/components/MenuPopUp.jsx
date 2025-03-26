@@ -55,7 +55,7 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
   return (
     <div className="fixed inset-0 bg-opacity-50 backdrop-blur-xs flex w-full justify-center items-center z-[50] p-4">
       <div className="bg-white rounded-lg p-4 md:p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-        <button onClick={onClose} className="text-[#1C359A] text-sm mb-2">← Back</button>
+        <button onClick={onClose} data-testid='back-button' className="text-[#1C359A] text-sm mb-2">← Back</button>
 
         {/* Change from grid to flex column on mobile, grid on larger screens */}
 
@@ -77,7 +77,7 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
               <span className="text-[#1C359A] font-bold">Size:</span>
               <select value={selectedSize} onChange={handleSizeChange} className="block w-full p-2 mt-1 border rounded">
                 {sizeOptions.map((option) => (
-                  <option key={option.size} value={option.size}>{option.size}</option>
+                  <option key={option.size} data-testid='combobox' value={option.size}>{option.size}</option>
                 ))}
               </select>
             </div>
@@ -85,12 +85,13 @@ const MenuPopup = ({ food, onClose, onAddToCart }) => {
             {/* Display updated price */}
             <div className="mt-4">
               <span className="text-[#1C359A] font-bold">Price:</span>
-              <p className="text-lg">₱{selectedPrice}</p>
+              <p className="text-lg" data-testid='price'>₱{selectedPrice}</p>
             </div>
 
             <button
               onClick={handleAddToCart}
               className="bg-blue-600 text-white px-4 py-2 mt-4 rounded-md w-full"
+              data-testid='add-to-cart'
             >
               Add to Cart
             </button>
