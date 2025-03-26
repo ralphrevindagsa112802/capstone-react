@@ -155,8 +155,7 @@ const UserHome = () => {
       />
       <UserNavbar></UserNavbar>
 
-       {/* Floating Cart Button */}
-      <div className="fixed bottom-4 z-40 left-4 lg:left-auto lg:right-4">
+      <div className="fixed bottom-18 md:bottom-4 z-40 right-4 lg:right-4">
         <button
           className="w-12 h-12 rounded-full bg-[#1C359A] text-white flex items-center justify-center shadow-lg hover:bg-blue-800 transition-all relative"
           aria-label="Shopping Cart"

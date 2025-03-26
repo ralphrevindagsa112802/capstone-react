@@ -147,7 +147,7 @@ const Home = () => {
       />
       <Navbar></Navbar>
       {/**user positive feedback */}
-      <div className={`fixed z-50 transition-all duration-300 ${isCollapsed
+      <div className={`fixed z-40 transition-all duration-300 ${isCollapsed
         ? 'bottom-4 left-4 w-12 h-12'
         : 'bottom-4 left-4 sm:bottom-6 sm:right-6 md:bottom-10 md:left-10 w-full max-w-xs sm:max-w-sm md:w-56'
         }`}

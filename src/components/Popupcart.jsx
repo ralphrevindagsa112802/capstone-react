@@ -27,7 +27,7 @@ const PopupCart = ({ isOpen, onClose, onUpdateCartItems }) => {
                     stiffness: 300, 
                     damping: 20 
                 }}
-                className="fixed bottom-4 right-4 left-4 sm:left-auto sm:w-96 z-50 bg-white shadow-2xl rounded-xl border border-gray-200 overflow-hidden max-w-md mx-auto"
+                className="fixed bottom-4 right-4 left-4 sm:left-auto sm:w-96 z-45 bg-white shadow-2xl rounded-xl border border-gray-200 overflow-hidden max-w-md mx-auto"
                 style={{ 
                     backgroundColor: 'white', 
                     borderColor: '#1C359A20' 
