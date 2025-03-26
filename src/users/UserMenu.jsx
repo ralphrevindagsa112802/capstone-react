@@ -1,11 +1,10 @@
+import React from "react";
 import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
 import { CartContext } from "../context/CartContext"; // Import context
 import MenuPopup from "../components/MenuPopUp"; // Import the new popup component
-import { Link } from "react-router-dom";
 import PopupCart from '../components/Popupcart'; // Import the new component
 
 const UserMenu = () => {

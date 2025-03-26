@@ -1,9 +1,8 @@
+import React from "react";
 import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
 import { Mail, MapPin, Phone, Facebook, Instagram } from "lucide-react";
-import Swal from 'sweetalert2';
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 import PopupCart from '../components/Popupcart'; // Import the new component
 import React, { useState } from 'react';
 

@@ -1,3 +1,4 @@
+import React from "react";
 import UserNavbar from '../components/UserNavbar'
 import Footer from '../components/Footer'
 import '../css/Home.css'

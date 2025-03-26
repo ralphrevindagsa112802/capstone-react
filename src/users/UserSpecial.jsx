@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
+import React from "react";
 import UserNavbar from "../components/UserNavbar";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import PopupCart from '../components/Popupcart'; // Import the new component
 import React, { useState } from 'react';
 
