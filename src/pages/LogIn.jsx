@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -146,7 +147,7 @@ const Login = () => {
             </Link>
             <div>
               <span>Don't have an account? </span>
-              <Link to="/signIn" className='text-[#1C359A] font-bold hover:underline'>SIGN-UP</Link>
+              <Link to="/signIn" data-testid="sign-up" className='text-[#1C359A] font-bold hover:underline'>SIGN-UP</Link>
             </div>
           </div>
           
@@ -163,7 +164,8 @@ const Login = () => {
                 <input 
                   type="text" 
                   name="username" 
-                  placeholder="Username" 
+                  placeholder="Username"
+                  data-testid="username-input" 
                   value={formData.username} 
                   onChange={handleChange} 
                   className="w-full px-3 sm:px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" 
@@ -177,11 +179,13 @@ const Login = () => {
                       type={showPassword ? "text" : "password"}
                       name="password"
                       placeholder="Password"
+                      data-testid="password-input"
                       onChange={handleChange}
                       className="w-full px-3 sm:px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                     <button
                       type="button"
+                      data-testid='toggle password visibility'
                       onClick={togglePasswordVisibility}
                       className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 focus:outline-none"
                     >
@@ -200,7 +204,7 @@ const Login = () => {
                 </div>
               
               <div className="w-full max-w-md px-3">
-                <button className="w-full py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">Log In</button>
+                <button data-testid='log-in' className="w-full py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">Log In</button>
               </div>
             </div>
           </form>

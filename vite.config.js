@@ -19,6 +19,13 @@ export default defineConfig({
       },
     },
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/setupTests.js'], // Optional but recommended
+    css: true, // If you're using CSS in your tests
+    include: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)']
+  },
   server: {
     proxy: {
       '/api': {
