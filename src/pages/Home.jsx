@@ -51,7 +51,7 @@ const Home = () => {
     e.stopPropagation();
   };
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = () => {
       // Here, since the user is not signed in, redirect them
       Swal.fire({
         title: 'Info!',
@@ -305,12 +305,13 @@ const Home = () => {
 
                 <div className="flex flex-row-reverse justify-between mt-auto items-center pt-4">
                   <div className="price text-sm font-semibold">₱130 - ₱140</div>
-                  <button
-                    className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => handleAddToCart}>
-                    <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
-                    <span>Add</span>
-                  </button>
+                    <button
+                      onClick={handleAddToCart}
+                      className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer"
+                      >
+                      <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
+                      <span>Add</span>
+                    </button>
                 </div>
               </div>
             </div>
@@ -334,11 +335,12 @@ const Home = () => {
                 <div className="flex flex-row-reverse justify-between pt-4 top-0 mt-auto items-center">
                   <div className="price text-sm font-semibold">₱120</div>
                   <button
-                    className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => handleAddToCart}>
-                    <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
-                    <span>Add</span>
-                  </button>
+                      onClick={handleAddToCart}
+                      className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer"
+                      >
+                      <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
+                      <span>Add</span>
+                    </button>
                 </div>
               </div>
             </div>
@@ -361,12 +363,13 @@ const Home = () => {
 
                 <div className="flex flex-row-reverse justify-between mt-auto pt-4 items-center">
                   <div className="price text-sm font-semibold">₱125 - 135</div>
-                  <button
-                    className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => handleAddToCart}>
-                    <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
-                    <span>Add</span>
-                  </button>
+                    <button
+                      onClick={handleAddToCart}
+                      className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer"
+                      >
+                      <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
+                      <span>Add</span>
+                    </button>
                 </div>
               </div>
             </div>
@@ -389,12 +392,13 @@ const Home = () => {
 
                 <div className="flex flex-row-reverse justify-between items-center mt-auto pt-4">
                   <div className="price text-sm font-semibold">₱160</div>
-                  <button
-                    className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2"
-                    onClick={() => handleAddToCart}>
-                    <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
-                    <span>Add</span>
-                  </button>
+                    <button
+                      onClick={handleAddToCart}
+                      className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer"
+                      >
+                      <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
+                      <span>Add</span>
+                    </button>
                 </div>
               </div>
             </div>
