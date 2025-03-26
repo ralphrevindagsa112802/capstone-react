@@ -266,7 +266,26 @@ const UserNavbar = () => {
     { path: "/user/special", name: "Special", icon: <FaStar className="w-4 h-4" /> },
     { path: "/user/contact", name: "Contact", icon: <FaEnvelope className="w-4 h-4" /> },
   ];
+   // Close mobile menu if clicking outside
+   useEffect(() => {
+    const handleMobileMenuClickOutside = (event) => {
+      // Only check if menu is open and not when clicking the toggle button itself
+      if (
+        isMobileMenuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target) &&
+        !event.target.closest('[data-menu-toggle="true"]')
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
 
+    document.addEventListener("click", handleMobileMenuClickOutside);
+    return () => {
+      document.removeEventListener("click", handleMobileMenuClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+  
   return (
     <nav className="bg-white shadow-md fixed top-0 z-50 w-full">
 {/* Popup Notification */}

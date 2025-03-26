@@ -1,45 +1,16 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ShoppingCart, Trash2, X } from 'lucide-react';
-import Swal from 'sweetalert2';
+import { ShoppingCart, X } from 'lucide-react';
 
 const PopupCart = ({ isOpen, onClose, onUpdateCartItems }) => {
-    const { cartItems, removeFromCart } = useContext(CartContext);
-    const navigate = useNavigate();
-    const [totalAmount, setTotalAmount] = useState(0);
+    const { cartItems } = useContext(CartContext);
 
     useEffect(() => {
         // When cart items change, update the parent component
         onUpdateCartItems(cartItems);
     }, [cartItems, onUpdateCartItems]);
-    
-    // Calculate total amount
-    useEffect(() => {
-        const total = cartItems.reduce((sum, item) => sum + Number(item.food_price) * item.quantity, 0);
-        setTotalAmount(total);
-    }, [cartItems]);
-
-    const handleCheckout = () => {
-        if (cartItems.length === 0) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: 'Your cart is empty!',
-                confirmButtonColor: '#1C359A'
-            });
-            return;
-        }
-
-        // Save order details before navigating to checkout
-        localStorage.setItem("checkoutOrder", JSON.stringify(cartItems));
-        localStorage.setItem("totalAmount", totalAmount);
-
-        // Close popup and navigate to checkout
-        onClose();
-        navigate("/user/checkout");
-    };
 
     // Prevent rendering if not open
     if (!isOpen) return null;
@@ -128,40 +99,21 @@ const PopupCart = ({ isOpen, onClose, onUpdateCartItems }) => {
                                                 ₱{(item.food_price * item.quantity).toFixed(2)}
                                             </p>
                                         </div>
-                                        <button 
-                                            onClick={() => removeFromCart(item.food_id, item.size)}
-                                            className="text-red-500 hover:text-red-700 transition-colors ml-2"
-                                        >
-                                            <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                                        </button>
                                     </motion.div>
                                 ))}
                             </AnimatePresence>
                         </div>
 
-                        {/* Total and Actions */}
+                        {/* View Cart Action */}
                         <div className="p-3 sm:p-4 bg-gray-50 border-t">
-                            <div className="flex justify-between mb-3 sm:mb-4">
-                                <span className="text-base sm:text-lg font-semibold text-gray-700">Total:</span>
-                                <span className="text-base sm:text-lg font-bold text-[#1C359A]">₱{totalAmount.toFixed(2)}</span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                                <Link 
-                                    to="/user/cart" 
-                                    onClick={onClose}
-                                    className="text-center bg-gray-200 text-gray-700 py-2 sm:py-3 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-base"
-                                >
-                                    <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
-                                    <span>View Cart</span>
-                                </Link>
-                                <button 
-                                    onClick={handleCheckout}
-                                    className="bg-[#1C359A] text-white py-2 sm:py-3 rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-base"
-                                >
-                                    <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
-                                    <span>Checkout</span>
-                                </button>
-                            </div>
+                            <Link 
+                                to="/user/cart" 
+                                onClick={onClose}
+                                className="w-full text-center bg-[#1C359A] text-white py-2 sm:py-3 rounded-lg hover:bg-blue-800 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-base"
+                            >
+                                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+                                <span>View Cart</span>
+                            </Link>
                         </div>
                     </>
                 )}

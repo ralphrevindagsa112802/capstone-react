@@ -156,7 +156,7 @@ const UserHome = () => {
       <UserNavbar></UserNavbar>
 
        {/* Floating Cart Button */}
-      <div className="fixed bottom-4 z-50 left-4 lg:left-auto lg:right-4">
+      <div className="fixed bottom-4 z-40 left-4 lg:left-auto lg:right-4">
         <button
           className="w-12 h-12 rounded-full bg-[#1C359A] text-white flex items-center justify-center shadow-lg hover:bg-blue-800 transition-all relative"
           aria-label="Shopping Cart"
@@ -183,13 +183,13 @@ const UserHome = () => {
       />
 
       {/**user positive feedback */}
-      <div className={`fixed z-50 transition-all duration-300 ${isCollapsed
+      <div className={`fixed z-40 transition-all duration-300 ${isCollapsed
         ? 'bottom-4 left-4 w-12 h-12'
         : 'bottom-4 left-4 sm:bottom-6 sm:right-6 md:bottom-10 md:left-10 w-full max-w-xs sm:max-w-sm md:w-56'
         }`}
       >
         {isSmallScreen && isCollapsed && (
-          <div className="fixed bottom-4 right-4 z-50">
+          <div className="fixed bottom-4 right-4 z-40">
             <button
               onClick={() => setIsCollapsed(false)}
               className="w-12 h-12 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-lg hover:bg-blue-800 transition-all"
@@ -205,7 +205,7 @@ const UserHome = () => {
         {/* Show the feedback panel when not collapsed or on larger screens */}
         {/* Only show the icon button on small screens when collapsed */}
         {isSmallScreen && isCollapsed && (
-          <div className="fixed bottom-4 right-4 z-50">
+          <div className="fixed bottom-4 right-4 z-40">
             <button
               onClick={toggleCollapsed}
               className="w-12 h-12 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-lg hover:bg-blue-800 transition-all"
@@ -221,7 +221,7 @@ const UserHome = () => {
         {/* Show the feedback panel when not collapsed or on larger screens */}
         {(!isSmallScreen || !isCollapsed) && (
           <div
-            className="fixed z-50 bg-white shadow-lg rounded-2xl p-4 
+            className="fixed z-40 bg-white shadow-lg rounded-2xl p-4 
               bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-10 md:left-10 
               w-full max-w-xs sm:max-w-sm md:w-56"
             onClick={handlePanelClick} // Add click handler to prevent propagation

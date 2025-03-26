@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import { CartContext } from "../context/CartContext"; // Import context
 import MenuPopup from "../components/MenuPopUp"; // Import the new popup component
 import { Link } from "react-router-dom";
+import PopupCart from '../components/Popupcart'; // Import the new component
 
 const UserMenu = () => {
     const { cartItems, addToCart } = useContext(CartContext); // Use context
@@ -13,6 +14,20 @@ const UserMenu = () => {
     const [selectedFood, setSelectedFood] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState("All"); // Track selected food item
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isPopupCartOpen, setIsPopupCartOpen] = useState(false);
+
+    const handleCartIconClick = () => {
+        setIsPopupCartOpen(true);
+    };
+
+    const handleClosePopupCart = () => {
+        setIsPopupCartOpen(false);
+    };
+
+    const handleUpdateCartItems = (updatedCartItems) => {
+        // You can add any additional logic here if needed
+        // For now, we'll just use the updated cart items
+    };
 
     useEffect(() => {
         axios.get(`https://yappari-coffee-bar.shop/api/getMenuItems?category=${selectedCategory}`)
@@ -108,9 +123,9 @@ const UserMenu = () => {
                     <div className="w-full flex flex-col">
                         {/* Header with menu and dropdown for mobile */}
                         <div className="w-full flex justify-between items-center px-4 py-4 md:h-16 relative">
-                        <h1 className="text-[#1C359A] font-bold text-lg">
-        {selectedCategory === "All" ? "All Menu" : selectedCategory}
-    </h1>
+                            <h1 className="text-[#1C359A] font-bold text-lg">
+                                {selectedCategory === "All" ? "All Menu" : selectedCategory}
+                            </h1>
                             {/* Mobile dropdown button */}
                             <div className="relative md:hidden">
                                 <button
@@ -210,17 +225,24 @@ const UserMenu = () => {
                             </div>
 
                             {/* Desktop cart icon */}
-                            <Link to="/user/cart">
-                            <div className="hidden md:block relative z-10">
-                                <img src="/img/cart.png" alt="Cart" className="h-6 w-6" />
+                            <div className="hidden md:block relative z-10" onClick={handleCartIconClick}>
+                                <img src="/img/cart.png" alt="Cart" className="h-6 w-6 cursor-pointer" />
+                                {cartItems.length > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                                        {cartItems.length}
+                                    </span>
+                                )}
                             </div>
 
                             {/* Mobile cart icon */}
-
-                            <div className="md:hidden">
-                                <img src="/img/cart.png" alt="Cart" className="h-6 w-6" />
+                            <div className="md:hidden relative" onClick={handleCartIconClick}>
+                                <img src="/img/cart.png" alt="Cart" className="h-6 w-6 cursor-pointer" />
+                                {cartItems.length > 0 && (
+                                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                                        {cartItems.length}
+                                    </span>
+                                )}
                             </div>
-                            </Link>
 
                         </div>
 
@@ -252,25 +274,25 @@ const UserMenu = () => {
                                 })
                                 .map(food => (
                                     <div key={food.food_id} className="w-full bg-[#DCDEEA] flex flex-col pt-4 h-auto rounded-lg shadow-lg">
-                                    <div className="w-full flex flex-wrap justify-center gap-4">
-                                        <img src={food.image_path} alt={food.food_name} className="w-full max-w-[213px] h-48 rounded-md object-cover" />
-                                    </div>
-                                    <div className="bg-white rounded-md w-full mt-4 p-5 flex flex-col h-full">
-                                        <div className="text-[#1C359A] font-bold flex">{food.food_name}</div>
-                                        <div className="text-justify opacity-55 flex-grow">{food.description}</div>
-                                        <div className="mt-auto pt-4">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm font-semibold">₱{food.price_small}</span>
-                                                <button
-                                                    onClick={() => setSelectedFood(food)}
-                                                    className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer">
-                                                    <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
-                                                    <span>Add</span>
-                                                </button>
+                                        <div className="w-full flex flex-wrap justify-center gap-4">
+                                            <img src={food.image_path} alt={food.food_name} className="w-full max-w-[213px] h-48 rounded-md object-cover" />
+                                        </div>
+                                        <div className="bg-white rounded-md w-full mt-4 p-5 flex flex-col h-full">
+                                            <div className="text-[#1C359A] font-bold flex">{food.food_name}</div>
+                                            <div className="text-justify opacity-55 flex-grow">{food.description}</div>
+                                            <div className="mt-auto pt-4">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-sm font-semibold">₱{food.price_small}</span>
+                                                    <button
+                                                        onClick={() => setSelectedFood(food)}
+                                                        className="bg-[#DCDEEA] text-[#1C359A] text-sm font-bold py-2 px-6 rounded flex items-center gap-2 hover:bg-gray-300 cursor-pointer">
+                                                        <img src="/img/cart.png" alt="Add Icon" className="w-4 h-4" />
+                                                        <span>Add</span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 ))
                             }
                         </div> {/* End of grid container */}
@@ -278,6 +300,25 @@ const UserMenu = () => {
                 </div>
             </div>
             <Footer />
+
+            {/* Render MenuPopup if a food item is selected */}
+            {selectedFood && (
+                <MenuPopup
+                    food={selectedFood}
+                    onClose={() => setSelectedFood(null)}
+                    onAddToCart={(food) => {
+                        addToCart({ ...food, quantity: 1 });
+                        setSelectedFood(null);
+                    }}
+                />
+            )}
+
+            {/* Popup Cart */}
+            <PopupCart
+                isOpen={isPopupCartOpen}
+                onClose={handleClosePopupCart}
+                onUpdateCartItems={handleUpdateCartItems}
+            />
 
             {/* Render MenuPopup if a food item is selected */}
             {selectedFood && (
