@@ -62,7 +62,7 @@ const CheckOut = () => {
    const handleShippingMethodChange = (method) => {
     if (method === "Delivery") {
       // Check if the user's address contains "Taguig"
-      if (!user.address || !user.address.includes("Taguig")) {
+      if (!user.address || !user.address.toLowerCase().includes("taguig")) {
         Swal.fire("Oops..", "Deliveries are only available to customers within Taguig.", "info", {timer: 3000});
         return; // Don't change shipping method
       }
