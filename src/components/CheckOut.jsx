@@ -82,7 +82,7 @@ const CheckOut = () => {
       }
     
       // Double-check Taguig address requirement for delivery
-      if (shippingMethod === "Delivery" && (!user.address || !user.address.includes("Taguig"))) {
+      if (shippingMethod === "Delivery" && (!user.address || !user.address.toLowerCase().includes("taguig"))) {
         Swal.fire("Warning", "Deliveries are only available to customers within Taguig.", "warning", {timer: 3000});
         return;
       }
