@@ -74,7 +74,7 @@ const SignIn = () => {
       }
 
       if (data.success) {
-        Swal.fire("Success", 'Signup successful! You can now log in.', "success", {timer: 3000});
+        Swal.fire("Success", 'Signup successful! You can now log in.', "success", {timer: 2000});
         navigate("/login");
       } else {
         setError(data.message || "Signup failed");
@@ -158,7 +158,7 @@ const SignIn = () => {
               </Link>
               <div>
                 <span>Already have an account? </span>
-                <Link to="/login" className="text-[#1C359A] font-bold hover:underline">LOGIN</Link>
+                <Link data-testid="log-in" to="/login" className="text-[#1C359A] font-bold hover:underline">LOGIN</Link>
               </div>
             </div>
 
@@ -167,9 +167,9 @@ const SignIn = () => {
               <p className="mt-2 text-sm sm:text-base text-gray-600">"Sign up now and enjoy fresh coffee delivered to your door!"</p>
             </div>
 
-            <form onSubmit={handleSignUp} className="flex flex-col items-center w-full">
+            <form onSubmit={handleSignUp} data-testid="signup-form" className="flex flex-col items-center w-full">
       <h2 className="text-xl sm:text-2xl font-bold text-[#1C359A] mb-4 sm:mb-6">Sign Up</h2>
-      {error && <p className="text-red-500 text-center text-sm mb-3 w-full max-w-md">{error}</p>}
+      {error && <p data-testid="error" className="text-red-500 text-center text-sm mb-3 w-full max-w-md">{error}</p>}
 
       <div className="w-full flex flex-col items-center">
         {/* First name field */}
@@ -177,6 +177,7 @@ const SignIn = () => {
           <input
             type="text"
             name="firstname"
+            data-testid="firstname-input"
             placeholder="First Name"
             onChange={handleChange}
             className="w-full px-3 sm:px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -188,6 +189,7 @@ const SignIn = () => {
           <input
             type="text"
             name="lastname"
+            data-testid="lastname-input"
             placeholder="Last Name"
             onChange={handleChange}
             className="w-full px-3 sm:px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -199,6 +201,7 @@ const SignIn = () => {
           <input
             type="email"
             name="email"
+            data-testid="email-input"
             placeholder="Email"
             onChange={handleChange}
             pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
@@ -213,6 +216,7 @@ const SignIn = () => {
           <input
             type="text"
             name="username"
+            data-testid="username-input"
             placeholder="Username"
             onChange={handleChange}
             className="w-full px-3 sm:px-4 py-2 border border-[#1C359A] rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -224,6 +228,7 @@ const SignIn = () => {
           <input
             type="text"
             name="address"
+            data-testid="address-input"
             placeholder="Full Address (including City)"
             onChange={handleChange}
             pattern=".*[Cc][Ii][Tt][Yy].*"
@@ -239,6 +244,7 @@ const SignIn = () => {
           <input
             type="tel"
             name="phone"
+            data-testid="phone-number-input"
             placeholder="Phone Number (09XXXXXXXXX)"
             onChange={handleChange}
             pattern="09[0-9]{9}"
@@ -257,6 +263,7 @@ const SignIn = () => {
       type={showPassword ? "text" : "password"}
       name="password"
       placeholder="Password"
+      data-testid="password-input"
       onChange={handleChange}
       pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
       title="Password must be at least 8 characters with at least 1 capital letter and 1 number"
@@ -265,6 +272,7 @@ const SignIn = () => {
     />
     <button
       type="button"
+      data-testid="toggle-password"
       onClick={togglePasswordVisibility}
       className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 focus:outline-none"
     >
@@ -289,6 +297,7 @@ const SignIn = () => {
             <input
               type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
+              data-testid="confirm-password-input"
               placeholder="Confirm Password"
               onChange={handleChange}
               required
@@ -314,7 +323,7 @@ const SignIn = () => {
         </div>
 
         <div className="w-full max-w-md px-3">
-          <button className="w-full py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">Sign Up</button>
+          <button data-testid="signup-btn" className="w-full py-2 px-4 bg-[#1C359A] text-white font-bold rounded-lg hover:bg-blue-700 transition">Sign Up</button>
         </div>
       </div>
     </form>
