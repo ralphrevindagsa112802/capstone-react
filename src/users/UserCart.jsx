@@ -42,26 +42,6 @@ const UserCart = () => {
     }, []);
 
 
-    /** 
-    useEffect(() => {
-        const total = cartItems.reduce((sum, item) => sum + item.food_price * item.quantity, 0);
-        setTotalAmount(total);
-    }, [cartItems]);
-
-    const handleCheckout = () => {
-        if (cartItems.length === 0) {
-            Swal.fire("Warning", `Your cart is empty!`, "warning");
-            return;
-        }
-
-        // 🔹 Save order details before navigating to checkout
-        localStorage.setItem("checkoutOrder", JSON.stringify(cartItems));
-        localStorage.setItem("totalAmount", totalAmount);
-
-        navigate("/user/checkout"); // 🔹 Redirect to Checkout page
-    };
-    */
-
 
     useEffect(() => {
         // Calculate total based on selected items

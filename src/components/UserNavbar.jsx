@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartContext } from "../context/CartContext";
 import { FaUser, FaSignOutAlt, FaBars, FaTimes, FaHome, FaUtensils, FaBuilding, FaStar, FaEnvelope, FaShoppingCart, FaBell } from "react-icons/fa";
+import * as Tone from 'tone';
 
 const UserNavbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,6 +25,19 @@ const UserNavbar = () => {
   const [error, setError] = useState(null);
   const currentPath = location.pathname;
   const popupTimerRef = useRef(null);
+
+  
+  // Create a simple notification sound using Tone.js
+  const playNotificationSound = () => {
+    // Ensure Tone is started (required for web audio)
+    Tone.start();
+
+    // Create a synth for the notification sound
+    const synth = new Tone.Synth().toDestination();
+    
+    // Play a short, pleasant notification tone
+    synth.triggerAttackRelease('C5', '8n'); // Short tone at C5 pitch
+  };
 
   // Function to handle profile image loading errors
   const handleImageError = () => {
@@ -143,6 +157,7 @@ const UserNavbar = () => {
   };
 
   // Fetch order notifications from API
+  // Fetch order notifications from API
   useEffect(() => {
     // Declare interval variable outside the fetch function so we can clear it later
     let intervalId;
@@ -169,6 +184,9 @@ const UserNavbar = () => {
           const changedNotification = checkForNewNotifications(response.data, notifications);
           
           if (changedNotification) {
+            // Play notification sound
+            playNotificationSound();
+
             setNewNotification(changedNotification);
             setShowPopup(true);
             
@@ -192,15 +210,16 @@ const UserNavbar = () => {
     // Call the function immediately when component mounts
     fetchNotifications();
 
-    // Set up interval for periodic refreshes
-    intervalId = setInterval(fetchNotifications, 10000);
+   // Set up interval for periodic refreshes
+   intervalId = setInterval(fetchNotifications, 10000);
 
-    // Clean up function to clear interval when component unmounts
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-      if (popupTimerRef.current) clearTimeout(popupTimerRef.current);
-    };
-  }, [notifications]);
+   // Clean up function to clear interval when component unmounts
+   return () => {
+     if (intervalId) clearInterval(intervalId);
+     if (popupTimerRef.current) clearTimeout(popupTimerRef.current);
+   };
+ }, [notifications]);
+
 
   // Toggle notification dropdown
   const toggleNotification = (event) => {
@@ -224,8 +243,8 @@ const UserNavbar = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Function to dismiss popup manually
-  const dismissPopup = () => {
+   // Dismiss popup function
+   const dismissPopup = () => {
     setShowPopup(false);
     if (popupTimerRef.current) {
       clearTimeout(popupTimerRef.current);
@@ -290,39 +309,40 @@ const UserNavbar = () => {
   return (
     <nav className="bg-white shadow-md fixed top-0 z-50 w-full">
 {/* Popup Notification */}
-{showPopup && newNotification && (
-  <div 
-    className="fixed z-50 w-full max-w-md bg-white rounded-lg shadow-lg border border-blue-200 overflow-hidden"
-    style={{ 
-      left: "50%", 
-      transform: "translateX(-50%)",
-      top: "40px",
-      animation: "slideInDown 0.3s ease-out forwards" 
-    }}
-  >
-    <div className="bg-blue-600 px-4 py-2 flex justify-between items-center">
-      <div className="flex items-center">
-        <FaBell className="text-white mr-2" />
-        <h3 className="text-white font-medium text-sm">Order Update</h3>
-      </div>
-      <button onClick={dismissPopup} className="text-white hover:text-gray-200">
-        <FaTimes size={16} />
-      </button>
-    </div>
-    <div className="p-4">
-      <p className="text-sm text-gray-700">
-        {newNotification.isNew 
-          ? `New order #${newNotification.orders_id} has been created.` 
-          : `Order #${newNotification.orders_id} status changed from "${newNotification.oldStatus}" to "${newNotification.newStatus}".`}
-      </p>
-      <div className="mt-3 flex justify-end">
-        <Link to="/user/status" onClick={dismissPopup} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
-          View Details
-        </Link>
-      </div>
-    </div>
-  </div>
-)}
+ {/* Popup Notification - same as before */}
+ {showPopup && newNotification && (
+        <div 
+          className="fixed z-50 w-full max-w-md bg-white rounded-lg shadow-lg border border-blue-200 overflow-hidden"
+          style={{ 
+            left: "50%", 
+            transform: "translateX(-50%)",
+            top: "40px",
+            animation: "slideInDown 0.3s ease-out forwards" 
+          }}
+        >
+          <div className="bg-blue-600 px-4 py-2 flex justify-between items-center">
+            <div className="flex items-center">
+              <FaBell className="text-white mr-2" />
+              <h3 className="text-white font-medium text-sm">Order Update</h3>
+            </div>
+            <button onClick={dismissPopup} className="text-white hover:text-gray-200">
+              <FaTimes size={16} />
+            </button>
+          </div>
+          <div className="p-4">
+            <p className="text-sm text-gray-700">
+              {newNotification.isNew 
+                ? `New order #${newNotification.orders_id} has been created.` 
+                : `Order #${newNotification.orders_id} status changed from "${newNotification.oldStatus}" to "${newNotification.newStatus}".`}
+            </p>
+            <div className="mt-3 flex justify-end">
+              <Link to="/user/status" onClick={dismissPopup} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                View Details
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="container mx-auto flex items-center justify-between py-3 sm:py-4 md:py-6 px-4 sm:px-8 md:px-16 lg:px-22">
         {/* Mobile: Left Side with Notification */}

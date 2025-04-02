@@ -48,7 +48,7 @@ const UserMenu = () => {
                 {/* Small floating up button */}
                 <button
                     onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    className="fixed bottom-6 right-6 bg-[#1C359A] text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg z-50 hover:bg-blue-800"
+                    className="fixed bottom-6 right-6 bg-[#1C359A] text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg z-30 hover:bg-blue-800"
                     aria-label="Scroll to top"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
