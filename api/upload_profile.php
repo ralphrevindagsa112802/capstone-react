@@ -1,6 +1,6 @@
 <?php
 session_start();
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: https://yappari-coffee-bar.shop");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
@@ -36,7 +36,7 @@ if (!file_exists($uploadDir)) {
 
 // ✅ Generate a unique filename
 $filename = time() . "_" . basename($_FILES["profile_pic"]["name"]);
-$targetFile = "uploads/" . $filename;
+$targetFile = "/uploads/" . $filename;
 
 // ✅ Move the uploaded file
 if (!move_uploaded_file($_FILES["profile_pic"]["tmp_name"], $uploadDir . $filename)) {

@@ -42,7 +42,7 @@ try {
         setcookie("PHPSESSID", session_id(), [
             "expires" => 0,
             "path" => "/",
-            "domain" => "localhost", // Change for production
+            "domain" => "admin.yappari-coffee-bar.shop", // Change for production
             "secure" => true, // Change to `true` if using HTTPS
             "httponly" => true,
             "samesite" => "Lax"

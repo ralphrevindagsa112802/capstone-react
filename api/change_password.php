@@ -7,7 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
 
-include __DIR__ . "/db.php"; // Ensure db.php uses PDO
+include 'db.php'; // Ensure db.php uses PDO
 
 // Check if user is logged in
 if (!isset($_SESSION["user_id"])) {

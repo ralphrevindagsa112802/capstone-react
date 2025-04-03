@@ -1,7 +1,8 @@
 <?php
 header("Access-Control-Allow-Origin: https://admin.yappari-coffee-bar.shop");
-header("Access-Control-Allow-Methods: GET");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
 
 include __DIR__ . "/db.php"; // Ensure db.php uses PDO
@@ -21,6 +22,7 @@ try {
 
     $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Convert availability (1 = Available, 0 = Not Available)
     foreach ($menuItems as &$item) {
         $item["availability_small"] = ($item["availability_small"] === "Available") ? "Available" : "Not Available";
         $item["availability_medium"] = ($item["availability_medium"] === "Available") ? "Available" : "Not Available";
