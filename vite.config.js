@@ -15,6 +15,7 @@ export default defineConfig({
           "react-vendors": ["react", "react-dom"],
           "framer-motion": ["framer-motion"],
           "google-auth": ["@react-oauth/google"],
+          "tone": ["tone"],
         },
       },
     },
