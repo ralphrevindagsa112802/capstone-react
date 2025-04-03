@@ -12,10 +12,11 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          "react-vendors": ["react", "react-dom"],
+          "react-vendors": ["react", "react-dom", "react-router-dom"],
           "framer-motion": ["framer-motion"],
           "google-auth": ["@react-oauth/google"],
           "tone": ["tone"],
+          "sweetalert2": ["sweetalert2"],
         },
       },
     },
