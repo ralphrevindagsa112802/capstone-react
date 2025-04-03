@@ -70,6 +70,19 @@ const UserCart = () => {
         );
     };
 
+    const handleRemoveSelected = () => {
+        // Filter out items that are in the selectedItems array
+        setCartItems((prevItems) => 
+            prevItems.filter((item) => {
+                const uniqueKey = `${item.food_id}-${item.size}`;
+                return !selectedItems.includes(uniqueKey);
+            })
+        );
+        
+        // Clear the selectedItems array after removing
+        setSelectedItems([]);
+    };
+
     const handleCheckout = () => {
         if (selectedItems.length === 0) {
             Swal.fire('Oops...','Please select items to order.','info');
@@ -578,7 +591,11 @@ const UserCart = () => {
                     <div className="mt-6 flex flex-col md:flex-row justify-between items-center md:items-end">
                         <div className="w-full md:w-auto mb-4 md:mb-0">
                             {selectedItems.length > 0 && (
-                                <button data-testid='remove-selected' className="bg-red-100 text-red-700 px-4 py-2 rounded text-sm font-semibold hover:bg-red-200 mr-2">
+                                <button 
+                                    data-testid='remove-selected' 
+                                    className="bg-red-100 text-red-700 px-4 py-2 rounded text-sm font-semibold hover:bg-red-200 mr-2"
+                                    onClick={handleRemoveSelected}
+                                >
                                     Remove Selected ({selectedItems.length})
                                 </button>
                             )}
