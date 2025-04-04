@@ -144,7 +144,9 @@ const CheckOut = () => {
      <div className="flex flex-col min-h-screen ">
   {/* Header */}
   <div className="flex items-center justify-center w-full shadow-md px-4 md:px-12 py-3 bg-white">
+  <a href="/user/home">
     <img src="../img/YCB LOGO (BLUE).png" alt="Logo" className="h-12 md:h-20 w-auto object-contain" />
+    </a>
   </div>
 
   {/* Main Content */}
